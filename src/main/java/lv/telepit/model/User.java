@@ -1,0 +1,131 @@
+package lv.telepit.model;
+
+import com.google.common.base.Objects;
+import com.sun.corba.se.spi.ior.ObjectAdapterId;
+
+import javax.persistence.*;
+import java.util.List;
+
+/**
+ * User
+ *
+ * @author Alex Kartishev (alexkartishev@gmail.com))
+ *         Date: 14.14.2.
+ */
+@Entity
+@Table(name = "telepit_user")
+@NamedQueries({
+        @NamedQuery(name = "User.getAll", query = "select u from User u"),
+        @NamedQuery(name = "User.getByLoginAndPass", query = "select u from User u where u.login = :login and u.password = :password")
+})
+public class User {
+    private long id;
+    private String name;
+    private String surname;
+    private String login;
+    private String password;
+    private String phone;
+    private Store store;
+    private boolean deleted = false;
+    private boolean admin = false;
+    private List<ServiceGood> serviceGoodList;
+
+    @Id
+    @GeneratedValue
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @ManyToOne(targetEntity = Store.class)
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    public List<ServiceGood> getServiceGoodList() {
+        return serviceGoodList;
+    }
+
+    public void setServiceGoodList(List<ServiceGood> serviceGoodList) {
+        this.serviceGoodList = serviceGoodList;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final User other = (User) obj;
+        return Objects.equal(this.id, other.id)
+                && Objects.equal(this.name, other.name)
+                && Objects.equal(this.surname, other.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id, this.name, this.surname);
+    }
+}
