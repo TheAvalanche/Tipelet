@@ -1,5 +1,6 @@
 package lv.telepit.backend;
 
+import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.dao.ServiceDao;
 import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.backend.dao.StoreDaoImpl;
@@ -7,6 +8,7 @@ import lv.telepit.model.ServiceGood;
 import lv.telepit.model.Store;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 04/03/14.
@@ -33,5 +35,9 @@ public class ServiceGoodService {
 
     public List<ServiceGood> getAllGoods() {
         return serviceDao.getAllGoods();
+    }
+
+    public List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> query) {
+        return serviceDao.findGoods(query);
     }
 }

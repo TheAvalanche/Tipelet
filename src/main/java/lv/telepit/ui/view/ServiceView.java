@@ -1,5 +1,6 @@
 package lv.telepit.ui.view;
 
+import com.google.common.base.Strings;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -9,15 +10,15 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
+import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.ServiceGood;
-import lv.telepit.model.User;
-import lv.telepit.ui.component.PropertyFilter;
 import lv.telepit.ui.form.ServiceGoodForm;
-import lv.telepit.ui.form.UserForm;
+import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
 
-import javax.xml.ws.Service;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 21/02/14.
@@ -53,6 +54,16 @@ public class ServiceView extends AbstractView {
         label.setContentMode(ContentMode.HTML);
 
         nameField = new TextField(bundle.getString("service.good.name"));
+        imeiField = new TextField(bundle.getString("service.good.imei"));
+        accumNumField = new TextField(bundle.getString("service.good.accumNum"));
+        userField = FieldFactory.getUserComboBox("user");
+        storeField = FieldFactory.getStoreComboBox("store");
+        deliveredField = new DateField(bundle.getString("service.good.deliveredDate"));
+        returnedField = new DateField(bundle.getString("service.good.returnedDate"));
+
+        searchButton = new Button(bundle.getString("default.button.search"));
+        searchButton.addClickListener(new SearchListener());
+        searchButton.setIcon(new ThemeResource("img/search.png"));
 
         refreshButton = new Button(bundle.getString("default.button.refresh"));
         refreshButton.addClickListener(new RefreshListener());
@@ -95,12 +106,18 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditServiceGoodListener());
 
-
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
+        searchLayout1.setSpacing(true);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, imeiField, accumNumField, deliveredField, returnedField, searchButton);
+        searchLayout2.setSpacing(true);
+        searchLayout2.setComponentAlignment(searchButton, Alignment.BOTTOM_RIGHT);
 
         final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood);
         buttonLayout.setSpacing(true);
 
         content.addComponent(label);
+        content.addComponent(searchLayout1);
+        content.addComponent(searchLayout2);
         content.addComponent(refreshButton);
         content.addComponent(buttonLayout);
         content.addComponent(table);
@@ -111,17 +128,20 @@ public class ServiceView extends AbstractView {
 
     @Override
     public void refreshView() {
+        refreshView(null);
+    }
 
+    public void refreshView(List<ServiceGood> serviceGoods) {
         ui.removeWindow(subWindow);
         updateGood.setEnabled(false);
         deleteGood.setEnabled(false);
 
-        List<ServiceGood> goods = ui.getServiceGoodService().getAllGoods();
+        if (serviceGoods == null) {
+            serviceGoods = ui.getServiceGoodService().getAllGoods();
+        }
         container.removeAllItems();
-
-        container.addAll(goods);
+        container.addAll(serviceGoods);
         table.refreshRowCache();
-
     }
 
     private class EditServiceGoodListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {
@@ -185,6 +205,36 @@ public class ServiceView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
+        }
+    }
+
+    private class SearchListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent event) {
+            Map<ServiceGoodCriteria, Object> map = new HashMap<>();
+            if (!Strings.isNullOrEmpty(nameField.getValue())) {
+                map.put(ServiceGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
+            }
+            if (!Strings.isNullOrEmpty(imeiField.getValue())) {
+                map.put(ServiceGoodCriteria.IMEI, imeiField.getValue().trim().toLowerCase());
+            }
+            if (!Strings.isNullOrEmpty(accumNumField.getValue())) {
+                map.put(ServiceGoodCriteria.ACCUM_NUM, accumNumField.getValue().trim().toLowerCase());
+            }
+            if (userField.getValue() != null) {
+                map.put(ServiceGoodCriteria.USER, userField.getValue());
+            }
+            if (storeField.getValue() != null) {
+                map.put(ServiceGoodCriteria.STORE, storeField.getValue());
+            }
+            if (deliveredField.getValue() != null) {
+                map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, deliveredField.getValue());
+            }
+            if (returnedField.getValue() != null) {
+                map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, returnedField.getValue());
+            }
+            List<ServiceGood> list = ui.getServiceGoodService().findGoods(map);
+            refreshView(list);
         }
     }
 }

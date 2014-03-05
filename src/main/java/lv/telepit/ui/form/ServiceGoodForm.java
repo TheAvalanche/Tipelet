@@ -12,6 +12,7 @@ import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -28,12 +29,6 @@ public class ServiceGoodForm extends FormLayout {
 
     @PropertyId("accumNum")
     private TextField accumNumField = FieldFactory.getTextField("accumNum");
-
-    @PropertyId("store")
-    private ComboBox storeField = FieldFactory.getStoreComboBox("store");
-
-    @PropertyId("user")
-    private ComboBox userField = FieldFactory.getUserComboBox("user");
 
     @PropertyId("problem")
     private TextArea problemField = FieldFactory.getTextArea("problem");
@@ -66,13 +61,19 @@ public class ServiceGoodForm extends FormLayout {
     private TextArea additionalDescriptionField = FieldFactory.getTextArea("additionalDescription");
 
     public ServiceGoodForm(BeanItem<ServiceGood> serviceGoodItem, AbstractView view) {
+        /*Initial seettings.*/
+        ServiceGood good = serviceGoodItem.getBean();
+        if (good.getId() == 0) {
+            good.setUser(view.getUi().getCurrentUser());
+            good.setStore(view.getUi().getCurrentUser().getStore());
+            good.setDeliveredDate(new Date());
+        }
 
+        /*View creation.*/
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
         addComponent(nameField);
         addComponent(imeiField);
-        addComponent(storeField);
-        addComponent(userField);
         addComponent(accumNumField);
         addComponent(problemField);
         addComponent(deliveredDateField);
