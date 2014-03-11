@@ -49,12 +49,14 @@ public class TelepitUI extends UI {
         ServiceView serviceView = new ServiceView(navigator, this);
         UserView userView = new UserView(navigator, this);
         StoreView storeView = new StoreView(navigator, this);
+        CategoryView categoryView = new CategoryView(navigator, this);
 
         navigator.addView("", startView);
         navigator.addView("stock", stockView);
         navigator.addView("service", serviceView);
         navigator.addView("user", userView);
         navigator.addView("store", storeView);
+        navigator.addView("category", categoryView);
 
 
     }

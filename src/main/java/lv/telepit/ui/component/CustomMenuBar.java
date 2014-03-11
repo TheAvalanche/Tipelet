@@ -17,6 +17,7 @@ public class CustomMenuBar extends MenuBar {
         MenuItem adminItem = this.addItem("Vadīšana", null, null);
         adminItem.addItem("Veikali", new NavigateCommand("store"));
         adminItem.addItem("Lietotāji", new NavigateCommand("user"));
+        adminItem.addItem("Kategorijas", new NavigateCommand("category"));
     }
 
     private class NavigateCommand implements Command {

@@ -19,6 +19,7 @@ public class ServiceGood {
     private Store store;
     private User user;
     private ServiceStatus status;
+    private Category category;
     private String name;
     private String imei;
     private String accumNum;
@@ -76,6 +77,15 @@ public class ServiceGood {
 
     public void setStatus(ServiceStatus status) {
         this.status = status;
+    }
+
+    @ManyToOne(targetEntity = Category.class)
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getName() {

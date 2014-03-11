@@ -1,7 +1,75 @@
 package lv.telepit.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Alex on 11/03/14.
  */
+@Entity
+@Table(name = "telepit_category")
 public class Category {
+    private long id;
+    private List<Category> children = new ArrayList<>();
+    private Category parent;
+    private String name;
+
+    public Category() {
+
+    }
+
+    // private constructor
+    private Category(Category parent, String name) {
+        this.parent = parent;
+        this.name = name;
+    }
+
+    @Id
+    @GeneratedValue
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    // adds a category to this category
+    public Category addCategory(String name) {
+        Category child = new Category(this, name);
+        children.add(child);
+        return child;
+    }
+
+    @OneToMany(mappedBy = "parent")
+    public List<Category> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Category> children) {
+        this.children = children;
+    }
+
+    @ManyToOne
+    public Category getParent() {
+        return parent;
+    }
+
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // creates and returns a new categories tree
+    public static Category createCategories() {
+        return new Category(null, "root");
+    }
 }
