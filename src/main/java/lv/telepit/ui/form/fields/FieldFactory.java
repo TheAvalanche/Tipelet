@@ -90,6 +90,16 @@ public final class FieldFactory {
      * @param key field's key
      * @return combo box
      */
+    public static ComboBox getStatusComboBox(final String key) {
+        return new SimpleStatusComboBox(getCaption(key),
+                getRequired(key));
+    }
+
+    /**
+     * Partners combobox with all partners prefilled.
+     * @param key field's key
+     * @return combo box
+     */
     public static TextArea getTextArea(final String key) {
         return new SimpleTextArea(getCaption(key),
                 getPrompt(key),

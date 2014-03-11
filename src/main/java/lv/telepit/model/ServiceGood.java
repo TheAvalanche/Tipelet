@@ -18,6 +18,7 @@ public class ServiceGood {
     private Integer version;
     private Store store;
     private User user;
+    private ServiceStatus status;
     private String name;
     private String imei;
     private String accumNum;
@@ -66,6 +67,15 @@ public class ServiceGood {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Enumerated(EnumType.STRING)
+    public ServiceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ServiceStatus status) {
+        this.status = status;
     }
 
     public String getName() {

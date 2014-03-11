@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.backend.UserService;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.model.ServiceStatus;
 import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
@@ -23,6 +24,9 @@ public class ServiceGoodForm extends FormLayout {
 
     @PropertyId("name")
     private TextField nameField = FieldFactory.getTextField("name3");
+
+    @PropertyId("status")
+    private ComboBox statusField = FieldFactory.getStatusComboBox("status");
 
     @PropertyId("imei")
     private TextField imeiField = FieldFactory.getTextField("imei");
@@ -61,18 +65,20 @@ public class ServiceGoodForm extends FormLayout {
     private TextArea additionalDescriptionField = FieldFactory.getTextArea("additionalDescription");
 
     public ServiceGoodForm(BeanItem<ServiceGood> serviceGoodItem, AbstractView view) {
-        /*Initial seettings.*/
+        /*Initial settings.*/
         ServiceGood good = serviceGoodItem.getBean();
         if (good.getId() == 0) {
             good.setUser(view.getUi().getCurrentUser());
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setDeliveredDate(new Date());
+            good.setStatus(ServiceStatus.WAITING);
         }
 
         /*View creation.*/
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
         addComponent(nameField);
+        addComponent(statusField);
         addComponent(imeiField);
         addComponent(accumNumField);
         addComponent(problemField);

@@ -87,7 +87,7 @@ public class Store {
 
     @Override
     public String toString() {
-        return name;
+        return getName();
     }
 
     @Override
@@ -95,13 +95,13 @@ public class Store {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         final Store other = (Store) obj;
-        return Objects.equal(this.id, other.id)
-                && Objects.equal(this.name, other.name)
-                && Objects.equal(this.address, other.address);
+        return Objects.equal(this.getId(), other.getId())
+                && Objects.equal(this.getName(), other.getName())
+                && Objects.equal(this.getAddress(), other.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.id, this.name, this.address);
+        return Objects.hashCode(this.getId(), this.getName(), this.getAddress());
     }
 }

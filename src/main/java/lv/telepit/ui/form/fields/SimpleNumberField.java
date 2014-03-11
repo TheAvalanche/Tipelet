@@ -1,9 +1,9 @@
 package lv.telepit.ui.form.fields;
 
 
-import com.vaadin.data.util.converter.StringToDoubleConverter;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.TextField;
+import lv.telepit.ui.form.converters.StringToDoubleConverter;
 import lv.telepit.ui.form.converters.StringToIntConverter;
 import lv.telepit.ui.form.converters.StringToLongConverter;
 

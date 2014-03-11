@@ -20,6 +20,7 @@ public class SimpleDateField extends DateField {
         super(caption);
         setImmediate(true);
         setWidth(DEFAULT_WIDTH, Unit.PIXELS);
+        setDateFormat("dd.MM.yyyy");
         setRequired(required);
     }
 }

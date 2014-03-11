@@ -16,6 +16,8 @@ import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ public class ServiceView extends AbstractView {
     private TextField accumNumField;
     private ComboBox userField;
     private ComboBox storeField;
+    private ComboBox statusField;
     private DateField deliveredField;
     private DateField returnedField;
     private Button searchButton;
@@ -58,8 +61,11 @@ public class ServiceView extends AbstractView {
         accumNumField = new TextField(bundle.getString("service.good.accumNum"));
         userField = FieldFactory.getUserComboBox("user");
         storeField = FieldFactory.getStoreComboBox("store");
+        statusField = FieldFactory.getStatusComboBox("status");
         deliveredField = new DateField(bundle.getString("service.good.deliveredDate"));
+        deliveredField.setDateFormat("dd.MM.yyyy");
         returnedField = new DateField(bundle.getString("service.good.returnedDate"));
+        returnedField.setDateFormat("dd.MM.yyyy");
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
@@ -70,12 +76,23 @@ public class ServiceView extends AbstractView {
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
         container = new BeanItemContainer<>(ServiceGood.class);
-        table = new Table();
+        table = new Table() {
+            @Override
+            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
+                Object v = property.getValue();
+                if (v instanceof Date) {
+                Date dateValue = (Date) v;
+                    return new SimpleDateFormat("dd.MM.yyyy").format(dateValue);
+                }
+                return super.formatPropertyValue(rowId, colId, property);
+            }
+        };
         table.setImmediate(true);
         table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "name", "imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table.setVisibleColumns("store", "name", "status","imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setColumnHeaders(bundle.getString("service.good.store"),
                 bundle.getString("service.good.name"),
+                bundle.getString("service.good.status"),
                 bundle.getString("service.good.imei"),
                 bundle.getString("service.good.accumNum"),
                 bundle.getString("service.good.problem"),
@@ -106,7 +123,7 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditServiceGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, statusField);
         searchLayout1.setSpacing(true);
         final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, imeiField, accumNumField, deliveredField, returnedField, searchButton);
         searchLayout2.setSpacing(true);
@@ -226,6 +243,9 @@ public class ServiceView extends AbstractView {
             }
             if (storeField.getValue() != null) {
                 map.put(ServiceGoodCriteria.STORE, storeField.getValue());
+            }
+            if (statusField.getValue() != null) {
+                map.put(ServiceGoodCriteria.STATUS, statusField.getValue());
             }
             if (deliveredField.getValue() != null) {
                 map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, deliveredField.getValue());
