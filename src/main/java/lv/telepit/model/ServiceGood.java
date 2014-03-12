@@ -1,5 +1,6 @@
 package lv.telepit.model;
 
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,7 +16,6 @@ import java.util.Date;
 })
 public class ServiceGood {
     private long id;
-    private Integer version;
     private Store store;
     private User user;
     private ServiceStatus status;
@@ -34,6 +34,8 @@ public class ServiceGood {
     private String contactMail;
     private String additionalDescription;
 
+    private ChangeRecord change = new ChangeRecord("service.good");
+
     @Id
     @GeneratedValue
     public long getId() {
@@ -44,20 +46,15 @@ public class ServiceGood {
         this.id = id;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     @ManyToOne(targetEntity = Store.class)
     public Store getStore() {
         return store;
     }
 
     public void setStore(Store store) {
+        change.addChange("store",
+                this.store != null ? this.store.getName() : "-" ,
+                store != null ? store.getName() : "-");
         this.store = store;
     }
 
@@ -67,6 +64,9 @@ public class ServiceGood {
     }
 
     public void setUser(User user) {
+        change.addChange("user",
+                this.user != null ? this.user.getName() + " " + this.user.getSurname() : "-",
+                user != null ? user.getName() + " " + user.getSurname() : "-");
         this.user = user;
     }
 
@@ -76,6 +76,9 @@ public class ServiceGood {
     }
 
     public void setStatus(ServiceStatus status) {
+        change.addChange("status",
+                this.status != null ? this.status.toString() : "-",
+                status != null ? status.toString() : "-");
         this.status = status;
     }
 
@@ -85,6 +88,9 @@ public class ServiceGood {
     }
 
     public void setCategory(Category category) {
+        change.addChange("category",
+                this.category != null ? this.category.getName() : "-",
+                category != null ? category.getName() : "-");
         this.category = category;
     }
 
@@ -93,6 +99,9 @@ public class ServiceGood {
     }
 
     public void setName(String name) {
+        change.addChange("name",
+                this.name != null ? this.name : "-",
+                name != null ? name : "-");
         this.name = name;
     }
 
@@ -101,6 +110,9 @@ public class ServiceGood {
     }
 
     public void setImei(String imei) {
+        change.addChange("imei",
+                this.imei != null ? this.imei : "-",
+                imei != null ? imei : "-");
         this.imei = imei;
     }
 
@@ -109,6 +121,9 @@ public class ServiceGood {
     }
 
     public void setAccumNum(String accumNum) {
+        change.addChange("accumNum",
+                this.accumNum != null ? this.accumNum : "-",
+                accumNum != null ? accumNum : "-");
         this.accumNum = accumNum;
     }
 
@@ -117,6 +132,9 @@ public class ServiceGood {
     }
 
     public void setProblem(String problem) {
+        change.addChange("problem",
+                this.problem != null ? this.problem : "-",
+                problem != null ? problem : "-");
         this.problem = problem;
     }
 
@@ -125,6 +143,9 @@ public class ServiceGood {
     }
 
     public void setPrice(Double price) {
+        change.addChange("price",
+                this.price != null ? this.price.toString() : "-",
+                price != null ? price.toString() : "-");
         this.price = price;
     }
 
@@ -134,6 +155,9 @@ public class ServiceGood {
     }
 
     public void setDeliveredDate(Date deliveredDate) {
+        change.addChange("deliveredDate",
+                this.deliveredDate != null ? this.deliveredDate.toString() : "-",
+                deliveredDate != null ? deliveredDate.toString() : "-");
         this.deliveredDate = deliveredDate;
     }
 
@@ -143,6 +167,9 @@ public class ServiceGood {
     }
 
     public void setStartDate(Date startDate) {
+        change.addChange("startDate",
+                this.startDate != null ? this.startDate.toString() : "-",
+                startDate != null ? startDate.toString() : "-");
         this.startDate = startDate;
     }
 
@@ -152,6 +179,9 @@ public class ServiceGood {
     }
 
     public void setFinishDate(Date finishDate) {
+        change.addChange("finishDate",
+                this.finishDate != null ? this.finishDate.toString() : "-",
+                finishDate != null ? finishDate.toString() : "-");
         this.finishDate = finishDate;
     }
 
@@ -161,6 +191,9 @@ public class ServiceGood {
     }
 
     public void setReturnedDate(Date returnedDate) {
+        change.addChange("returnedDate",
+                this.returnedDate != null ? this.returnedDate.toString() : "-",
+                returnedDate != null ? returnedDate.toString() : "-");
         this.returnedDate = returnedDate;
     }
 
@@ -169,6 +202,9 @@ public class ServiceGood {
     }
 
     public void setContactName(String contactName) {
+        change.addChange("contactName",
+                this.contactName != null ? this.contactName : "-",
+                contactName != null ? contactName : "-");
         this.contactName = contactName;
     }
 
@@ -177,6 +213,9 @@ public class ServiceGood {
     }
 
     public void setContactPhone(String contactPhone) {
+        change.addChange("contactPhone",
+                this.contactPhone != null ? this.contactPhone : "-",
+                contactPhone != null ? contactPhone : "-");
         this.contactPhone = contactPhone;
     }
 
@@ -185,6 +224,9 @@ public class ServiceGood {
     }
 
     public void setContactMail(String contactMail) {
+        change.addChange("contactMail",
+                this.contactMail != null ? this.contactMail : "-",
+                contactMail != null ? contactMail : "-");
         this.contactMail = contactMail;
     }
 
@@ -193,6 +235,14 @@ public class ServiceGood {
     }
 
     public void setAdditionalDescription(String additionalDescription) {
+        change.addChange("additionalDescription",
+                this.additionalDescription != null ? this.additionalDescription : "-",
+                additionalDescription != null ? additionalDescription : "-");
         this.additionalDescription = additionalDescription;
+    }
+
+    @Transient
+    public ChangeRecord getChange() {
+        return change;
     }
 }

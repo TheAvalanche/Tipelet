@@ -1,5 +1,7 @@
 package lv.telepit.backend.dao;
 
+import com.google.gson.Gson;
+import com.google.gwt.json.client.JSONArray;
 import lv.telepit.backend.PersistenceProvider;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.ServiceGood;

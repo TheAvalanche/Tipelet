@@ -95,7 +95,6 @@ public class CategoryView extends AbstractView {
         nameField.setValue("");
         addRoot.setEnabled(false);
         addChildren.setEnabled(false);
-
     }
 
     private void loadChildren(Category parent) {
