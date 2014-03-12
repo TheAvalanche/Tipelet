@@ -27,6 +27,7 @@ public class UserDaoImpl implements UserDao {
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -35,6 +36,7 @@ public class UserDaoImpl implements UserDao {
         em.getTransaction().begin();
         em.merge(user);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -42,6 +44,7 @@ public class UserDaoImpl implements UserDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("User.getAll");
         List<User> users = q.getResultList();
+        em.close();
         return users;
     }
 
@@ -52,6 +55,7 @@ public class UserDaoImpl implements UserDao {
         q.setParameter("login", username);
         q.setParameter("password", password);
         List<User> users = q.getResultList();
+        em.close();
         if (users.isEmpty()) {
             return null;
         } else {

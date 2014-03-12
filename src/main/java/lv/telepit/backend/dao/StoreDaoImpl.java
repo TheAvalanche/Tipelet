@@ -27,6 +27,7 @@ public class StoreDaoImpl implements StoreDao {
         em.getTransaction().begin();
         em.persist(store);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -35,6 +36,7 @@ public class StoreDaoImpl implements StoreDao {
         em.getTransaction().begin();
         em.merge(store);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -42,6 +44,7 @@ public class StoreDaoImpl implements StoreDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("Store.getAll");
         List<Store> stores = q.getResultList();
+        em.close();
         return stores;
     }
 }

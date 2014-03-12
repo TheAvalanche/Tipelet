@@ -12,6 +12,7 @@ import com.vaadin.ui.Tree;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Category;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -48,10 +49,8 @@ public class CategoryView extends AbstractView {
                 }
                 Category c = Category.createCategories();
                 c.setName(nameField.getValue());
-                tree.addItem(c);
-                tree.setItemCaption(c, c.getName());
-                tree.setChildrenAllowed(c, false);
-                nameField.setValue("");
+                ui.getCategoryService().addOrUpdateCategory(c);
+                refreshView();
             }
         });
 
@@ -65,13 +64,8 @@ public class CategoryView extends AbstractView {
                     return;
                 }
                 Category c = ((Category) tree.getValue()).addCategory(nameField.getValue());
-                tree.setChildrenAllowed(tree.getValue(), true);
-                tree.addItem(c);
-                tree.setItemCaption(c, c.getName());
-                tree.setParent(c, tree.getValue());
-                tree.setChildrenAllowed(c, false);
-                tree.expandItemsRecursively(tree.getValue());
-                nameField.setValue("");
+                ui.getCategoryService().addOrUpdateCategory(c);
+                refreshView();
             }
         });
 
@@ -84,11 +78,40 @@ public class CategoryView extends AbstractView {
         content.addComponent(nameField);
         content.addComponent(addRoot);
         content.addComponent(addChildren);
+
+        refreshView();
     }
 
     @Override
     public void refreshView() {
+        List<Category> categories = ui.getCategoryService().getAllCategories();
+        for (Category category : categories) {
+            tree.addItem(category);
+            tree.setItemCaption(category, category.getName());
 
+            loadChildren(category);
+            tree.expandItemsRecursively(category);
+        }
+        nameField.setValue("");
+        addRoot.setEnabled(false);
+        addChildren.setEnabled(false);
+
+    }
+
+    private void loadChildren(Category parent) {
+
+        if (parent.getChildren().isEmpty()) {
+            tree.setChildrenAllowed(parent, false);
+            return;
+        }
+
+        for (Category category : parent.getChildren()) {
+            tree.addItem(category);
+            tree.setParent(category, parent);
+            tree.setItemCaption(category, category.getName());
+            loadChildren(category);
+        }
+        tree.setChildrenAllowed(parent, true);
     }
 
     private class EditCategoryListener implements Property.ValueChangeListener, ItemClickEvent.ItemClickListener, FieldEvents.TextChangeListener {

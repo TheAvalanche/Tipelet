@@ -8,6 +8,7 @@ import lv.telepit.model.Store;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.xml.ws.Service;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class ServiceDaoImpl implements ServiceDao {
         em.getTransaction().begin();
         em.persist(good);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -38,6 +40,7 @@ public class ServiceDaoImpl implements ServiceDao {
         em.getTransaction().begin();
         em.merge(good);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -47,6 +50,7 @@ public class ServiceDaoImpl implements ServiceDao {
         em.getTransaction().begin();
         em.remove(good);
         em.getTransaction().commit();
+        em.close();
     }
 
     @Override
@@ -54,6 +58,7 @@ public class ServiceDaoImpl implements ServiceDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("ServiceGood.getAll");
         List<ServiceGood> goods = q.getResultList();
+        em.close();
         return goods;
     }
 
@@ -74,7 +79,9 @@ public class ServiceDaoImpl implements ServiceDao {
             }
         }
         q.setMaxResults(100);
-        return (List<ServiceGood>) q.getResultList();
+        List<ServiceGood> list = q.getResultList();
+        em.close();
+        return list;
     }
 
 

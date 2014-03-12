@@ -1,5 +1,7 @@
 package lv.telepit.model;
 
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,10 @@ import java.util.List;
  */
 @Entity
 @Table(name = "telepit_category")
+@NamedQueries({
+        @NamedQuery(name = "Category.getAll", query = "select c from Category c where c.parent is null"),
+        @NamedQuery(name = "Category.getChildren", query = "select c from Category c where c.parent = :parent")
+})
 public class Category {
     private long id;
     private List<Category> children = new ArrayList<>();
@@ -42,7 +48,7 @@ public class Category {
         return child;
     }
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     public List<Category> getChildren() {
         return children;
     }
@@ -52,6 +58,7 @@ public class Category {
     }
 
     @ManyToOne
+    @JoinColumn(name = "parent_id")
     public Category getParent() {
         return parent;
     }
@@ -71,5 +78,24 @@ public class Category {
     // creates and returns a new categories tree
     public static Category createCategories() {
         return new Category(null, "root");
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        final Category other = (Category) obj;
+        return Objects.equal(this.getId(), other.getId())
+                && Objects.equal(this.getName(), other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getId(), this.getName());
     }
 }
