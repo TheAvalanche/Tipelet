@@ -8,13 +8,14 @@
         <class>lv.telepit.model.Store</class>
         <class>lv.telepit.model.ServiceGood</class>
         <class>lv.telepit.model.Category</class>
+        <class>lv.telepit.model.ChangeRecord</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/telepit"/>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.user" value="postgres"/>
             <property name="javax.persistence.jdbc.password" value="123456"/>
-            <property name="eclipselink.ddl-generation" value="create-tables"/>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="both" />
         </properties>
     </persistence-unit>

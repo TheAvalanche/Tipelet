@@ -2,8 +2,11 @@ package lv.telepit.backend.dao;
 
 import com.google.gson.Gson;
 import com.google.gwt.json.client.JSONArray;
+import com.vaadin.ui.UI;
+import lv.telepit.TelepitUI;
 import lv.telepit.backend.PersistenceProvider;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
+import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.Store;
 
@@ -11,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.xml.ws.Service;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +36,12 @@ public class ServiceDaoImpl implements ServiceDao {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(good);
+
+        ChangeRecord cr = good.getChange();
+        cr.setDate(new Date());
+        cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+        em.persist(cr);
+
         em.getTransaction().commit();
         em.close();
     }
@@ -41,6 +51,12 @@ public class ServiceDaoImpl implements ServiceDao {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.merge(good);
+
+        ChangeRecord cr = good.getChange();
+        cr.setDate(new Date());
+        cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+        em.persist(cr);
+
         em.getTransaction().commit();
         em.close();
     }

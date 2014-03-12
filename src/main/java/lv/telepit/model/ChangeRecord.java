@@ -1,20 +1,20 @@
 package lv.telepit.model;
 
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.*;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * Created by Alex on 12/03/14.
  */
+@Entity
 public class ChangeRecord {
 
+    private long id;
     private User user;
     private Date date;
     private ServiceGood serviceGood;
@@ -27,6 +27,16 @@ public class ChangeRecord {
 
     public ChangeRecord(String baseName) {
         this.baseName = baseName;
+    }
+
+    @Id
+    @GeneratedValue
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Transient
@@ -65,12 +75,26 @@ public class ChangeRecord {
         this.serviceGood = serviceGood;
     }
 
+    @Column(length = 4096)
     public String getJson() {
         return json;
     }
 
     public void setJson(String json) {
         this.json = json;
+    }
+
+    @PrePersist
+    public void preTransform() {
+        Gson gson = new Gson();
+        this.json = gson.toJson(changeList);
+    }
+
+    @PostLoad
+    public void postTransform() {
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<Collection<PropertyChange>>(){}.getType();
+        this.changeList = gson.fromJson(json, collectionType);
     }
 
     @Transient
@@ -83,6 +107,9 @@ public class ChangeRecord {
     }
 
     public void addChange(String name, String oldValue, String newValue) {
+        if (Objects.equals(oldValue, newValue)) {
+            return;
+        }
         if (!Strings.isNullOrEmpty(name)) {
             name = baseName + "." + name;
         }
@@ -90,6 +117,7 @@ public class ChangeRecord {
         change.setName(name);
         change.setOldValue(oldValue);
         change.setNewValue(newValue);
+        changeList.add(change);
     }
 
     private class PropertyChange {

@@ -245,4 +245,9 @@ public class ServiceGood {
     public ChangeRecord getChange() {
         return change;
     }
+
+    @PostLoad
+    public void postLoad() {
+        change = new ChangeRecord("service.good");
+    }
 }
