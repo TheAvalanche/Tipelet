@@ -10,7 +10,6 @@ import lv.telepit.TelepitUI;
 import lv.telepit.ui.component.CustomMenuBar;
 import lv.telepit.utils.AuthUtil;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -56,7 +55,7 @@ public abstract class AbstractView extends VerticalLayout implements View {
         } else if (!AuthUtil.isAllowed(name, ui.getCurrentUser())) {
             ui.getNavigator().navigateTo("service");
         }
-        menuBar.checkAutherity(ui.getCurrentUser());
+        menuBar.checkAuthority(ui.getCurrentUser());
         checkAuthority();
     }
 

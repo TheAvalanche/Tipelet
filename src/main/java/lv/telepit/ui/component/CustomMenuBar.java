@@ -22,7 +22,7 @@ public class CustomMenuBar extends MenuBar {
         adminItem.addItem("Kategorijas", new NavigateCommand("category"));
     }
 
-    public void checkAutherity(User user) {
+    public void checkAuthority(User user) {
         if (user != null && !user.isAdmin()) {
             adminItem.setVisible(false);
         }
