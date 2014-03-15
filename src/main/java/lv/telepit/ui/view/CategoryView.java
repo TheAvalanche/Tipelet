@@ -25,8 +25,8 @@ public class CategoryView extends AbstractView {
     private Button addRoot;
     private Button addChildren;
 
-    public CategoryView(Navigator navigator, TelepitUI ui) {
-        super(navigator, ui);
+    public CategoryView(Navigator navigator, TelepitUI ui, String name) {
+        super(navigator, ui, name);
     }
 
     @Override
@@ -95,6 +95,11 @@ public class CategoryView extends AbstractView {
         nameField.setValue("");
         addRoot.setEnabled(false);
         addChildren.setEnabled(false);
+    }
+
+    @Override
+    public void checkAuthority() {
+
     }
 
     private void loadChildren(Category parent) {

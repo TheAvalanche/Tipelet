@@ -91,8 +91,8 @@ public class PropertyUtil {
      * @return value if found or null if not found
      */
     public static String get(Object arg) {
-        String value1 = (String) getInstance().properties1.get(arg);
-        String value2 = (String) getInstance().properties2.get(arg);
+        String value1 = getInstance().properties1 != null ? (String) getInstance().properties1.get(arg) : null;
+        String value2 = getInstance().properties2 != null ? (String) getInstance().properties2.get(arg) : null;
 
         //return value1 if it is found or value2 if not found. If both are not found - null is returned.
         String toReturn = Strings.isNullOrEmpty(value1) ? (Strings.isNullOrEmpty(value2) ? null : value2) : value1;

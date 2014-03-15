@@ -26,11 +26,10 @@ public class StoreView extends AbstractView {
     private Table table;
     private BeanItemContainer<Store> container;
     private Label label;
-    private Label description;
     private Window subWindow;
 
-    public StoreView(Navigator navigator, TelepitUI ui) {
-        super(navigator, ui);
+    public StoreView(Navigator navigator, TelepitUI ui, String name) {
+        super(navigator, ui, name);
     }
 
     @Override
@@ -92,6 +91,11 @@ public class StoreView extends AbstractView {
         container.removeAllItems();
         container.addAll(stores);
         table.refreshRowCache();
+    }
+
+    @Override
+    public void checkAuthority() {
+
     }
 
     private class EditStoreListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {

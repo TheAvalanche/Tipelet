@@ -46,8 +46,8 @@ public class ServiceView extends AbstractView {
     private Label label;
     private Window subWindow;
 
-    public ServiceView(Navigator navigator, TelepitUI ui) {
-        super(navigator, ui);
+    public ServiceView(Navigator navigator, TelepitUI ui, String name) {
+        super(navigator, ui, name);
 
     }
 
@@ -159,6 +159,11 @@ public class ServiceView extends AbstractView {
         container.removeAllItems();
         container.addAll(serviceGoods);
         table.refreshRowCache();
+    }
+
+    @Override
+    public void checkAuthority() {
+
     }
 
     private class EditServiceGoodListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {

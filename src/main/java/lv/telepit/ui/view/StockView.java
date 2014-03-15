@@ -12,8 +12,8 @@ import lv.telepit.ui.component.CustomMenuBar;
  */
 public class StockView extends AbstractView {
 
-    public StockView(Navigator navigator, TelepitUI ui) {
-        super(navigator, ui);
+    public StockView(Navigator navigator, TelepitUI ui, String name) {
+        super(navigator, ui, name);
     }
 
     @Override
@@ -23,6 +23,11 @@ public class StockView extends AbstractView {
 
     @Override
     public void refreshView() {
+
+    }
+
+    @Override
+    public void checkAuthority() {
 
     }
 }

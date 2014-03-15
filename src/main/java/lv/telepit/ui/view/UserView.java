@@ -41,9 +41,9 @@ public class UserView extends AbstractView {
     private Label description;
     private Window subWindow;
 
-    public UserView(Navigator navigator, TelepitUI ui) {
+    public UserView(Navigator navigator, TelepitUI ui, String name) {
 
-        super(navigator, ui);
+        super(navigator, ui, name);
 
     }
 
@@ -142,7 +142,10 @@ public class UserView extends AbstractView {
         container.addContainerFilter(new PropertyFilter<>("deleted", Boolean.FALSE));
     }
 
+    @Override
+    public void checkAuthority() {
 
+    }
 
     private class EditUserListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {
         @Override

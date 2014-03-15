@@ -8,6 +8,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import lv.telepit.TelepitUI;
 import lv.telepit.ui.component.CustomMenuBar;
+import lv.telepit.utils.AuthUtil;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -21,15 +22,19 @@ public abstract class AbstractView extends VerticalLayout implements View {
 
     protected VerticalLayout content;
 
-    protected static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
+    protected String name;
 
-    protected AbstractView(Navigator navigator, TelepitUI ui) {
+    protected static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
+    private final CustomMenuBar menuBar;
+
+    protected AbstractView(Navigator navigator, TelepitUI ui, String name) {
         this.ui = ui;
+        this.name = name;
 
         Label logo = new Label("<div class='logo'></div>");
         logo.setContentMode(ContentMode.HTML);
 
-        CustomMenuBar menuBar = new CustomMenuBar(navigator);
+        menuBar = new CustomMenuBar(navigator);
         menuBar.setWidth("100%");
 
         addComponent(logo);
@@ -48,12 +53,18 @@ public abstract class AbstractView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         if (ui.getCurrentUser() == null) {
             ui.getNavigator().navigateTo("");
+        } else if (!AuthUtil.isAllowed(name, ui.getCurrentUser())) {
+            ui.getNavigator().navigateTo("service");
         }
+        menuBar.checkAutherity(ui.getCurrentUser());
+        checkAuthority();
     }
 
     public abstract void buildContent();
 
     public abstract void refreshView();
+
+    public abstract void checkAuthority();
 
     public TelepitUI getUi() {
         return ui;
