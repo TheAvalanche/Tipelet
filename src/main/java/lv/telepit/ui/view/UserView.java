@@ -73,13 +73,14 @@ public class UserView extends AbstractView {
         table = new Table();
         table.setImmediate(true);
         table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "name", "surname", "login", "phone", "admin");
-        table.setColumnHeaders(bundle.getString("user.store"),
+        table.setVisibleColumns("name", "surname", "login", "phone", "admin", "store");
+        table.setColumnHeaders(
                 bundle.getString("user.name"),
                 bundle.getString("user.surname"),
                 bundle.getString("user.login"),
                 bundle.getString("user.phone"),
-                bundle.getString("user.admin"));
+                bundle.getString("user.admin"),
+                bundle.getString("user.store"));
         table.setSelectable(true);
         table.setImmediate(true);
         table.addItemClickListener(new EditUserListener());
@@ -163,7 +164,11 @@ public class UserView extends AbstractView {
                     @Override
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
-                            ui.getUserService().deleteUser(userToDelete);
+                            try {
+                                ui.getUserService().deleteUser(userToDelete);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             refreshView();
                         }
                     }

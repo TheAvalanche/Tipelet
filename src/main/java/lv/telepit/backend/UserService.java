@@ -17,15 +17,15 @@ public class UserService {
         this.userDao = new UserDaoImpl();
     }
 
-    public void saveUser(User user) {
+    public void saveUser(User user) throws Exception {
         userDao.createUser(user);
     }
 
-    public void updateUser(User user) {
+    public void updateUser(User user) throws Exception {
         userDao.updateUser(user);
     }
 
-    public void deleteUser(User user) {
+    public void deleteUser(User user) throws Exception {
         user.setDeleted(true);
         userDao.updateUser(user);
     }

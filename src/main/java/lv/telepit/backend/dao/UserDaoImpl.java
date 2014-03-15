@@ -22,8 +22,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(User user) throws Exception {
         EntityManager em = emf.createEntityManager();
+
+        Query q = em.createNamedQuery("User.getByLogin");
+        q.setParameter("login", user.getLogin());
+        List<User> duplicates = q.getResultList();
+        if (!duplicates.isEmpty()) {
+            throw new Exception("Lietotājs ar tādu loginu jau eksistē datubasē!");
+        }
+
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
@@ -31,8 +39,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user) throws Exception {
         EntityManager em = emf.createEntityManager();
+
+        Query q = em.createNamedQuery("User.getByLogin");
+        q.setParameter("login", user.getLogin());
+        List<User> duplicates = q.getResultList();
+        if (!duplicates.isEmpty()) {
+            throw new Exception("Lietotājs ar tādu loginu jau eksistē datubasē!");
+        }
+
         em.getTransaction().begin();
         em.merge(user);
         em.getTransaction().commit();

@@ -8,9 +8,9 @@ import java.util.List;
  * Created by Alex on 21/02/14.
  */
 public interface UserDao {
-    void createUser(User user);
+    void createUser(User user) throws Exception;
 
-    void updateUser(User user);
+    void updateUser(User user) throws Exception;
 
     List<User> getAllUsers();
 

@@ -16,6 +16,7 @@ import java.util.List;
 @Table(name = "telepit_user")
 @NamedQueries({
         @NamedQuery(name = "User.getAll", query = "select u from User u"),
+        @NamedQuery(name = "User.getByLogin", query = "select u from User u where u.login = :login"),
         @NamedQuery(name = "User.getByLoginAndPass", query = "select u from User u where u.login = :login and u.password = :password")
 })
 public class User {
