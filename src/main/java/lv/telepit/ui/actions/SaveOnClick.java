@@ -47,10 +47,10 @@ public abstract class SaveOnClick<T> implements Button.ClickListener {
             view.refreshView();
 
         } catch (Exception e) {
-            Notification.show("Kļūdaini dati!", Notification.Type.ERROR_MESSAGE);
+            Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    public abstract void businessMethod();
+    public abstract void businessMethod() throws Exception;
 }

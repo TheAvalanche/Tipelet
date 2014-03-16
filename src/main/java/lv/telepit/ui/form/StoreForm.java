@@ -22,7 +22,7 @@ public class StoreForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("name")
-    private TextField nameField = FieldFactory.getTextField("name2");
+    private TextField nameField = FieldFactory.getTextField("name");
 
     @PropertyId("city")
     private TextField cityField = FieldFactory.getTextField("city");
@@ -38,6 +38,8 @@ public class StoreForm extends FormLayout {
 
         FieldGroup binder = new FieldGroup(storeItem);
         binder.bindMemberFields(this);
+        nameField.setCaption("Nosaukums");
+        nameField.setInputPrompt("Rīga, Marijas iela");
         addComponent(nameField);
         addComponent(cityField);
         addComponent(addressField);

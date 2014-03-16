@@ -12,6 +12,7 @@ import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Store;
 import lv.telepit.model.User;
+import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.component.PropertyFilter;
 import lv.telepit.ui.form.UserForm;
 import lv.telepit.ui.form.fields.SimpleStoreComboBox;
@@ -52,25 +53,22 @@ public class UserView extends AbstractView {
         label = new Label(bundle.getString("user.view.label"));
         label.setContentMode(ContentMode.HTML);
 
-
         filterStore = new SimpleStoreComboBox(bundle.getString("user.store"), false);
-
         filterName = new TextField(bundle.getString("user.name"));
-
         filterSurname = new TextField(bundle.getString("user.surname"));
-
         filterDeleted = new CheckBox(bundle.getString("user.deleted"));
 
         filterButton = new Button(bundle.getString("default.button.filter"));
         filterButton.addClickListener(new FilterUser());
         filterButton.setIcon(new ThemeResource("img/filter.png"));
 
-        refreshButton = new Button(bundle.getString("default.button.refresh"));
+        refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
         container = new BeanItemContainer<>(User.class);
         table = new Table();
+        table.setWidth("700px");
         table.setImmediate(true);
         table.setContainerDataSource(container);
         table.setVisibleColumns("name", "surname", "login", "phone", "admin", "store");
@@ -103,10 +101,15 @@ public class UserView extends AbstractView {
         deleteUser.setEnabled(false);
         deleteUser.addClickListener(new EditUserListener());
 
-        final HorizontalLayout searchLayout = new HorizontalLayout(filterStore, filterName, filterSurname, filterDeleted, filterButton);
+        final HorizontalLayout searchLayout = new HorizontalLayout(filterName, filterSurname, filterStore, filterDeleted, filterButton);
         searchLayout.setSpacing(true);
         searchLayout.setComponentAlignment(filterDeleted, Alignment.BOTTOM_CENTER);
         searchLayout.setComponentAlignment(filterButton, Alignment.BOTTOM_RIGHT);
+
+        final HorizontalLayout searchButtonLayout = new HorizontalLayout(filterButton, refreshButton);
+        searchButtonLayout.setSpacing(true);
+        searchButtonLayout.setWidth("700px");
+        searchButtonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
         final VerticalLayout buttonLayout = new VerticalLayout(addUser, updateUser, deleteUser);
         buttonLayout.setSpacing(true);
@@ -115,8 +118,10 @@ public class UserView extends AbstractView {
         tableButtonsLayout.setSpacing(true);
 
         content.addComponent(label);
+        content.addComponent(new Hr());
         content.addComponent(searchLayout);
-        content.addComponent(refreshButton);
+        content.addComponent(new Hr());
+        content.addComponent(searchButtonLayout);
         content.addComponent(tableButtonsLayout);
 
         refreshView();

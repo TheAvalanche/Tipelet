@@ -23,7 +23,7 @@ public class ServiceGoodForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("name")
-    private TextField nameField = FieldFactory.getTextField("name3");
+    private TextField nameField = FieldFactory.getTextField("name");
 
     @PropertyId("status")
     private ComboBox statusField = FieldFactory.getStatusComboBox("status");
@@ -77,6 +77,9 @@ public class ServiceGoodForm extends FormLayout {
         /*View creation.*/
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
+
+        nameField.setCaption("Nosaukums");
+        nameField.setInputPrompt("Samsung Galaxy S3");
         addComponent(nameField);
         addComponent(statusField);
         addComponent(imeiField);

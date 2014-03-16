@@ -1,5 +1,6 @@
 package lv.telepit.ui.form;
 
+import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
@@ -53,8 +54,8 @@ public class UserForm extends FormLayout {
         addComponent(passwordField);
         addComponent(passwordField);
         addComponent(phoneField);
-        addComponent(storeField);
         addComponent(adminField);
+        addComponent(storeField);
 
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
@@ -79,19 +80,15 @@ public class UserForm extends FormLayout {
         }
 
         @Override
-        public void businessMethod() {
-            try {
-                UserService service = view.getUi().getUserService();
-                if (entity.getId() == 0) {
-                    service.saveUser(entity);
-                } else {
-                    service.updateUser(entity);
-                }
-            } catch (Exception e) {
-                Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
-                e.printStackTrace();
-                throw new RuntimeException(e);
+        public void businessMethod() throws Exception {
+
+            UserService service = view.getUi().getUserService();
+            if (entity.getId() == 0) {
+                service.saveUser(entity);
+            } else {
+                service.updateUser(entity);
             }
+
         }
     }
 

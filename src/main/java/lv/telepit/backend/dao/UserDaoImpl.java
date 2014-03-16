@@ -45,7 +45,7 @@ public class UserDaoImpl implements UserDao {
         Query q = em.createNamedQuery("User.getByLogin");
         q.setParameter("login", user.getLogin());
         List<User> duplicates = q.getResultList();
-        if (!duplicates.isEmpty()) {
+        if (!duplicates.isEmpty() && duplicates.get(0).getId() != user.getId()) {
             throw new Exception("Lietotājs ar tādu loginu jau eksistē datubasē!");
         }
 
