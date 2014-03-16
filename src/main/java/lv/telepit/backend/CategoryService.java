@@ -25,6 +25,10 @@ public class CategoryService {
         return categoryDao.getAllCategories();
     }
 
+    public void removeCategory(Category category) {
+        categoryDao.removeCategory(category);
+    }
+
 
 
 }

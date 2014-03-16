@@ -10,5 +10,7 @@ import java.util.List;
 public interface CategoryDao {
     void addOrUpdateCategory(Category category);
 
+    void removeCategory(Category category);
+
     List<Category> getAllCategories();
 }

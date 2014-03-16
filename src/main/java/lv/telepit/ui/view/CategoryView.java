@@ -25,6 +25,7 @@ public class CategoryView extends AbstractView {
     private Label label;
     private Button addRoot;
     private Button addChildren;
+    private Button removeChildren;
 
     public CategoryView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
@@ -74,12 +75,28 @@ public class CategoryView extends AbstractView {
             }
         });
 
+        removeChildren = new Button("Nodzēst Kategoriju");
+        removeChildren.setEnabled(false);
+        removeChildren.setImmediate(true);
+        removeChildren.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                if (tree.getValue() == null) {
+                    return;
+                }
+                Category c = (Category) tree.getValue();
+                tree.removeItem(c);
+                ui.getCategoryService().removeCategory(c);
+                refreshView();
+            }
+        });
+
         tree.addValueChangeListener(new EditCategoryListener());
         tree.addItemClickListener(new EditCategoryListener());
         nameField.addTextChangeListener(new EditCategoryListener());
         nameField.addValueChangeListener(new EditCategoryListener());
 
-        VerticalLayout controlLayout = new VerticalLayout(nameField, addRoot, addChildren);
+        VerticalLayout controlLayout = new VerticalLayout(nameField, addRoot, addChildren, removeChildren);
         controlLayout.setSpacing(true);
 
         Panel treePanel = new Panel(tree);
@@ -99,6 +116,7 @@ public class CategoryView extends AbstractView {
 
     @Override
     public void refreshView() {
+        tree.removeAllItems();
         List<Category> categories = ui.getCategoryService().getAllCategories();
         for (Category category : categories) {
             tree.addItem(category);
@@ -162,6 +180,12 @@ public class CategoryView extends AbstractView {
                 addChildren.setEnabled(true);
             } else {
                 addChildren.setEnabled(false);
+            }
+
+            if (tree.getValue() != null) {
+                removeChildren.setEnabled(true);
+            } else {
+                removeChildren.setEnabled(false);
             }
         }
     }

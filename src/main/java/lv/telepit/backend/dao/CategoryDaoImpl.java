@@ -31,6 +31,15 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
+    public void removeCategory(Category category) {
+        EntityManager em = emf.createEntityManager();
+        Category c = em.find(Category.class, category.getId());
+        loadChildren(c, em);
+        removeChildren(c, em);
+        em.close();
+    }
+
+    @Override
     public List<Category> getAllCategories() {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("Category.getAll");
@@ -52,5 +61,20 @@ public class CategoryDaoImpl implements CategoryDao {
                 loadChildren(category, em);
             }
         }
+    }
+
+    private void removeChildren(Category parent, EntityManager em) {
+        Query q = em.createNamedQuery("Category.getChildren");
+        q.setParameter("parent", parent);
+        List<Category> categories = q.getResultList();
+        if (!categories.isEmpty()) {
+            for (Category category : categories) {
+                removeChildren(category, em);
+            }
+        }
+
+        em.getTransaction().begin();
+        em.remove(parent);
+        em.getTransaction().commit();
     }
 }
