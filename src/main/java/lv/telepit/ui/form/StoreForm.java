@@ -30,9 +30,6 @@ public class StoreForm extends FormLayout {
     @PropertyId("address")
     private TextField addressField = FieldFactory.getTextField("address");
 
-    @PropertyId("deleted")
-    private CheckBox deletedField = FieldFactory.getCheckBox("deleted");
-
 
     public StoreForm(BeanItem<Store> storeItem, AbstractView view) {
 
@@ -43,7 +40,6 @@ public class StoreForm extends FormLayout {
         addComponent(nameField);
         addComponent(cityField);
         addComponent(addressField);
-        addComponent(deletedField);
 
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
@@ -68,7 +64,7 @@ public class StoreForm extends FormLayout {
         }
 
         @Override
-        public void businessMethod() {
+        public void businessMethod() throws Exception {
             StoreService service = view.getUi().getStoreService();
             if (entity.getId() == 0) {
                 service.saveStore(entity);

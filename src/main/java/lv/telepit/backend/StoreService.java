@@ -17,15 +17,15 @@ public class StoreService {
         this.storeDao = new StoreDaoImpl();
     }
 
-    public void saveStore(Store store) {
+    public void saveStore(Store store) throws Exception {
         storeDao.createStore(store);
     }
 
-    public void updateStore(Store store) {
+    public void updateStore(Store store) throws Exception {
         storeDao.updateStore(store);
     }
 
-    public void deleteStore(Store store) {
+    public void deleteStore(Store store) throws Exception {
         store.setDeleted(true);
         storeDao.updateStore(store);
     }

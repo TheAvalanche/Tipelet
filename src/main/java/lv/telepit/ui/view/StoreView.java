@@ -10,6 +10,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Store;
+import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.StoreForm;
 import org.vaadin.dialogs.ConfirmDialog;
 
@@ -39,6 +40,7 @@ public class StoreView extends AbstractView {
 
         container = new BeanItemContainer<>(Store.class);
         table = new Table();
+        table.setWidth("500px");
         table.setImmediate(true);
         table.setContainerDataSource(container);
         table.setVisibleColumns("name", "city", "address");
@@ -74,6 +76,7 @@ public class StoreView extends AbstractView {
         tableButtonsLayout.setSpacing(true);
 
         content.addComponent(label);
+        content.addComponent(new Hr());
         content.addComponent(tableButtonsLayout);
 
         refreshView();
@@ -114,7 +117,11 @@ public class StoreView extends AbstractView {
                     @Override
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
-                            ui.getStoreService().deleteStore(storeToDelete);
+                            try {
+                                ui.getStoreService().deleteStore(storeToDelete);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             refreshView();
                         }
                     }
