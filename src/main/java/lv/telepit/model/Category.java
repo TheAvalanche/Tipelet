@@ -20,6 +20,7 @@ public class Category {
     private List<Category> children = new ArrayList<>();
     private Category parent;
     private String name;
+    private String treeName;
 
     public Category() {
 
@@ -73,6 +74,15 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Transient
+    public String getTreeName() {
+        return treeName;
+    }
+
+    public void setTreeName(String treeName) {
+        this.treeName = treeName;
     }
 
     // creates and returns a new categories tree

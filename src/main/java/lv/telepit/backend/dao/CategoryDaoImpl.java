@@ -45,6 +45,7 @@ public class CategoryDaoImpl implements CategoryDao {
         Query q = em.createNamedQuery("Category.getAll");
         List<Category> categories = q.getResultList();
         for (Category category : categories) {
+            category.setTreeName(category.getName());
             loadChildren(category, em);
         }
         em.close();
@@ -58,6 +59,7 @@ public class CategoryDaoImpl implements CategoryDao {
         if (!categories.isEmpty()) {
             parent.setChildren(categories);
             for (Category category : categories) {
+                category.setTreeName(parent.getTreeName() + "/" + category.getName());
                 loadChildren(category, em);
             }
         }

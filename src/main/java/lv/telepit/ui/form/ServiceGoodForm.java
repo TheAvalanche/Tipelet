@@ -80,6 +80,7 @@ public class ServiceGoodForm extends FormLayout {
 
         nameField.setCaption("Nosaukums");
         nameField.setInputPrompt("Samsung Galaxy S3");
+        addComponent(FieldFactory.getCategoryComboBox("category"));
         addComponent(nameField);
         addComponent(statusField);
         addComponent(imeiField);
