@@ -1,16 +1,16 @@
 package lv.telepit.ui.view;
 
 import com.google.common.base.Strings;
+import com.google.gwt.user.client.ui.HasOneWidget;
 import com.vaadin.data.Property;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
-import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.Tree;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Category;
+import lv.telepit.ui.component.Hr;
 
 import java.util.List;
 import java.util.Random;
@@ -22,6 +22,7 @@ public class CategoryView extends AbstractView {
 
     private TextField nameField;
     private Tree tree;
+    private Label label;
     private Button addRoot;
     private Button addChildren;
 
@@ -32,11 +33,15 @@ public class CategoryView extends AbstractView {
     @Override
     public void buildContent() {
 
+        label = new Label(bundle.getString("category.view.label"));
+        label.setContentMode(ContentMode.HTML);
+
         nameField = new TextField("Kategorijas Nosaukums");
         nameField.setImmediate(true);
         nameField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
-        tree = new Tree("Kategorijas");
+        tree = new Tree();
+        tree.setImmediate(true);
 
         addRoot = new Button("Pievienot Kategoriju");
         addRoot.setEnabled(false);
@@ -74,10 +79,20 @@ public class CategoryView extends AbstractView {
         nameField.addTextChangeListener(new EditCategoryListener());
         nameField.addValueChangeListener(new EditCategoryListener());
 
-        content.addComponent(tree);
-        content.addComponent(nameField);
-        content.addComponent(addRoot);
-        content.addComponent(addChildren);
+        VerticalLayout controlLayout = new VerticalLayout(nameField, addRoot, addChildren);
+        controlLayout.setSpacing(true);
+
+        Panel treePanel = new Panel(tree);
+        treePanel.setWidth("300px");
+        treePanel.setHeight("100%");
+
+        HorizontalLayout treeAndButtons = new HorizontalLayout(treePanel, controlLayout);
+        treeAndButtons.setSpacing(true);
+        treeAndButtons.setHeight("100%");
+
+        content.addComponent(label);
+        content.addComponent(new Hr());
+        content.addComponent(treeAndButtons);
 
         refreshView();
     }
@@ -109,13 +124,14 @@ public class CategoryView extends AbstractView {
             return;
         }
 
+        tree.setChildrenAllowed(parent, true);
         for (Category category : parent.getChildren()) {
             tree.addItem(category);
             tree.setParent(category, parent);
             tree.setItemCaption(category, category.getName());
             loadChildren(category);
         }
-        tree.setChildrenAllowed(parent, true);
+
     }
 
     private class EditCategoryListener implements Property.ValueChangeListener, ItemClickEvent.ItemClickListener, FieldEvents.TextChangeListener {
