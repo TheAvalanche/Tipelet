@@ -21,6 +21,7 @@ public class Category {
     private Category parent;
     private String name;
     private String treeName;
+    private List<Long> allIds = new ArrayList<>();
 
     public Category() {
 
@@ -83,6 +84,15 @@ public class Category {
 
     public void setTreeName(String treeName) {
         this.treeName = treeName;
+    }
+
+    @Transient
+    public List<Long> getAllIds() {
+        return allIds;
+    }
+
+    public void setAllIds(List<Long> allIds) {
+        this.allIds = allIds;
     }
 
     // creates and returns a new categories tree

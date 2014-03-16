@@ -22,6 +22,9 @@ import java.util.ResourceBundle;
 public class ServiceGoodForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
+    @PropertyId("category")
+    private ComboBox categoryField = FieldFactory.getCategoryComboBox("category");
+
     @PropertyId("name")
     private TextField nameField = FieldFactory.getTextField("name");
 
@@ -80,7 +83,7 @@ public class ServiceGoodForm extends FormLayout {
 
         nameField.setCaption("Nosaukums");
         nameField.setInputPrompt("Samsung Galaxy S3");
-        addComponent(FieldFactory.getCategoryComboBox("category"));
+        addComponent(categoryField);
         addComponent(nameField);
         addComponent(statusField);
         addComponent(imeiField);

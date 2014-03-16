@@ -46,6 +46,7 @@ public class CategoryDaoImpl implements CategoryDao {
         List<Category> categories = q.getResultList();
         for (Category category : categories) {
             category.setTreeName(category.getName());
+            category.getAllIds().add(category.getId());
             loadChildren(category, em);
         }
         em.close();
@@ -59,7 +60,9 @@ public class CategoryDaoImpl implements CategoryDao {
         if (!categories.isEmpty()) {
             parent.setChildren(categories);
             for (Category category : categories) {
+                parent.getAllIds().add(category.getId());
                 category.setTreeName(parent.getTreeName() + "/" + category.getName());
+                category.getAllIds().add(category.getId());
                 loadChildren(category, em);
             }
         }
