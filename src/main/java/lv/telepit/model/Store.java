@@ -96,13 +96,11 @@ public class Store {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         final Store other = (Store) obj;
-        return Objects.equal(this.getId(), other.getId())
-                && Objects.equal(this.getName(), other.getName())
-                && Objects.equal(this.getAddress(), other.getAddress());
+        return Objects.equal(this.getId(), other.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.getId(), this.getName(), this.getAddress());
+        return Objects.hashCode(this.getId());
     }
 }

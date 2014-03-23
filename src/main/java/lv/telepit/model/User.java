@@ -120,13 +120,11 @@ public class User {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         final User other = (User) obj;
-        return Objects.equal(this.id, other.id)
-                && Objects.equal(this.name, other.name)
-                && Objects.equal(this.surname, other.surname);
+        return Objects.equal(this.getId(), other.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.id, this.name, this.surname);
+        return Objects.hashCode(this.getId());
     }
 }

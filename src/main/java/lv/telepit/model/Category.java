@@ -110,12 +110,11 @@ public class Category {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         final Category other = (Category) obj;
-        return Objects.equal(this.getId(), other.getId())
-                && Objects.equal(this.getName(), other.getName());
+        return Objects.equal(this.getId(), other.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.getId(), this.getName());
+        return Objects.hashCode(this.getId());
     }
 }

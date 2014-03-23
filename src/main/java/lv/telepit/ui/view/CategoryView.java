@@ -11,6 +11,7 @@ import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Category;
 import lv.telepit.ui.component.Hr;
+import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
 import java.util.Random;
@@ -25,6 +26,7 @@ public class CategoryView extends AbstractView {
     private Label label;
     private Button addRoot;
     private Button addChildren;
+    private Button changeChildren;
     private Button removeChildren;
 
     public CategoryView(Navigator navigator, TelepitUI ui, String name) {
@@ -75,6 +77,22 @@ public class CategoryView extends AbstractView {
             }
         });
 
+        changeChildren = new Button("Izmainīt nosaukumu");
+        changeChildren.setEnabled(false);
+        changeChildren.setImmediate(true);
+        changeChildren.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                if (Strings.isNullOrEmpty(nameField.getValue()) || tree.getValue() == null) {
+                    return;
+                }
+                Category c = (Category) tree.getValue();
+                c.setName(nameField.getValue());
+                ui.getCategoryService().addOrUpdateCategory(c);
+                refreshView();
+            }
+        });
+
         removeChildren = new Button("Nodzēst Kategoriju");
         removeChildren.setEnabled(false);
         removeChildren.setImmediate(true);
@@ -84,10 +102,20 @@ public class CategoryView extends AbstractView {
                 if (tree.getValue() == null) {
                     return;
                 }
-                Category c = (Category) tree.getValue();
-                tree.removeItem(c);
-                ui.getCategoryService().removeCategory(c);
-                refreshView();
+                ConfirmDialog.show(ui,
+                        bundle.getString("category.view.delete.header"),
+                        bundle.getString("category.view.delete.message"),
+                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
+                            @Override
+                            public void onClose(ConfirmDialog dialog) {
+                                if (dialog.isConfirmed()) {
+                                    Category c = (Category) tree.getValue();
+                                    ui.getCategoryService().removeCategory(c);
+                                    refreshView();
+                                }
+                            }
+                        }
+                );
             }
         });
 
@@ -96,7 +124,7 @@ public class CategoryView extends AbstractView {
         nameField.addTextChangeListener(new EditCategoryListener());
         nameField.addValueChangeListener(new EditCategoryListener());
 
-        VerticalLayout controlLayout = new VerticalLayout(nameField, addRoot, addChildren, removeChildren);
+        VerticalLayout controlLayout = new VerticalLayout(nameField, addRoot, addChildren, changeChildren, removeChildren);
         controlLayout.setSpacing(true);
 
         Panel treePanel = new Panel(tree);
@@ -128,6 +156,8 @@ public class CategoryView extends AbstractView {
         nameField.setValue("");
         addRoot.setEnabled(false);
         addChildren.setEnabled(false);
+        removeChildren.setEnabled(false);
+        changeChildren.setEnabled(false);
     }
 
     @Override
@@ -177,8 +207,10 @@ public class CategoryView extends AbstractView {
             }
 
             if (tree.getValue() != null && !Strings.isNullOrEmpty(nameField.getValue())) {
+                changeChildren.setEnabled(true);
                 addChildren.setEnabled(true);
             } else {
+                changeChildren.setEnabled(false);
                 addChildren.setEnabled(false);
             }
 
