@@ -6,7 +6,7 @@ import javax.persistence.Query;
  * Created by Alex on 05/03/14.
  */
 public enum ServiceGoodCriteria {
-    NAME, STATUS, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, USER, STORE;
+    NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, USER, STORE;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
@@ -16,6 +16,9 @@ public enum ServiceGoodCriteria {
                 break;
             case STATUS:
                 query.append("sg.status = :status ");
+                break;
+            case CATEGORY:
+                query.append("sg.category.id in :idList");
                 break;
             case IMEI:
                 query.append("lower(sg.imei) like :imei ");
@@ -35,6 +38,7 @@ public enum ServiceGoodCriteria {
             case STORE:
                 query.append("sg.store = :store ");
                 break;
+
         }
 
     }
@@ -47,6 +51,9 @@ public enum ServiceGoodCriteria {
                 break;
             case STATUS:
                 q.setParameter("status", value);
+                break;
+            case CATEGORY:
+                q.setParameter("idList", value);
                 break;
             case IMEI:
                 q.setParameter("imei", "%" + value + "%");
@@ -66,6 +73,7 @@ public enum ServiceGoodCriteria {
             case STORE:
                 q.setParameter("store", value);
                 break;
+
         }
     }
 }

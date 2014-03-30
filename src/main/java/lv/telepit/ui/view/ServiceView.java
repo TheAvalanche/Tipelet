@@ -9,9 +9,12 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
+import lv.telepit.model.Category;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -37,8 +40,10 @@ public class ServiceView extends AbstractView {
     private ComboBox userField;
     private ComboBox storeField;
     private ComboBox statusField;
+    private ComboBox categoryField;
     private DateField deliveredField;
     private DateField returnedField;
+    private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
     private Table table;
@@ -62,6 +67,7 @@ public class ServiceView extends AbstractView {
         userField = FieldFactory.getUserComboBox("user");
         storeField = FieldFactory.getStoreComboBox("store");
         statusField = FieldFactory.getStatusComboBox("status");
+        categoryField = FieldFactory.getCategoryComboBox("category");
         deliveredField = new DateField(bundle.getString("service.good.deliveredDate"));
         deliveredField.setDateFormat("dd.MM.yyyy");
         returnedField = new DateField(bundle.getString("service.good.returnedDate"));
@@ -71,7 +77,7 @@ public class ServiceView extends AbstractView {
         searchButton.addClickListener(new SearchListener());
         searchButton.setIcon(new ThemeResource("img/search.png"));
 
-        refreshButton = new Button(bundle.getString("default.button.refresh"));
+        refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
@@ -81,16 +87,21 @@ public class ServiceView extends AbstractView {
             protected String formatPropertyValue(Object rowId, Object colId, Property property) {
                 Object v = property.getValue();
                 if (v instanceof Date) {
-                Date dateValue = (Date) v;
+                    Date dateValue = (Date) v;
                     return new SimpleDateFormat("dd.MM.yyyy").format(dateValue);
+                } else if (v instanceof Double) {
+                    Double doubleValue = (Double) v;
+                    return String.format("%.2f", doubleValue);
                 }
                 return super.formatPropertyValue(rowId, colId, property);
             }
         };
         table.setImmediate(true);
+        table.setWidth("1200px");
         table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "name", "status","imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table.setVisibleColumns("store", "category", "name", "status","imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setColumnHeaders(bundle.getString("service.good.store"),
+                bundle.getString("service.good.category"),
                 bundle.getString("service.good.name"),
                 bundle.getString("service.good.status"),
                 bundle.getString("service.good.imei"),
@@ -123,19 +134,33 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditServiceGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, statusField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField);
         searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, imeiField, accumNumField, deliveredField, returnedField, searchButton);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, imeiField, accumNumField, deliveredField, returnedField);
         searchLayout2.setSpacing(true);
-        searchLayout2.setComponentAlignment(searchButton, Alignment.BOTTOM_RIGHT);
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood);
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
+        searchLayout.setSpacing(true);
+        searchLayout.setVisible(false);
+
+        expandButton = new Button("Radīt/Slēpt meklēšanas rīkus");
+        expandButton.setStyleName(Reindeer.BUTTON_LINK);
+        expandButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                searchLayout.setVisible(!searchLayout.isVisible());
+            }
+        });
+
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, refreshButton);
         buttonLayout.setSpacing(true);
+        buttonLayout.setWidth("1200px");
+        buttonLayout.setExpandRatio(refreshButton, 1.0f);
+        buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
         content.addComponent(label);
-        content.addComponent(searchLayout1);
-        content.addComponent(searchLayout2);
-        content.addComponent(refreshButton);
+        content.addComponent(expandButton);
+        content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);
 
@@ -248,6 +273,9 @@ public class ServiceView extends AbstractView {
             }
             if (storeField.getValue() != null) {
                 map.put(ServiceGoodCriteria.STORE, storeField.getValue());
+            }
+            if (categoryField.getValue() != null) {
+                map.put(ServiceGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
             }
             if (statusField.getValue() != null) {
                 map.put(ServiceGoodCriteria.STATUS, statusField.getValue());

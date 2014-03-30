@@ -37,10 +37,12 @@ public class ServiceDaoImpl implements ServiceDao {
         em.getTransaction().begin();
         em.persist(good);
 
-        ChangeRecord cr = good.getChange();
-        cr.setDate(new Date());
-        cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
-        em.persist(cr);
+        if (!good.getChange().getChangeList().isEmpty()) {
+            ChangeRecord cr = good.getChange();
+            cr.setDate(new Date());
+            cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+            em.persist(cr);
+        }
 
         em.getTransaction().commit();
         em.close();
@@ -52,10 +54,12 @@ public class ServiceDaoImpl implements ServiceDao {
         em.getTransaction().begin();
         em.merge(good);
 
-        ChangeRecord cr = good.getChange();
-        cr.setDate(new Date());
-        cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
-        em.persist(cr);
+        if (!good.getChange().getChangeList().isEmpty()) {
+            ChangeRecord cr = good.getChange();
+            cr.setDate(new Date());
+            cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+            em.persist(cr);
+        }
 
         em.getTransaction().commit();
         em.close();
