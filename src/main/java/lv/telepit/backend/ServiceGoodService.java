@@ -4,6 +4,7 @@ import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.dao.ServiceDao;
 import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.backend.dao.StoreDaoImpl;
+import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.Store;
 
@@ -39,5 +40,9 @@ public class ServiceGoodService {
 
     public List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> query) {
         return serviceDao.findGoods(query);
+    }
+    
+    public List<ChangeRecord> findChanges(ServiceGood serviceGood) {
+        return serviceDao.findChanges(serviceGood);
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.Action;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ThemeResource;
@@ -17,6 +18,7 @@ import lv.telepit.model.ServiceGood;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.ui.view.context.ServiceContext;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
@@ -116,6 +118,7 @@ public class ServiceView extends AbstractView {
         table.setImmediate(true);
         table.addItemClickListener(new EditServiceGoodListener());
         table.addValueChangeListener(new EditServiceGoodListener());
+        table.addActionHandler(new ServiceContext(this));
 
         addGood = new Button(bundle.getString("default.button.add"));
         addGood.setIcon(new ThemeResource("img/add.png"));

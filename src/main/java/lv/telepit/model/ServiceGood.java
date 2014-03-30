@@ -2,6 +2,7 @@ package lv.telepit.model;
 
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -156,8 +157,8 @@ public class ServiceGood {
 
     public void setDeliveredDate(Date deliveredDate) {
         change.addChange("deliveredDate",
-                this.deliveredDate != null ? this.deliveredDate.toString() : "-",
-                deliveredDate != null ? deliveredDate.toString() : "-");
+                this.deliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.deliveredDate) : "-",
+                deliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(deliveredDate) : "-");
         this.deliveredDate = deliveredDate;
     }
 
@@ -168,8 +169,8 @@ public class ServiceGood {
 
     public void setStartDate(Date startDate) {
         change.addChange("startDate",
-                this.startDate != null ? this.startDate.toString() : "-",
-                startDate != null ? startDate.toString() : "-");
+                this.startDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.startDate) : "-",
+                startDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(startDate) : "-");
         this.startDate = startDate;
     }
 
@@ -180,8 +181,8 @@ public class ServiceGood {
 
     public void setFinishDate(Date finishDate) {
         change.addChange("finishDate",
-                this.finishDate != null ? this.finishDate.toString() : "-",
-                finishDate != null ? finishDate.toString() : "-");
+                this.finishDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.finishDate) : "-",
+                finishDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(finishDate) : "-");
         this.finishDate = finishDate;
     }
 
@@ -192,8 +193,8 @@ public class ServiceGood {
 
     public void setReturnedDate(Date returnedDate) {
         change.addChange("returnedDate",
-                this.returnedDate != null ? this.returnedDate.toString() : "-",
-                returnedDate != null ? returnedDate.toString() : "-");
+                this.returnedDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.returnedDate) : "-",
+                returnedDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(returnedDate) : "-");
         this.returnedDate = returnedDate;
     }
 

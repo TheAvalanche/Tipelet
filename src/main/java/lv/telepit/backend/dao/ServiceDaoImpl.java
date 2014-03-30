@@ -35,10 +35,11 @@ public class ServiceDaoImpl implements ServiceDao {
     public void createGood(ServiceGood good) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        em.persist(good);
 
+        System.out.println(good.getId());
         if (!good.getChange().getChangeList().isEmpty()) {
             ChangeRecord cr = good.getChange();
+            cr.setServiceGood(good);
             cr.setDate(new Date());
             cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
             em.persist(cr);
@@ -56,6 +57,7 @@ public class ServiceDaoImpl implements ServiceDao {
 
         if (!good.getChange().getChangeList().isEmpty()) {
             ChangeRecord cr = good.getChange();
+            cr.setServiceGood(good);
             cr.setDate(new Date());
             cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
             em.persist(cr);
@@ -104,6 +106,16 @@ public class ServiceDaoImpl implements ServiceDao {
         List<ServiceGood> list = q.getResultList();
         em.close();
         return list;
+    }
+
+    @Override
+    public List<ChangeRecord> findChanges(ServiceGood serviceGood) {
+
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createNamedQuery("ChangeRecord.findForServiceGood");
+        q.setParameter("serviceGood", serviceGood);
+        return q.getResultList();
+
     }
 
 

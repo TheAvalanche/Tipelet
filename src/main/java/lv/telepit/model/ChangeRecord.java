@@ -12,6 +12,9 @@ import java.util.*;
  * Created by Alex on 12/03/14.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "ChangeRecord.findForServiceGood", query = "select cr from ChangeRecord cr where cr.serviceGood = :serviceGood order by cr.date DESC")
+})
 public class ChangeRecord {
 
     private long id;
@@ -120,7 +123,7 @@ public class ChangeRecord {
         changeList.add(change);
     }
 
-    private class PropertyChange {
+    public class PropertyChange {
 
         private String name;
         private String oldValue;
