@@ -6,8 +6,10 @@ import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.backend.dao.StoreDaoImpl;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.model.ServiceStatus;
 import lv.telepit.model.Store;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +46,27 @@ public class ServiceGoodService {
     
     public List<ChangeRecord> findChanges(ServiceGood serviceGood) {
         return serviceDao.findChanges(serviceGood);
+    }
+
+    public void changeStatus(ServiceGood serviceGood, ServiceStatus status) {
+        serviceGood.setStatus(status);
+        if (status == ServiceStatus.WAITING) {
+            serviceGood.setFinishDate(null);
+            serviceGood.setStartDate(null);
+            serviceGood.setReturnedDate(null);
+        }
+        if (status == ServiceStatus.IN_REPAIR) {
+            serviceGood.setStartDate(new Date());
+        }
+        if (status == ServiceStatus.REPAIRED || status == ServiceStatus.BROKEN) {
+            serviceGood.setFinishDate(new Date());
+        }
+        if (status == ServiceStatus.RETURNED || status == ServiceStatus.ON_DETAILS) {
+            serviceGood.setReturnedDate(new Date());
+            if (serviceGood.getFinishDate() == null) {
+                serviceGood.setFinishDate(new Date());
+            }
+        }
+        serviceDao.updateGood(serviceGood);
     }
 }

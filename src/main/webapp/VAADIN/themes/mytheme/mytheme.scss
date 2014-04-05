@@ -15,4 +15,20 @@
     background-image: url("./img/logo.png");
     background-repeat: no-repeat;
   }
+
+  .v-table-row-waiting {
+    background: #5ca2ff;
+  }
+
+  .v-table-row-in-repair {
+    background: #ffffff;
+  }
+
+  .v-table-row-finished {
+    background: #1cd71b;
+  }
+
+  .v-table-row-returned {
+    background: #f1c300;
+  }
 }

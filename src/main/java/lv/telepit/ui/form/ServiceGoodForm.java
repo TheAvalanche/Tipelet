@@ -25,6 +25,9 @@ public class ServiceGoodForm extends FormLayout {
     @PropertyId("category")
     private ComboBox categoryField = FieldFactory.getCategoryComboBox("category");
 
+    @PropertyId("store")
+    private ComboBox storeField = FieldFactory.getStoreComboBox("store");
+
     @PropertyId("name")
     private TextField nameField = FieldFactory.getTextField("name");
 
@@ -75,6 +78,11 @@ public class ServiceGoodForm extends FormLayout {
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setDeliveredDate(new Date());
             good.setStatus(ServiceStatus.WAITING);
+        }
+
+        if (view.getUi().getCurrentUser().isAdmin()) {
+            storeField.setRequired(true);
+            addComponent(storeField);
         }
 
         /*View creation.*/

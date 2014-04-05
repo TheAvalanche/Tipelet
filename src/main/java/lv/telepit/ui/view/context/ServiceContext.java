@@ -46,26 +46,27 @@ public class ServiceContext implements Action.Handler {
     @Override
     public void handleAction(Action action, Object sender, Object target) {
         if (action == inWaiting) {
-
+            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.WAITING);
+            view.refreshView();
         } else if (action == inRepair) {
-
+            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.IN_REPAIR);
+            view.refreshView();
         } else if (action == repaired) {
-
+            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.REPAIRED);
+            view.refreshView();
         } else if (action == broken) {
-
+            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.BROKEN);
+            view.refreshView();
         } else if (action == returned) {
-
+            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.RETURNED);
+            view.refreshView();
         } else if (action == onDetails) {
-
+            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.ON_DETAILS);
+            view.refreshView();
         } else if (action == showHistory) {
             showHistory((ServiceGood) target);
+            view.refreshView();
         }
-    }
-
-    private void inRepair(ServiceGood serviceGood) {
-        serviceGood.setStatus(ServiceStatus.IN_REPAIR);
-        serviceGood.setStartDate(new Date());
-        view.getUi().getServiceGoodService().updateGood(serviceGood);
     }
 
     private void showHistory(ServiceGood serviceGood) {

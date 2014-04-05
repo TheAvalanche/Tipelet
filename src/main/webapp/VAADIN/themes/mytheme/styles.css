@@ -328,68 +328,6 @@
 	background: #f5f5f5;
 }
 
-.mytheme .v-context-menu {
-	float: left;
-	font-family: Arial;
-	font-size: 12px;
-	background-color: #f0f0f0;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic, .mytheme .v-context-menu .v-context-menu-item-basic-submenu {
-	float: left;
-	clear: left;
-	height: 26px;
-	color: #222;
-	cursor: pointer;
-	background-color: #f0f0f0;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic.v-context-menu-item-separator, .mytheme .v-context-menu .v-context-menu-item-basic-submenu.v-context-menu-item-separator {
-	border-bottom: 1px solid #d0d0d0;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic-submenu {
-	background: transparent url(../../../VAADIN/themes/contextmenu/img/basic/arrow.png) no-repeat center right;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic:focus, .mytheme .v-context-menu .v-context-menu-item-basic-submenu:focus, .mytheme .v-context-menu .v-context-menu-item-basic-open {
-	background-color: #e0e0e0;
-	outline: none;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic.v-context-menu-item-disabled {
-	opacity: 0.3;
-	filter: alpha(opacity = 30);
-	zoom: 1;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic.v-context-menu-item-disabled:hover, .mytheme .v-context-menu .v-context-menu-item-basic-submenu.v-context-menu-item-disabled:hover {
-	background-color: #f0f0f0;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic-icon-container {
-	float: left;
-	width: 26px;
-	height: 26px;
-	margin-right: 5px;
-	border-right: 1px solid #d0d0d0;
-	text-align: center;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic-icon-container .v-icon {
-	float: left;
-	width: 16px;
-	height: 16px;
-	padding: 5px;
-}
-
-.mytheme .v-context-menu .v-context-menu-item-basic-text {
-	float: left;
-	height: 26px;
-	line-height: 26px;
-	padding: 0 20px 0 10px;
-}
-
 .mytheme .v-widget {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -7087,4 +7025,20 @@ body .mytheme.v-app .v-app-loading {
 	height: 120px;
 	background-image: url("./img/logo.png");
 	background-repeat: no-repeat;
+}
+
+.mytheme .v-table-row-waiting {
+	background: #5ca2ff;
+}
+
+.mytheme .v-table-row-in-repair {
+	background: #ffffff;
+}
+
+.mytheme .v-table-row-finished {
+	background: #1cd71b;
+}
+
+.mytheme .v-table-row-returned {
+	background: #f1c300;
 }

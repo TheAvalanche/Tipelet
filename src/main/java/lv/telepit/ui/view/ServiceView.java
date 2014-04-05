@@ -15,6 +15,7 @@ import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.Category;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.model.ServiceStatus;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
@@ -101,7 +102,7 @@ public class ServiceView extends AbstractView {
         table.setImmediate(true);
         table.setWidth("1200px");
         table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "category", "name", "status","imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table.setVisibleColumns("store", "category", "name", "status", "imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setColumnHeaders(bundle.getString("service.good.store"),
                 bundle.getString("service.good.category"),
                 bundle.getString("service.good.name"),
@@ -114,6 +115,26 @@ public class ServiceView extends AbstractView {
                 bundle.getString("service.good.returnedDate"),
                 bundle.getString("service.good.contactName"),
                 bundle.getString("service.good.contactPhone"));
+        table.setCellStyleGenerator(new Table.CellStyleGenerator() {
+            @Override
+            public String getStyle(Table source, Object itemId, Object propertyId) {
+                ServiceGood sg = container.getItem(itemId).getBean();
+                switch (sg.getStatus()) {
+
+                    case WAITING:
+                        return "waiting";
+                    case IN_REPAIR:
+                        return "in-repair";
+                    case REPAIRED:
+                    case BROKEN:
+                        return "finished";
+                    case RETURNED:
+                    case ON_DETAILS:
+                        return "returned";
+                }
+                return "";
+            }
+        });
         table.setSelectable(true);
         table.setImmediate(true);
         table.addItemClickListener(new EditServiceGoodListener());
