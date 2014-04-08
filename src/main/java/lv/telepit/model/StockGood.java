@@ -18,6 +18,8 @@ public class StockGood {
     private User user;
     private Category category;
     private Double price;
+    private Double total;
+    private Integer soldCount;
     private Integer count;
     private String name;
     private Date lastDeliveredDate;
@@ -110,5 +112,23 @@ public class StockGood {
 
     public void setSoldItemList(List<SoldItem> soldItemList) {
         this.soldItemList = soldItemList;
+    }
+
+    @Transient
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    @Transient
+    public Integer getSoldCount() {
+        return soldCount;
+    }
+
+    public void setSoldCount(Integer soldCount) {
+        this.soldCount = soldCount;
     }
 }

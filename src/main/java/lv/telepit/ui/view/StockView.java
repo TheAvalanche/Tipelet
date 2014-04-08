@@ -1,5 +1,6 @@
 package lv.telepit.ui.view;
 
+import com.google.common.base.Strings;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -8,15 +9,24 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
+import lv.telepit.backend.criteria.ServiceGoodCriteria;
+import lv.telepit.backend.criteria.StockGoodCriteria;
+import lv.telepit.model.Category;
+import lv.telepit.model.ServiceGood;
 import lv.telepit.model.StockGood;
+import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.StockGoodForm;
+import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 21/02/14.
@@ -26,6 +36,13 @@ public class StockView extends AbstractView {
     private Button addGood;
     private Button updateGood;
     private Button deleteGood;
+
+    private TextField nameField;
+    private ComboBox userField;
+    private ComboBox storeField;
+    private ComboBox categoryField;
+    private Button expandButton;
+    private Button searchButton;
 
     private Label label;
     private Button refreshButton;
@@ -42,6 +59,15 @@ public class StockView extends AbstractView {
     public void buildContent() {
         label = new Label(bundle.getString("stock.view.label"));
         label.setContentMode(ContentMode.HTML);
+
+        nameField = new TextField(bundle.getString("stock.good.name"));
+        userField = FieldFactory.getUserComboBox("user");
+        storeField = FieldFactory.getStoreComboBox("store");
+        categoryField = FieldFactory.getCategoryComboBox("category");
+
+        searchButton = new Button(bundle.getString("default.button.search"));
+        searchButton.addClickListener(new SearchListener());
+        searchButton.setIcon(new ThemeResource("img/search.png"));
 
         refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
@@ -95,6 +121,22 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditStockGoodListener());
 
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, nameField);
+        searchLayout1.setSpacing(true);
+
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchButton, new Hr());
+        searchLayout.setSpacing(true);
+        searchLayout.setVisible(false);
+
+        expandButton = new Button("Radīt/Slēpt meklēšanas rīkus");
+        expandButton.setStyleName(Reindeer.BUTTON_LINK);
+        expandButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                searchLayout.setVisible(!searchLayout.isVisible());
+            }
+        });
+
         final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1000px");
@@ -102,6 +144,8 @@ public class StockView extends AbstractView {
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
         content.addComponent(label);
+        content.addComponent(expandButton);
+        content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);
 
@@ -195,6 +239,28 @@ public class StockView extends AbstractView {
             layout.addComponent(new StockGoodForm(serviceGood, StockView.this));
 
             subWindow.setContent(layout);
+        }
+    }
+
+    private class SearchListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent event) {
+            Map<StockGoodCriteria, Object> map = new HashMap<>();
+            if (!Strings.isNullOrEmpty(nameField.getValue())) {
+                map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
+            }
+            if (userField.getValue() != null) {
+                map.put(StockGoodCriteria.USER, userField.getValue());
+            }
+            if (storeField.getValue() != null) {
+                map.put(StockGoodCriteria.STORE, storeField.getValue());
+            }
+            if (categoryField.getValue() != null) {
+                map.put(StockGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
+            }
+
+            List<StockGood> list = ui.getStockService().findGoods(map);
+            refreshView(list);
         }
     }
 }

@@ -13,7 +13,8 @@ import java.util.*;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "ChangeRecord.findForServiceGood", query = "select cr from ChangeRecord cr where cr.serviceGood = :serviceGood order by cr.date DESC")
+        @NamedQuery(name = "ChangeRecord.findForServiceGood", query = "select cr from ChangeRecord cr where cr.serviceGood = :serviceGood order by cr.date DESC"),
+        @NamedQuery(name = "ChangeRecord.findForStockGood", query = "select cr from ChangeRecord cr where cr.stockGood = :stockGood order by cr.date DESC")
 })
 public class ChangeRecord {
 
@@ -21,6 +22,7 @@ public class ChangeRecord {
     private User user;
     private Date date;
     private ServiceGood serviceGood;
+    private StockGood stockGood;
     private String json;
     private String baseName;
     private List<PropertyChange> changeList = new ArrayList<>();
@@ -76,6 +78,15 @@ public class ChangeRecord {
 
     public void setServiceGood(ServiceGood serviceGood) {
         this.serviceGood = serviceGood;
+    }
+
+    @ManyToOne
+    public StockGood getStockGood() {
+        return stockGood;
+    }
+
+    public void setStockGood(StockGood stockGood) {
+        this.stockGood = stockGood;
     }
 
     @Column(length = 4096)

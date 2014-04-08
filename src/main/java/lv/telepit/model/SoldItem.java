@@ -11,6 +11,7 @@ public class SoldItem {
 
     private long id;
     private Store store;
+    private String code;
     private User user;
     private Double price;
     private Date soldDate;
@@ -44,13 +45,6 @@ public class SoldItem {
         this.user = user;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date getSoldDate() {
@@ -68,5 +62,21 @@ public class SoldItem {
 
     public void setParent(StockGood parent) {
         this.parent = parent;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

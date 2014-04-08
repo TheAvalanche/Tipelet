@@ -3,6 +3,8 @@ package lv.telepit.backend.dao;
 import com.vaadin.ui.UI;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.PersistenceProvider;
+import lv.telepit.backend.criteria.ServiceGoodCriteria;
+import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.StockGood;
@@ -12,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 07/04/2014.
@@ -57,6 +60,28 @@ public class StockDaoImpl implements StockDao {
 
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("StockGood.findAll");
+        List<StockGood> list = q.getResultList();
+        em.close();
+        return list;
+    }
+
+    @Override
+    public List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap) {
+        EntityManager em = emf.createEntityManager();
+        StringBuilder queryBuilder = new StringBuilder("select sg from StockGood sg where 1=1");
+        if (criteriaMap != null) {
+            for (Map.Entry<StockGoodCriteria, Object> entry : criteriaMap.entrySet()) {
+                queryBuilder.append(" and ");
+                entry.getKey().setQuery(queryBuilder);
+            }
+        }
+        final Query q = em.createQuery(queryBuilder.toString());
+        if (criteriaMap != null) {
+            for (Map.Entry<StockGoodCriteria, Object> entry : criteriaMap.entrySet()) {
+                entry.getKey().setValue(q, entry.getValue());
+            }
+        }
+        q.setMaxResults(100);
         List<StockGood> list = q.getResultList();
         em.close();
         return list;
