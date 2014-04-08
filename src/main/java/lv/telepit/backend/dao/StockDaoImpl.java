@@ -9,7 +9,9 @@ import lv.telepit.model.StockGood;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Alex on 07/04/2014.
@@ -48,5 +50,15 @@ public class StockDaoImpl implements StockDao {
         em.remove(good);
         em.getTransaction().commit();
         em.close();
+    }
+
+    @Override
+    public List<StockGood> getAllGoods() {
+
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createNamedQuery("StockGood.findAll");
+        List<StockGood> list = q.getResultList();
+        em.close();
+        return list;
     }
 }

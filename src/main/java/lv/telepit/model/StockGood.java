@@ -8,14 +8,17 @@ import java.util.List;
  * Created by Alex on 07/04/2014.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "StockGood.findAll", query = "select sg from StockGood sg")
+})
 public class StockGood {
 
     private long id;
     private Store store;
     private User user;
     private Category category;
-    private double price;
-    private int count;
+    private Double price;
+    private Integer count;
     private String name;
     private Date lastDeliveredDate;
     private Date lastSoldDate;
@@ -58,19 +61,19 @@ public class StockGood {
         this.category = category;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 

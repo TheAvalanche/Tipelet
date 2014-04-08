@@ -4,6 +4,8 @@ import lv.telepit.backend.dao.StockDao;
 import lv.telepit.backend.dao.StockDaoImpl;
 import lv.telepit.model.StockGood;
 
+import java.util.List;
+
 /**
  * Created by Alex on 07/04/2014.
  */
@@ -24,5 +26,9 @@ public class StockService {
 
     public void deleteGood(StockGood good) {
         stockDao.deleteGood(good);
+    }
+
+    public List<StockGood> getAllGoods() {
+        return stockDao.getAllGoods();
     }
 }

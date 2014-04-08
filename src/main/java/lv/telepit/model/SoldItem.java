@@ -12,7 +12,7 @@ public class SoldItem {
     private long id;
     private Store store;
     private User user;
-    private double price;
+    private Double price;
     private Date soldDate;
     private StockGood parent;
 

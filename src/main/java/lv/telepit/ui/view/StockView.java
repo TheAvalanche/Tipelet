@@ -16,6 +16,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Alex on 21/02/14.
@@ -94,11 +95,37 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditStockGoodListener());
 
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, refreshButton);
+        buttonLayout.setSpacing(true);
+        buttonLayout.setWidth("1000px");
+        buttonLayout.setExpandRatio(refreshButton, 1.0f);
+        buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
+
+        content.addComponent(label);
+        content.addComponent(buttonLayout);
+        content.addComponent(table);
+
+        refreshView();
+
     }
 
     @Override
     public void refreshView() {
+        refreshView(null);
+    }
 
+    public void refreshView(List<StockGood> stockGoods) {
+
+        ui.removeWindow(subWindow);
+        updateGood.setEnabled(false);
+        deleteGood.setEnabled(false);
+
+        if (stockGoods == null) {
+            stockGoods = ui.getStockService().getAllGoods();
+        }
+        container.removeAllItems();
+        container.addAll(stockGoods);
+        table.refreshRowCache();
     }
 
     @Override
