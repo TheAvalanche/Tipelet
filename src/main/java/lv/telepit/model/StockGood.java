@@ -1,6 +1,7 @@
 package lv.telepit.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,15 +19,13 @@ public class StockGood {
     private User user;
     private Category category;
     private Double price;
-    private Double total;
-    private Integer soldCount;
     private Integer count;
     private String name;
     private String model;
     private String compatibleModels;
     private Date lastDeliveredDate;
     private Date lastSoldDate;
-    private List<SoldItem> soldItemList;
+    private List<SoldItem> soldItemList = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -134,19 +133,11 @@ public class StockGood {
 
     @Transient
     public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
+        return count * price;
     }
 
     @Transient
     public Integer getSoldCount() {
-        return soldCount;
-    }
-
-    public void setSoldCount(Integer soldCount) {
-        this.soldCount = soldCount;
+        return soldItemList.size();
     }
 }

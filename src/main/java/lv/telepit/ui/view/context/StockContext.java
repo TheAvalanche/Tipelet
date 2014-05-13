@@ -73,7 +73,11 @@ public class StockContext implements Action.Handler {
         addButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                addSoldItem(soldItems, subLayout);
+                if (soldItems.size() < stockGood.getCount()) {
+                    addSoldItem(soldItems, subLayout);
+                } else {
+                    Notification.show("Nedrikst pārsniegt pieejamo preču skaitu.");
+                }
             }
         });
 

@@ -87,6 +87,8 @@ public class StockDaoImpl implements StockDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("ChangeRecord.findForStockGood");
         q.setParameter("stockGood", stockGood);
-        return q.getResultList();
+        List<ChangeRecord> changeRecords =  q.getResultList();
+        em.close();
+        return changeRecords;
     }
 }

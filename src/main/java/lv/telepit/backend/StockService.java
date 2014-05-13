@@ -51,5 +51,9 @@ public class StockService {
             soldItem.setPrice(stockGood.getPrice());
             soldItem.setSoldDate(new Date());
         }
+        stockGood.getSoldItemList().addAll(soldItems);
+        stockGood.setCount(stockGood.getCount() - soldItems.size());
+        stockGood.setLastSoldDate(new Date());
+        stockDao.updateGood(stockGood);
     }
 }
