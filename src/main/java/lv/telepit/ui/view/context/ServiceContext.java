@@ -98,7 +98,7 @@ public class ServiceContext implements Action.Handler {
             table.setWidth("100%");
 
             VerticalLayout panelLayout = new VerticalLayout();
-            panelLayout.addComponent(new Label("<b>" + new SimpleDateFormat("dd-MM-YYYY hh:mm").format(record.getDate())
+            panelLayout.addComponent(new Label("<b>" + new SimpleDateFormat("dd-MM-YYYY HH:mm").format(record.getDate())
                     + ": " + record.getUser().getName() + " "
                     + record.getUser().getSurname() + "</b><br/>", ContentMode.HTML));
             panelLayout.addComponent(table);

@@ -50,7 +50,7 @@ public class StockContext implements Action.Handler {
     }
 
     private void showSell(final StockGood stockGood) {
-        Window subWindow = new Window();
+        final Window subWindow = new Window();
         subWindow.setModal(true);
         subWindow.setHeight("500px");
         subWindow.setWidth("500px");
@@ -86,6 +86,8 @@ public class StockContext implements Action.Handler {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 view.getUi().getStockService().sell(stockGood, soldItems);
+                Notification.show("Saglabāts.");
+                subWindow.close();
             }
         });
 
@@ -170,7 +172,7 @@ public class StockContext implements Action.Handler {
             table.setWidth("100%");
 
             VerticalLayout panelLayout = new VerticalLayout();
-            panelLayout.addComponent(new Label("<b>" + new SimpleDateFormat("dd-MM-YYYY hh:mm").format(record.getDate())
+            panelLayout.addComponent(new Label("<b>" + new SimpleDateFormat("dd-MM-YYYY HH:mm").format(record.getDate())
                     + ": " + record.getUser().getName() + " "
                     + record.getUser().getSurname() + "</b><br/>", ContentMode.HTML));
             panelLayout.addComponent(table);
