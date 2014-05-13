@@ -1,5 +1,7 @@
 package lv.telepit.backend.dao;
 
+import com.vaadin.ui.UI;
+import lv.telepit.TelepitUI;
 import lv.telepit.backend.PersistenceProvider;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.ChangeRecord;
@@ -8,6 +10,7 @@ import lv.telepit.model.StockGood;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,15 @@ public class StockDaoImpl implements StockDao {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(good);
+
+        if (!good.getChange().getChangeList().isEmpty()) {
+            ChangeRecord cr = good.getChange();
+            cr.setStockGood(good);
+            cr.setDate(new Date());
+            cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+            em.persist(cr);
+        }
+
         em.getTransaction().commit();
         em.close();
     }
@@ -36,6 +48,15 @@ public class StockDaoImpl implements StockDao {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.merge(good);
+
+        if (!good.getChange().getChangeList().isEmpty()) {
+            ChangeRecord cr = good.getChange();
+            cr.setStockGood(good);
+            cr.setDate(new Date());
+            cr.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+            em.persist(cr);
+        }
+
         em.getTransaction().commit();
         em.close();
     }

@@ -7,11 +7,9 @@ import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
-import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.view.ServiceView;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -100,7 +98,9 @@ public class ServiceContext implements Action.Handler {
             table.setWidth("100%");
 
             VerticalLayout panelLayout = new VerticalLayout();
-            panelLayout.addComponent(new Label("<b>" + new SimpleDateFormat("dd-MM-YYYY hh:mm").format(record.getDate()) + ": " + record.getUser().getName() + "</b><br/>", ContentMode.HTML));
+            panelLayout.addComponent(new Label("<b>" + new SimpleDateFormat("dd-MM-YYYY hh:mm").format(record.getDate())
+                    + ": " + record.getUser().getName() + " "
+                    + record.getUser().getSurname() + "</b><br/>", ContentMode.HTML));
             panelLayout.addComponent(table);
             panel.setContent(panelLayout);
             layout.addComponent(panel);

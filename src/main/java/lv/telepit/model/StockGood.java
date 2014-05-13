@@ -1,6 +1,7 @@
 package lv.telepit.model;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,8 @@ public class StockGood {
     private Date lastSoldDate;
     private List<SoldItem> soldItemList = new ArrayList<>();
 
+    private ChangeRecord change = new ChangeRecord("stock.good");
+
     @Id
     @GeneratedValue
     public long getId() {
@@ -43,6 +46,9 @@ public class StockGood {
     }
 
     public void setStore(Store store) {
+        change.addChange("store",
+                this.store != null ? this.store.getName() : "-" ,
+                store != null ? store.getName() : "-");
         this.store = store;
     }
 
@@ -52,6 +58,9 @@ public class StockGood {
     }
 
     public void setUser(User user) {
+        change.addChange("user",
+                this.user != null ? this.user.getName() + " " + this.user.getSurname() : "-",
+                user != null ? user.getName() + " " + user.getSurname() : "-");
         this.user = user;
     }
 
@@ -61,6 +70,9 @@ public class StockGood {
     }
 
     public void setCategory(Category category) {
+        change.addChange("category",
+                this.category != null ? this.category.getName() : "-",
+                category != null ? category.getName() : "-");
         this.category = category;
     }
 
@@ -69,6 +81,9 @@ public class StockGood {
     }
 
     public void setPrice(Double price) {
+        change.addChange("price",
+                this.price != null ? this.price.toString() : "-",
+                price != null ? price.toString() : "-");
         this.price = price;
     }
 
@@ -77,6 +92,9 @@ public class StockGood {
     }
 
     public void setCount(Integer count) {
+        change.addChange("count",
+                this.count != null ? this.count.toString() : "-",
+                count != null ? count.toString() : "-");
         this.count = count;
     }
 
@@ -85,6 +103,9 @@ public class StockGood {
     }
 
     public void setName(String name) {
+        change.addChange("name",
+                this.name != null ? this.name : "-",
+                name != null ? name : "-");
         this.name = name;
     }
 
@@ -93,6 +114,9 @@ public class StockGood {
     }
 
     public void setModel(String model) {
+        change.addChange("model",
+                this.model != null ? this.model : "-",
+                model != null ? model : "-");
         this.model = model;
     }
 
@@ -101,6 +125,9 @@ public class StockGood {
     }
 
     public void setCompatibleModels(String compatibleModels) {
+        change.addChange("compatibleModels",
+                this.model != null ? this.compatibleModels : "-",
+                compatibleModels != null ? compatibleModels : "-");
         this.compatibleModels = compatibleModels;
     }
 
@@ -110,6 +137,9 @@ public class StockGood {
     }
 
     public void setLastDeliveredDate(Date lastDeliveredDate) {
+        change.addChange("lastDeliveredDate",
+                this.lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.lastDeliveredDate) : "-",
+                lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(lastDeliveredDate) : "-");
         this.lastDeliveredDate = lastDeliveredDate;
     }
 
@@ -119,6 +149,9 @@ public class StockGood {
     }
 
     public void setLastSoldDate(Date lastSoldDate) {
+        change.addChange("lastSoldDate",
+                this.lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.lastSoldDate) : "-",
+                lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(lastSoldDate) : "-");
         this.lastSoldDate = lastSoldDate;
     }
 
@@ -139,5 +172,15 @@ public class StockGood {
     @Transient
     public Integer getSoldCount() {
         return soldItemList.size();
+    }
+
+    @Transient
+    public ChangeRecord getChange() {
+        return change;
+    }
+
+    @PostLoad
+    public void postLoad() {
+        change = new ChangeRecord("stock.good");
     }
 }

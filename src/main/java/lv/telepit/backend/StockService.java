@@ -50,6 +50,7 @@ public class StockService {
             soldItem.setParent(stockGood);
             soldItem.setPrice(stockGood.getPrice());
             soldItem.setSoldDate(new Date());
+            stockGood.getChange().addChange("sold", "", soldItem.getCode());
         }
         stockGood.getSoldItemList().addAll(soldItems);
         stockGood.setCount(stockGood.getCount() - soldItems.size());
