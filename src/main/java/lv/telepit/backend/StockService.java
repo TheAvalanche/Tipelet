@@ -1,12 +1,13 @@
 package lv.telepit.backend;
 
-import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.backend.dao.StockDao;
 import lv.telepit.backend.dao.StockDaoImpl;
-import lv.telepit.model.ServiceGood;
+import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,5 +39,17 @@ public class StockService {
 
     public List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap) {
         return stockDao.findGoods(criteriaMap);
+    }
+
+    public List<ChangeRecord> findChanges(StockGood stockGood) {
+        return stockDao.findChanges(stockGood);
+    }
+
+    public void sell(StockGood stockGood, List<SoldItem> soldItems) {
+        for (SoldItem soldItem : soldItems) {
+            soldItem.setParent(stockGood);
+            soldItem.setPrice(stockGood.getPrice());
+            soldItem.setSoldDate(new Date());
+        }
     }
 }

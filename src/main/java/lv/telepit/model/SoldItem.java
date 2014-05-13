@@ -15,6 +15,7 @@ public class SoldItem {
     private User user;
     private Double price;
     private Date soldDate;
+    private boolean withBill = true;
     private StockGood parent;
 
     @Id
@@ -78,5 +79,13 @@ public class SoldItem {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public boolean isWithBill() {
+        return withBill;
+    }
+
+    public void setWithBill(boolean withBill) {
+        this.withBill = withBill;
     }
 }

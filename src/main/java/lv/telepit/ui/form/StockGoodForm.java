@@ -28,6 +28,12 @@ public class StockGoodForm extends FormLayout {
     @PropertyId("name")
     private TextField nameField = FieldFactory.getTextField("stock.name");
 
+    @PropertyId("model")
+    private TextField modelField = FieldFactory.getTextField("stock.model");
+
+    @PropertyId("compatibleModels")
+    private TextField compatibleModelsField = FieldFactory.getTextField("stock.compatibleModels");
+
     @PropertyId("price")
     private TextField priceField = FieldFactory.getNumberField("stock.price");
 
@@ -55,6 +61,8 @@ public class StockGoodForm extends FormLayout {
 
         addComponent(categoryField);
         addComponent(nameField);
+        addComponent(modelField);
+        addComponent(compatibleModelsField);
         addComponent(priceField);
         addComponent(countField);
 

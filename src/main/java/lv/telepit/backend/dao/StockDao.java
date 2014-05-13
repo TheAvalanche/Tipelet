@@ -1,8 +1,7 @@
 package lv.telepit.backend.dao;
 
-import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.StockGoodCriteria;
-import lv.telepit.model.ServiceGood;
+import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.StockGood;
 
 import java.util.List;
@@ -21,4 +20,6 @@ public interface StockDao {
     List<StockGood> getAllGoods();
 
     List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap);
+
+    List<ChangeRecord> findChanges(StockGood stockGood);
 }

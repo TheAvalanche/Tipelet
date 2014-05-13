@@ -22,6 +22,8 @@ public class StockGood {
     private Integer soldCount;
     private Integer count;
     private String name;
+    private String model;
+    private String compatibleModels;
     private Date lastDeliveredDate;
     private Date lastSoldDate;
     private List<SoldItem> soldItemList;
@@ -85,6 +87,22 @@ public class StockGood {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getCompatibleModels() {
+        return compatibleModels;
+    }
+
+    public void setCompatibleModels(String compatibleModels) {
+        this.compatibleModels = compatibleModels;
     }
 
     @Temporal(TemporalType.TIMESTAMP)

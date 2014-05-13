@@ -17,6 +17,7 @@ import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.StockGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.ui.view.context.StockContext;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
@@ -88,10 +89,12 @@ public class StockView extends AbstractView {
         table.setImmediate(true);
         table.setWidth("1000px");
         table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "category", "name", "price", "count", "lastSoldDate");
+        table.setVisibleColumns("store", "category", "name", "model", "compatibleModels", "price", "count", "lastSoldDate");
         table.setColumnHeaders(bundle.getString("stock.good.store"),
                 bundle.getString("stock.good.category"),
                 bundle.getString("stock.good.name"),
+                bundle.getString("stock.good.model"),
+                bundle.getString("stock.good.compatibleModels"),
                 bundle.getString("stock.good.price"),
                 bundle.getString("stock.good.count"),
                 bundle.getString("stock.good.lastSoldDate"));
@@ -99,6 +102,7 @@ public class StockView extends AbstractView {
         table.setImmediate(true);
         table.addItemClickListener(new EditStockGoodListener());
         table.addValueChangeListener(new EditStockGoodListener());
+        table.addActionHandler(new StockContext(this));
 
 
         addGood = new Button(bundle.getString("default.button.add"));
