@@ -1,19 +1,15 @@
 package lv.telepit.backend.dao;
 
-import com.google.gson.Gson;
-import com.google.gwt.json.client.JSONArray;
 import com.vaadin.ui.UI;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.PersistenceProvider;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
-import lv.telepit.model.Store;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.xml.ws.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +110,9 @@ public class ServiceDaoImpl implements ServiceDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("ChangeRecord.findForServiceGood");
         q.setParameter("serviceGood", serviceGood);
-        return q.getResultList();
+        List<ChangeRecord> changeRecords = q.getResultList();
+        em.close();
+        return changeRecords;
 
     }
 
