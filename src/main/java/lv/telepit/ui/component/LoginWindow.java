@@ -2,7 +2,7 @@ package lv.telepit.ui.component;
 
 import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
-import lv.telepit.backend.UserService;
+import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
 
 /**
@@ -19,7 +19,7 @@ public class LoginWindow extends Window {
     /**Fields.*/
     private final AbstractField<String> usernameField, passwordField;
 
-    private UserService userService;
+    private CommonService commonService;
 
     /**
      * Creates login window with field for username,
@@ -29,7 +29,7 @@ public class LoginWindow extends Window {
     public LoginWindow(final TelepitUI application) {
         super("Login");
         this.application = application;
-        this.userService = this.application.getUserService();
+        this.commonService = this.application.getCommonService();
 
         //window layout
         final VerticalLayout layout = new VerticalLayout();
@@ -59,7 +59,7 @@ public class LoginWindow extends Window {
         public void buttonClick(final Button.ClickEvent event) {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
-            User user = userService.getUser(username, password);
+            User user = commonService.getUser(username, password);
             if (user == null && "test".equals(username) && "123456".equals(password)) {
                 user = new User();
                 user.setAdmin(true);

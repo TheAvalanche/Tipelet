@@ -1,17 +1,14 @@
 package lv.telepit.ui.form;
 
-import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
-import lv.telepit.TelepitUI;
-import lv.telepit.backend.UserService;
+import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
-import lv.telepit.ui.view.ServiceView;
 
 import java.util.ResourceBundle;
 
@@ -23,25 +20,25 @@ public class UserForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("name")
-    private TextField nameField = FieldFactory.getTextField("name");
+    private TextField nameField = FieldFactory.getTextField("user.name");
 
     @PropertyId("surname")
-    private TextField surnameField = FieldFactory.getTextField("surname");
+    private TextField surnameField = FieldFactory.getTextField("user.surname");
 
     @PropertyId("login")
-    private TextField loginField = FieldFactory.getTextField("login");
+    private TextField loginField = FieldFactory.getTextField("user.login");
 
     @PropertyId("password")
-    private PasswordField passwordField = FieldFactory.getPasswordField("password");
+    private PasswordField passwordField = FieldFactory.getPasswordField("user.password");
 
     @PropertyId("phone")
-    private TextField phoneField = FieldFactory.getTextField("phone");
+    private TextField phoneField = FieldFactory.getTextField("user.phone");
 
     @PropertyId("store")
-    private ComboBox storeField = FieldFactory.getStoreComboBox("store");
+    private ComboBox storeField = FieldFactory.getStoreComboBox("user.store");
 
     @PropertyId("admin")
-    private CheckBox adminField = FieldFactory.getCheckBox("admin");
+    private CheckBox adminField = FieldFactory.getCheckBox("user.admin");
 
 
     public UserForm(BeanItem<User> userItem, AbstractView view) {
@@ -82,7 +79,7 @@ public class UserForm extends FormLayout {
         @Override
         public void businessMethod() throws Exception {
 
-            UserService service = view.getUi().getUserService();
+            CommonService service = view.getUi().getCommonService();
             if (entity.getId() == 0) {
                 service.saveUser(entity);
             } else {

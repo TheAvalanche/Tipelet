@@ -1,18 +1,18 @@
 package lv.telepit;
 
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
-import lv.telepit.backend.*;
-import lv.telepit.model.Category;
+import lv.telepit.backend.CommonService;
+import lv.telepit.backend.ServiceGoodService;
+import lv.telepit.backend.StockService;
 import lv.telepit.model.User;
 import lv.telepit.ui.view.*;
 
+import javax.servlet.annotation.WebServlet;
 import java.util.Locale;
 
 @Theme("mytheme")
@@ -20,10 +20,8 @@ import java.util.Locale;
 public class TelepitUI extends UI {
 
 
-    private UserService userService;
-    private StoreService storeService;
+    private CommonService commonService;
     private ServiceGoodService serviceGoodService;
-    private CategoryService categoryService;
     private StockService stockService;
 
     private User currentUser;
@@ -39,10 +37,8 @@ public class TelepitUI extends UI {
         setLocale(new Locale("lv"));
         Locale.setDefault(new Locale("lv"));
 
-        userService = new UserService();
-        storeService = new StoreService();
+        commonService = new CommonService();
         serviceGoodService = new ServiceGoodService();
-        categoryService = new CategoryService();
         stockService = new StockService();
 
         Navigator navigator = new Navigator(this, this);
@@ -53,6 +49,8 @@ public class TelepitUI extends UI {
         UserView userView = new UserView(navigator, this, "user");
         StoreView storeView = new StoreView(navigator, this, "store");
         CategoryView categoryView = new CategoryView(navigator, this, "category");
+        ReportView reportView = new ReportView(navigator, this, "report");
+        ChangesView changesView = new ChangesView(navigator, this, "changes");
 
         navigator.addView("", startView);
         navigator.addView("stock", stockView);
@@ -60,23 +58,18 @@ public class TelepitUI extends UI {
         navigator.addView("user", userView);
         navigator.addView("store", storeView);
         navigator.addView("category", categoryView);
+        navigator.addView("report", reportView);
+        navigator.addView("changes", changesView);
 
 
     }
 
-    public UserService getUserService() {
-        return userService;
-    }
-    public StoreService getStoreService() {
-        return storeService;
+    public CommonService getCommonService() {
+        return commonService;
     }
 
     public ServiceGoodService getServiceGoodService() {
         return serviceGoodService;
-    }
-
-    public CategoryService getCategoryService() {
-        return categoryService;
     }
 
     public StockService getStockService() {

@@ -11,13 +11,10 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
-import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.Category;
-import lv.telepit.model.ServiceGood;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
-import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.StockGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -60,10 +57,10 @@ public class StockView extends AbstractView {
         label = new Label(bundle.getString("stock.view.label"));
         label.setContentMode(ContentMode.HTML);
 
-        nameField = new TextField(bundle.getString("stock.good.name"));
-        userField = FieldFactory.getUserComboBox("user");
-        storeField = FieldFactory.getStoreComboBox("store");
-        categoryField = FieldFactory.getCategoryComboBox("category");
+        nameField = FieldFactory.getTextField("search.stock.name");
+        userField = FieldFactory.getUserComboBox("search.user");
+        storeField = FieldFactory.getStoreComboBox("search.store");
+        categoryField = FieldFactory.getCategoryComboBox("search.category");
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());

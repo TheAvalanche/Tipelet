@@ -15,7 +15,7 @@ import lv.telepit.model.User;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.component.PropertyFilter;
 import lv.telepit.ui.form.UserForm;
-import lv.telepit.ui.form.fields.SimpleStoreComboBox;
+import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
@@ -39,7 +39,6 @@ public class UserView extends AbstractView {
     private Table table;
     private BeanItemContainer<User> container;
     private Label label;
-    private Label description;
     private Window subWindow;
 
     public UserView(Navigator navigator, TelepitUI ui, String name) {
@@ -53,10 +52,10 @@ public class UserView extends AbstractView {
         label = new Label(bundle.getString("user.view.label"));
         label.setContentMode(ContentMode.HTML);
 
-        filterStore = new SimpleStoreComboBox(bundle.getString("user.store"), false);
-        filterName = new TextField(bundle.getString("user.name"));
-        filterSurname = new TextField(bundle.getString("user.surname"));
-        filterDeleted = new CheckBox(bundle.getString("user.deleted"));
+        filterStore = FieldFactory.getStoreComboBox("search.store");
+        filterName = FieldFactory.getTextField("search.user.name");
+        filterSurname = FieldFactory.getTextField("search.user.surname");
+        filterDeleted = FieldFactory.getCheckBox("search.user.deleted");
 
         filterButton = new Button(bundle.getString("default.button.filter"));
         filterButton.addClickListener(new FilterUser());
@@ -139,7 +138,7 @@ public class UserView extends AbstractView {
         updateUser.setEnabled(false);
         deleteUser.setEnabled(false);
 
-        List<User> users = ui.getUserService().getAllUsers();
+        List<User> users = ui.getCommonService().getAllUsers();
         container.removeAllItems();
 
         container.addAll(users);
@@ -170,7 +169,7 @@ public class UserView extends AbstractView {
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             try {
-                                ui.getUserService().deleteUser(userToDelete);
+                                ui.getCommonService().deleteUser(userToDelete);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

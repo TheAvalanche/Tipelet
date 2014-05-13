@@ -4,10 +4,8 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
-import lv.telepit.backend.StoreService;
-import lv.telepit.backend.UserService;
+import lv.telepit.backend.CommonService;
 import lv.telepit.model.Store;
-import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
@@ -22,21 +20,19 @@ public class StoreForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("name")
-    private TextField nameField = FieldFactory.getTextField("name");
+    private TextField nameField = FieldFactory.getTextField("store.name");
 
     @PropertyId("city")
-    private TextField cityField = FieldFactory.getTextField("city");
+    private TextField cityField = FieldFactory.getTextField("store.city");
 
     @PropertyId("address")
-    private TextField addressField = FieldFactory.getTextField("address");
+    private TextField addressField = FieldFactory.getTextField("store.address");
 
 
     public StoreForm(BeanItem<Store> storeItem, AbstractView view) {
 
         FieldGroup binder = new FieldGroup(storeItem);
         binder.bindMemberFields(this);
-        nameField.setCaption("Nosaukums");
-        nameField.setInputPrompt("Rīga, Marijas iela");
         addComponent(nameField);
         addComponent(cityField);
         addComponent(addressField);
@@ -65,7 +61,7 @@ public class StoreForm extends FormLayout {
 
         @Override
         public void businessMethod() throws Exception {
-            StoreService service = view.getUi().getStoreService();
+            CommonService service = view.getUi().getCommonService();
             if (entity.getId() == 0) {
                 service.saveStore(entity);
             } else {

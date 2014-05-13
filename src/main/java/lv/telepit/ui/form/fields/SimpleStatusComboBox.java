@@ -1,11 +1,7 @@
 package lv.telepit.ui.form.fields;
 
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.UI;
-import lv.telepit.TelepitUI;
-import lv.telepit.backend.StoreService;
 import lv.telepit.model.ServiceStatus;
-import lv.telepit.model.Store;
 
 /**
  * Created by Alex on 11/03/14.

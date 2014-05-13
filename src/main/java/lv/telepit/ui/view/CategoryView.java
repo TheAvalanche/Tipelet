@@ -1,7 +1,6 @@
 package lv.telepit.ui.view;
 
 import com.google.common.base.Strings;
-import com.google.gwt.user.client.ui.HasOneWidget;
 import com.vaadin.data.Property;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
@@ -14,7 +13,6 @@ import lv.telepit.ui.component.Hr;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Alex on 11/03/14.
@@ -57,7 +55,7 @@ public class CategoryView extends AbstractView {
                 }
                 Category c = Category.createCategories();
                 c.setName(nameField.getValue());
-                ui.getCategoryService().addOrUpdateCategory(c);
+                ui.getCommonService().addOrUpdateCategory(c);
                 refreshView();
             }
         });
@@ -72,7 +70,7 @@ public class CategoryView extends AbstractView {
                     return;
                 }
                 Category c = ((Category) tree.getValue()).addCategory(nameField.getValue());
-                ui.getCategoryService().addOrUpdateCategory(c);
+                ui.getCommonService().addOrUpdateCategory(c);
                 refreshView();
             }
         });
@@ -88,7 +86,7 @@ public class CategoryView extends AbstractView {
                 }
                 Category c = (Category) tree.getValue();
                 c.setName(nameField.getValue());
-                ui.getCategoryService().addOrUpdateCategory(c);
+                ui.getCommonService().addOrUpdateCategory(c);
                 refreshView();
             }
         });
@@ -110,7 +108,7 @@ public class CategoryView extends AbstractView {
                             public void onClose(ConfirmDialog dialog) {
                                 if (dialog.isConfirmed()) {
                                     Category c = (Category) tree.getValue();
-                                    ui.getCategoryService().removeCategory(c);
+                                    ui.getCommonService().removeCategory(c);
                                     refreshView();
                                 }
                             }
@@ -145,7 +143,7 @@ public class CategoryView extends AbstractView {
     @Override
     public void refreshView() {
         tree.removeAllItems();
-        List<Category> categories = ui.getCategoryService().getAllCategories();
+        List<Category> categories = ui.getCommonService().getAllCategories();
         for (Category category : categories) {
             tree.addItem(category);
             tree.setItemCaption(category, category.getName());

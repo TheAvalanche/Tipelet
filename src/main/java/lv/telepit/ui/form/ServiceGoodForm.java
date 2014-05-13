@@ -5,10 +5,8 @@ import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
 import lv.telepit.backend.ServiceGoodService;
-import lv.telepit.backend.UserService;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
-import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
@@ -23,52 +21,52 @@ public class ServiceGoodForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("category")
-    private ComboBox categoryField = FieldFactory.getCategoryComboBox("category");
+    private ComboBox categoryField = FieldFactory.getCategoryComboBox("service.category");
 
     @PropertyId("store")
-    private ComboBox storeField = FieldFactory.getStoreComboBox("store");
+    private ComboBox storeField = FieldFactory.getStoreComboBox("service.store");
 
     @PropertyId("name")
-    private TextField nameField = FieldFactory.getTextField("name");
+    private TextField nameField = FieldFactory.getTextField("service.name");
 
     @PropertyId("status")
-    private ComboBox statusField = FieldFactory.getStatusComboBox("status");
+    private ComboBox statusField = FieldFactory.getStatusComboBox("service.status");
 
     @PropertyId("imei")
-    private TextField imeiField = FieldFactory.getTextField("imei");
+    private TextField imeiField = FieldFactory.getTextField("service.imei");
 
     @PropertyId("accumNum")
-    private TextField accumNumField = FieldFactory.getTextField("accumNum");
+    private TextField accumNumField = FieldFactory.getTextField("service.accumNum");
 
     @PropertyId("problem")
-    private TextArea problemField = FieldFactory.getTextArea("problem");
+    private TextArea problemField = FieldFactory.getTextArea("service.problem");
 
     @PropertyId("price")
-    private TextField price = FieldFactory.getNumberField("price");
+    private TextField price = FieldFactory.getNumberField("service.price");
 
     @PropertyId("deliveredDate")
-    private DateField deliveredDateField = FieldFactory.getDateField("deliveredDate");
+    private DateField deliveredDateField = FieldFactory.getDateField("service.deliveredDate");
 
     @PropertyId("startDate")
-    private DateField startDateField = FieldFactory.getDateField("startDate");
+    private DateField startDateField = FieldFactory.getDateField("service.startDate");
 
     @PropertyId("finishDate")
-    private DateField finishDateField = FieldFactory.getDateField("finishDate");
+    private DateField finishDateField = FieldFactory.getDateField("service.finishDate");
 
     @PropertyId("returnedDate")
-    private DateField returnedDateField = FieldFactory.getDateField("returnedDate");
+    private DateField returnedDateField = FieldFactory.getDateField("service.returnedDate");
 
     @PropertyId("contactName")
-    private TextField contactNameField = FieldFactory.getTextField("contactName");
+    private TextField contactNameField = FieldFactory.getTextField("service.contactName");
 
     @PropertyId("contactPhone")
-    private TextField contactPhoneField = FieldFactory.getTextField("contactPhone");
+    private TextField contactPhoneField = FieldFactory.getTextField("service.contactPhone");
 
     @PropertyId("contactMail")
-    private TextField contactMailField = FieldFactory.getTextField("contactMail");
+    private TextField contactMailField = FieldFactory.getTextField("service.contactMail");
 
     @PropertyId("additionalDescription")
-    private TextArea additionalDescriptionField = FieldFactory.getTextArea("additionalDescription");
+    private TextArea additionalDescriptionField = FieldFactory.getTextArea("service.additionalDescription");
 
     public ServiceGoodForm(BeanItem<ServiceGood> serviceGoodItem, AbstractView view) {
         /*Initial settings.*/
@@ -89,8 +87,6 @@ public class ServiceGoodForm extends FormLayout {
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
 
-        nameField.setCaption("Nosaukums");
-        nameField.setInputPrompt("Samsung Galaxy S3");
         addComponent(categoryField);
         addComponent(nameField);
         addComponent(statusField);

@@ -4,16 +4,12 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
-import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.backend.StockService;
-import lv.telepit.model.ServiceGood;
-import lv.telepit.model.ServiceStatus;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
-import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -24,24 +20,24 @@ public class StockGoodForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("category")
-    private ComboBox categoryField = FieldFactory.getCategoryComboBox("category");
+    private ComboBox categoryField = FieldFactory.getCategoryComboBox("stock.category");
 
     @PropertyId("store")
-    private ComboBox storeField = FieldFactory.getStoreComboBox("store");
+    private ComboBox storeField = FieldFactory.getStoreComboBox("stock.store");
 
     @PropertyId("name")
-    private TextField nameField = FieldFactory.getTextField("name");
+    private TextField nameField = FieldFactory.getTextField("stock.name");
 
     @PropertyId("price")
-    private TextField priceField = FieldFactory.getNumberField("price");
+    private TextField priceField = FieldFactory.getNumberField("stock.price");
 
     @PropertyId("count")
-    private TextField countField = FieldFactory.getNumberField("count");
+    private TextField countField = FieldFactory.getNumberField("stock.count");
 
 
     public StockGoodForm(BeanItem<StockGood> stockGoodItem, AbstractView view) {
 
-                /*Initial settings.*/
+        /*Initial settings.*/
         StockGood good = stockGoodItem.getBean();
         if (good.getId() == 0) {
             good.setUser(view.getUi().getCurrentUser());
@@ -57,14 +53,10 @@ public class StockGoodForm extends FormLayout {
         FieldGroup binder = new FieldGroup(stockGoodItem);
         binder.bindMemberFields(this);
 
-        nameField.setCaption("Nosaukums");
-        nameField.setInputPrompt("Vads NP420");
         addComponent(categoryField);
         addComponent(nameField);
         addComponent(priceField);
         addComponent(countField);
-
-
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, stockGoodItem.getBean(), view));

@@ -32,6 +32,8 @@ public class SimpleTextField extends TextField {
         setImmediate(true);
         setWidth(DEFAULT_WIDTH, Unit.PIXELS);
         setRequired(required);
-        addValidator(new RegexpValidator(regex, caption + ": Jābūt formātā - " + prompt));
+        if (regex != null) {
+            addValidator(new RegexpValidator(regex, caption + ": Jābūt formātā - " + prompt));
+        }
     }
 }

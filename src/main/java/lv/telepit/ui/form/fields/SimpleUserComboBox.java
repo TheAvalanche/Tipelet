@@ -4,9 +4,7 @@ import com.vaadin.server.Sizeable;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.UI;
 import lv.telepit.TelepitUI;
-import lv.telepit.backend.StoreService;
-import lv.telepit.backend.UserService;
-import lv.telepit.model.Store;
+import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
 
 /**
@@ -16,7 +14,7 @@ public class SimpleUserComboBox extends ComboBox {
     /**Fields default width.*/
     private static final int DEFAULT_WIDTH = 200;
     /**Database usage.*/
-    private UserService userService = ((TelepitUI) UI.getCurrent()).getUserService();
+    private CommonService commonService = ((TelepitUI) UI.getCurrent()).getCommonService();
 
     /**
      * Constructor.
@@ -28,7 +26,7 @@ public class SimpleUserComboBox extends ComboBox {
         setRequired(required);
         setWidth(DEFAULT_WIDTH, Sizeable.Unit.PIXELS);
         try {
-            for (User user : userService.getAllUsers()) {
+            for (User user : commonService.getAllUsers()) {
                 addItem(user);
                 setItemCaption(user, user.getName());
             }

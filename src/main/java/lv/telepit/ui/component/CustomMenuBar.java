@@ -17,6 +17,8 @@ public class CustomMenuBar extends MenuBar {
         this.addItem("Noliktāva", new NavigateCommand("stock"));
         this.addItem("Serviss", new NavigateCommand("service"));
         adminItem = this.addItem("Vadīšana", null, null);
+        adminItem.addItem("Finanšu pārskats", new NavigateCommand("report"));
+        adminItem.addItem("Izmaiņu vēsture", new NavigateCommand("changes"));
         adminItem.addItem("Veikali", new NavigateCommand("store"));
         adminItem.addItem("Lietotāji", new NavigateCommand("user"));
         adminItem.addItem("Kategorijas", new NavigateCommand("category"));

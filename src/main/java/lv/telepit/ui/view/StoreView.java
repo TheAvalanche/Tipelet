@@ -90,7 +90,7 @@ public class StoreView extends AbstractView {
         updateStore.setEnabled(false);
         deleteStore.setEnabled(false);
 
-        List<Store> stores = ui.getStoreService().getAllStores();
+        List<Store> stores = ui.getCommonService().getAllStores();
         container.removeAllItems();
         container.addAll(stores);
         table.refreshRowCache();
@@ -118,7 +118,7 @@ public class StoreView extends AbstractView {
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             try {
-                                ui.getStoreService().deleteStore(storeToDelete);
+                                ui.getCommonService().deleteStore(storeToDelete);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
