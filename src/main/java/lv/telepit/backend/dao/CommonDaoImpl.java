@@ -1,7 +1,9 @@
 package lv.telepit.backend.dao;
 
 import lv.telepit.backend.PersistenceProvider;
+import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.model.Category;
+import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.Store;
 import lv.telepit.model.User;
 
@@ -9,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 21/02/14.
@@ -184,5 +187,27 @@ public class CommonDaoImpl implements CommonDao {
         em.getTransaction().begin();
         em.remove(parent);
         em.getTransaction().commit();
+    }
+
+    @Override
+    public List<ChangeRecord> findRecords(Map<ChangeRecordCriteria, Object> query) {
+        EntityManager em = emf.createEntityManager();
+        StringBuilder queryBuilder = new StringBuilder("select cr from ChangeRecord cr where 1=1");
+        if (query != null) {
+            for (Map.Entry<ChangeRecordCriteria, Object> entry : query.entrySet()) {
+                queryBuilder.append(" and ");
+                entry.getKey().setQuery(queryBuilder);
+            }
+        }
+        final Query q = em.createQuery(queryBuilder.toString());
+        if (query != null) {
+            for (Map.Entry<ChangeRecordCriteria, Object> entry : query.entrySet()) {
+                entry.getKey().setValue(q, entry.getValue());
+            }
+        }
+        q.setMaxResults(100);
+        List<ChangeRecord> list = q.getResultList();
+        em.close();
+        return list;
     }
 }

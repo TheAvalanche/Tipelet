@@ -1,12 +1,13 @@
 package lv.telepit.backend;
 
+import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.backend.dao.CommonDao;
 import lv.telepit.backend.dao.CommonDaoImpl;
-import lv.telepit.model.Category;
-import lv.telepit.model.Store;
-import lv.telepit.model.User;
+import lv.telepit.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 21/02/14.
@@ -67,6 +68,19 @@ public class CommonService {
 
     public void removeCategory(Category category) {
         commonDao.removeCategory(category);
+    }
+
+    public List<RecordData> findRecords(Map<ChangeRecordCriteria, Object> query) {
+        List<ChangeRecord> records = commonDao.findRecords(query);
+        List<RecordData> list = new ArrayList<>(records.size());
+        for (ChangeRecord cr : records) {
+            list.addAll(RecordData.construct(cr));
+        }
+        return list;
+    }
+
+    public List<ChangeRecord> findChangeRecords(Map<ChangeRecordCriteria, Object> query) {
+        return commonDao.findRecords(query);
     }
 
 }

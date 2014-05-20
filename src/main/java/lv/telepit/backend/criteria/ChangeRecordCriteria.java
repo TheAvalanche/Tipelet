@@ -7,36 +7,40 @@ import javax.persistence.Query;
  */
 public enum ChangeRecordCriteria {
 
-    NAME, CATEGORY, USER, STORE;
+    USER, DATE_FROM, DATE_TO, NAME, STORE;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
 
-            case NAME:
-                query.append("lower(sg.name) like :name ");
+            case DATE_FROM:
+                query.append("cr.date >= :dateFrom ");
                 break;
-            case CATEGORY:
-                query.append("sg.category.id in :idList");
+            case DATE_TO:
+                query.append("cr.date <= :dateTo ");
+                break;
+            case NAME:
+                query.append("(lower(cr.serviceGood.name) like :name or lower(cr.stockGood.name) like :name) ");
                 break;
             case USER:
-                query.append("sg.user = :user ");
+                query.append("cr.user = :user ");
                 break;
             case STORE:
-                query.append("sg.store = :store ");
+                query.append("cr.user.store = :store ");
                 break;
-
         }
-
     }
 
     public void setValue(Query q, Object value) {
         switch (this) {
 
+            case DATE_FROM:
+                q.setParameter("dateFrom", value);
+                break;
+            case DATE_TO:
+                q.setParameter("dateTo", value);
+                break;
             case NAME:
                 q.setParameter("name", "%" + value + "%");
-                break;
-            case CATEGORY:
-                q.setParameter("idList", value);
                 break;
             case USER:
                 q.setParameter("user", value);

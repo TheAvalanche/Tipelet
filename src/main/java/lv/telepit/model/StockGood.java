@@ -138,8 +138,8 @@ public class StockGood {
 
     public void setLastDeliveredDate(Date lastDeliveredDate) {
         change.addChange("lastDeliveredDate",
-                this.lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.lastDeliveredDate) : "-",
-                lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(lastDeliveredDate) : "-");
+                this.lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(this.lastDeliveredDate) : "-",
+                lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(lastDeliveredDate) : "-");
         this.lastDeliveredDate = lastDeliveredDate;
     }
 
@@ -150,8 +150,8 @@ public class StockGood {
 
     public void setLastSoldDate(Date lastSoldDate) {
         change.addChange("lastSoldDate",
-                this.lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(this.lastSoldDate) : "-",
-                lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY hh:mm").format(lastSoldDate) : "-");
+                this.lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(this.lastSoldDate) : "-",
+                lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(lastSoldDate) : "-");
         this.lastSoldDate = lastSoldDate;
     }
 

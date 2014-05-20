@@ -71,7 +71,6 @@ public class ServiceView extends AbstractView {
         categoryField = FieldFactory.getCategoryComboBox("search.category");
         deliveredField = FieldFactory.getDateField("search.service.deliveredDate");
         returnedField = FieldFactory.getDateField("search.service.returnedDate");
-        returnedField.setDateFormat("dd.MM.yyyy");
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());

@@ -27,10 +27,10 @@ public enum ServiceGoodCriteria {
                 query.append("lower(sg.accumNum) like :accumNum ");
                 break;
             case DELIVERED_DATE_FROM:
-                query.append("sg.deliveredDate > :deliveredDateFrom ");
+                query.append("sg.deliveredDate >= :deliveredDateFrom ");
                 break;
             case RETURNED_DATE_FROM:
-                query.append("sg.returnedDate > :returnedDateFrom ");
+                query.append("sg.returnedDate >= :returnedDateFrom ");
                 break;
             case USER:
                 query.append("sg.user = :user ");

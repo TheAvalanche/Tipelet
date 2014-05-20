@@ -51,6 +51,7 @@ public class LoginWindow extends Window {
 
     }
 
+    //TODO: Autofocus
     /**
      * Listener to react on login button click.
      */
