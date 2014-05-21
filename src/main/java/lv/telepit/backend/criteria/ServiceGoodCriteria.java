@@ -5,8 +5,8 @@ import javax.persistence.Query;
 /**
  * Created by Alex on 05/03/14.
  */
-public enum ServiceGoodCriteria {
-    NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, USER, STORE;
+public enum ServiceGoodCriteria implements Criteria {
+    NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, RETURNED_DATE_TO, USER, STORE;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
@@ -28,6 +28,9 @@ public enum ServiceGoodCriteria {
                 break;
             case DELIVERED_DATE_FROM:
                 query.append("sg.deliveredDate >= :deliveredDateFrom ");
+                break;
+            case RETURNED_DATE_TO:
+                query.append("sg.returnedDate <= :returnedDateTo ");
                 break;
             case RETURNED_DATE_FROM:
                 query.append("sg.returnedDate >= :returnedDateFrom ");
@@ -63,6 +66,9 @@ public enum ServiceGoodCriteria {
                 break;
             case DELIVERED_DATE_FROM:
                 q.setParameter("deliveredDateFrom", value);
+                break;
+            case RETURNED_DATE_TO:
+                q.setParameter("returnedDateTo", value);
                 break;
             case RETURNED_DATE_FROM:
                 q.setParameter("returnedDateFrom", value);

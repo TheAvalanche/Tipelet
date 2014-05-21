@@ -41,6 +41,8 @@ public class ChangesView extends AbstractView {
     private BeanItemContainer<RecordData> container;
     private Label label;
 
+    //TODO: filter by good type
+    //TODO: limit of records
     public ChangesView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
     }

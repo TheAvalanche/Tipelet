@@ -97,7 +97,7 @@ public class ServiceView extends AbstractView {
         };
         table.setImmediate(true);
         table.setWidth("1200px");
-        table.setContainerDataSource(container);
+        table.setContainerDataSource(container); //TODO: id column
         table.setVisibleColumns("store", "category", "name", "status", "imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setColumnHeaders(bundle.getString("service.good.store"),
                 bundle.getString("service.good.category"),

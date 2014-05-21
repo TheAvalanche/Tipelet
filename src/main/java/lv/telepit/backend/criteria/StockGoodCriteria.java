@@ -5,7 +5,7 @@ import javax.persistence.Query;
 /**
  * Created by Alex on 08/04/2014.
  */
-public enum StockGoodCriteria {
+public enum StockGoodCriteria implements Criteria {
 
     NAME, CATEGORY, USER, STORE;
 

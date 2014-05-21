@@ -3,8 +3,10 @@ package lv.telepit.backend.dao;
 import com.vaadin.ui.UI;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.PersistenceProvider;
+import lv.telepit.backend.criteria.SoldItemCriteria;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 
 import javax.persistence.EntityManager;
@@ -111,5 +113,27 @@ public class StockDaoImpl implements StockDao {
         List<ChangeRecord> changeRecords =  q.getResultList();
         em.close();
         return changeRecords;
+    }
+
+    @Override
+    public List<SoldItem> findSoldItems(Map<SoldItemCriteria, Object> query) {
+        EntityManager em = emf.createEntityManager();
+        StringBuilder queryBuilder = new StringBuilder("select si from SoldItem si where 1=1");
+        if (query != null) {
+            for (Map.Entry<SoldItemCriteria, Object> entry : query.entrySet()) {
+                queryBuilder.append(" and ");
+                entry.getKey().setQuery(queryBuilder);
+            }
+        }
+        final Query q = em.createQuery(queryBuilder.toString());
+        if (query != null) {
+            for (Map.Entry<SoldItemCriteria, Object> entry : query.entrySet()) {
+                entry.getKey().setValue(q, entry.getValue());
+            }
+        }
+        q.setMaxResults(100);
+        List<SoldItem> list = q.getResultList();
+        em.close();
+        return list;
     }
 }

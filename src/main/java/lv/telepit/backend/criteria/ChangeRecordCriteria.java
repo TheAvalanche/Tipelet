@@ -5,7 +5,7 @@ import javax.persistence.Query;
 /**
  * Created by Alex on 12/05/2014.
  */
-public enum ChangeRecordCriteria {
+public enum ChangeRecordCriteria implements Criteria {
 
     USER, DATE_FROM, DATE_TO, NAME, STORE;
 
@@ -18,8 +18,8 @@ public enum ChangeRecordCriteria {
             case DATE_TO:
                 query.append("cr.date <= :dateTo ");
                 break;
-            case NAME:
-                query.append("(lower(cr.serviceGood.name) like :name or lower(cr.stockGood.name) like :name) ");
+            case NAME: //todo working script and filter by type
+                query.append("(lower(cr.stockGood.name) like :name or lower(cr.serviceGood.name) like :name) ");
                 break;
             case USER:
                 query.append("cr.user = :user ");

@@ -4,12 +4,11 @@ import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.dao.ServiceDao;
 import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.ReportData;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Alex on 04/03/14.
@@ -66,5 +65,15 @@ public class ServiceGoodService {
             }
         }
         serviceDao.updateGood(serviceGood);
+    }
+
+    public List<ReportData> findReports(Map<ServiceGoodCriteria, Object> map) {
+        if (!map.containsKey(ServiceGoodCriteria.RETURNED_DATE_FROM) && !map.containsKey(ServiceGoodCriteria.RETURNED_DATE_TO)) {
+            map.put(ServiceGoodCriteria.RETURNED_DATE_TO, new Date()); //to return where returned date is not null only
+        }
+        List<ServiceGood> serviceGoods = serviceDao.findGoods(map);
+        List<ReportData> list = new ArrayList<>(serviceGoods.size());
+        list.addAll(ReportData.constructFromServiceGoods(serviceGoods));
+        return list;
     }
 }
