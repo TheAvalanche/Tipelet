@@ -18,13 +18,12 @@ import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.context.ServiceContext;
+import org.apache.commons.lang3.time.DateUtils;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by Alex on 21/02/14.
@@ -206,6 +205,17 @@ public class ServiceView extends AbstractView {
         container.removeAllItems();
         container.addAll(serviceGoods);
         table.refreshRowCache();
+
+        idField.setValue(null);
+        nameField.setValue(null);
+        imeiField.setValue(null);
+        accumNumField.setValue(null);
+        userField.setValue(null);
+        storeField.setValue(null);
+        statusField.setValue(null);
+        categoryField.setValue(null);
+        deliveredField.setValue(null);
+        returnedField.setValue(null);
     }
 
     @Override
@@ -306,10 +316,10 @@ public class ServiceView extends AbstractView {
                 map.put(ServiceGoodCriteria.STATUS, statusField.getValue());
             }
             if (deliveredField.getValue() != null) {
-                map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, deliveredField.getValue());
+                map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, DateUtils.truncate(deliveredField.getValue(), Calendar.DATE));
             }
             if (returnedField.getValue() != null) {
-                map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, returnedField.getValue());
+                map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(returnedField.getValue(), Calendar.DATE));
             }
             List<ServiceGood> list = ui.getServiceGoodService().findGoods(map);
             refreshView(list);

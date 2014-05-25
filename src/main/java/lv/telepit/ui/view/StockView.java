@@ -175,6 +175,12 @@ public class StockView extends AbstractView {
         container.removeAllItems();
         container.addAll(stockGoods);
         table.refreshRowCache();
+
+        idField.setValue(null);
+        nameField.setValue(null);
+        userField.setValue(null);
+        storeField.setValue(null);
+        categoryField.setValue(null);
     }
 
     @Override

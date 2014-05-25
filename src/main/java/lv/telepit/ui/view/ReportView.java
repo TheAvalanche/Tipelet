@@ -17,12 +17,14 @@ import lv.telepit.model.ReportData;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.utils.PdfUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by Alex on 12/05/2014.
@@ -160,6 +162,11 @@ public class ReportView extends AbstractView {
         table.refreshRowCache();
         table.sort(new Object[]{"date"}, new boolean[]{false});
         buildSumLabel(records);
+
+        userField.setValue(null);
+        storeField.setValue(null);
+        fromDateField.setValue(null);
+        toDateField.setValue(null);
     }
 
     @Override
@@ -221,10 +228,10 @@ public class ReportView extends AbstractView {
             map.put(SoldItemCriteria.STORE, storeField.getValue());
         }
         if (fromDateField.getValue() != null) {
-            map.put(SoldItemCriteria.DATE_FROM, fromDateField.getValue()); //TODO: floor value
+            map.put(SoldItemCriteria.DATE_FROM, DateUtils.truncate(fromDateField.getValue(), Calendar.DATE));
         }
         if (toDateField.getValue() != null) {
-            map.put(SoldItemCriteria.DATE_TO, toDateField.getValue()); //TODO: truncate date
+            map.put(SoldItemCriteria.DATE_TO, DateUtils.ceiling(toDateField.getValue(), Calendar.DATE));
         }
         return map;
     }
@@ -238,10 +245,10 @@ public class ReportView extends AbstractView {
             map.put(ServiceGoodCriteria.STORE, storeField.getValue());
         }
         if (fromDateField.getValue() != null) {
-            map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, fromDateField.getValue()); //TODO: floor value
+            map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(fromDateField.getValue(), Calendar.DATE));
         }
         if (toDateField.getValue() != null) {
-            map.put(ServiceGoodCriteria.RETURNED_DATE_TO, toDateField.getValue()); //TODO: truncate date
+            map.put(ServiceGoodCriteria.RETURNED_DATE_TO, DateUtils.ceiling(toDateField.getValue(), Calendar.DATE));
         }
         return map;
     }

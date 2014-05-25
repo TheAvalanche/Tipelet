@@ -17,14 +17,13 @@ import lv.telepit.model.RecordData;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.utils.PdfUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by Alex on 12/05/2014.
@@ -159,6 +158,12 @@ public class ChangesView extends AbstractView {
         container.addAll(records);
         table.refreshRowCache();
         table.sort(new Object[]{"date"}, new boolean[]{false});
+
+        userField.setValue(null);
+        storeField.setValue(null);
+        fromDateField.setValue(null);
+        toDateField.setValue(null);
+        nameField.setValue(null);
     }
 
     @Override
@@ -213,10 +218,10 @@ public class ChangesView extends AbstractView {
             map.put(ChangeRecordCriteria.STORE, storeField.getValue());
         }
         if (fromDateField.getValue() != null) {
-            map.put(ChangeRecordCriteria.DATE_FROM, fromDateField.getValue()); //TODO: floor value
+            map.put(ChangeRecordCriteria.DATE_FROM, DateUtils.truncate(fromDateField.getValue(), Calendar.DATE));
         }
         if (toDateField.getValue() != null) {
-            map.put(ChangeRecordCriteria.DATE_TO, toDateField.getValue()); //TODO: truncate date
+            map.put(ChangeRecordCriteria.DATE_TO, DateUtils.ceiling(toDateField.getValue(), Calendar.DATE));
         }
         return map;
     }

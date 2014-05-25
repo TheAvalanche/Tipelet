@@ -28,7 +28,7 @@ public class SimpleUserComboBox extends ComboBox {
         try {
             for (User user : commonService.getAllUsers()) {
                 addItem(user);
-                setItemCaption(user, user.getName());
+                setItemCaption(user, user.getName() + " " + user.getSurname());
             }
         } catch (Exception e) {
             e.printStackTrace();
