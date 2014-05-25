@@ -34,7 +34,7 @@ public class ServiceView extends AbstractView {
     private Button addGood;
     private Button updateGood;
     private Button deleteGood;
-
+    private TextField idField;
     private TextField nameField;
     private TextField imeiField;
     private TextField accumNumField;
@@ -62,6 +62,7 @@ public class ServiceView extends AbstractView {
         label = new Label(bundle.getString("service.view.label"));
         label.setContentMode(ContentMode.HTML);
 
+        idField = FieldFactory.getTextField("search.service.id");
         nameField = FieldFactory.getTextField("search.service.name");
         imeiField = FieldFactory.getTextField("search.service.imei");
         accumNumField = FieldFactory.getTextField("search.service.accumNum");
@@ -97,9 +98,10 @@ public class ServiceView extends AbstractView {
         };
         table.setImmediate(true);
         table.setWidth("1200px");
-        table.setContainerDataSource(container); //TODO: id column
-        table.setVisibleColumns("store", "category", "name", "status", "imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
-        table.setColumnHeaders(bundle.getString("service.good.store"),
+        table.setContainerDataSource(container); //TODO: locking
+        table.setVisibleColumns("id", "store", "category", "name", "status", "imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table.setColumnHeaders(bundle.getString("service.good.id"),
+                bundle.getString("service.good.store"),
                 bundle.getString("service.good.category"),
                 bundle.getString("service.good.name"),
                 bundle.getString("service.good.status"),
@@ -156,7 +158,7 @@ public class ServiceView extends AbstractView {
 
         final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField);
         searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, imeiField, accumNumField, deliveredField, returnedField);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
         searchLayout2.setSpacing(true);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
@@ -279,6 +281,9 @@ public class ServiceView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             Map<ServiceGoodCriteria, Object> map = new HashMap<>();
+            if (!Strings.isNullOrEmpty(idField.getValue())) {
+                map.put(ServiceGoodCriteria.ID, idField.getValue().trim().toLowerCase());
+            }
             if (!Strings.isNullOrEmpty(nameField.getValue())) {
                 map.put(ServiceGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
             }

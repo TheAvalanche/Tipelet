@@ -142,7 +142,7 @@ public class ReportView extends AbstractView {
             records = new ArrayList<>();
             records.addAll(ui.getServiceGoodService().findReports(new HashMap<ServiceGoodCriteria, Object>()));
             records.addAll(ui.getStockService().findReports(new HashMap<SoldItemCriteria, Object>()));
-        }
+        } //todo add sorting
         container.removeAllItems();
         container.addAll(records);
         table.refreshRowCache();

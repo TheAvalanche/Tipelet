@@ -1,5 +1,7 @@
 package lv.telepit.ui.component;
 
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.CommonService;
@@ -37,7 +39,15 @@ public class LoginWindow extends Window {
         layout.setSpacing(true);
 
         usernameField = new TextField("Username");
+        usernameField.focus();
         passwordField = new PasswordField("Password");
+        passwordField.addShortcutListener(new ShortcutListener("Login", ShortcutAction.KeyCode.ENTER, null) {
+            @Override
+            public void handleAction(Object sender, Object target) {
+                new LoginListener().buttonClick(null);
+            }
+        });
+
         final Button loginButton = new Button("Login");
         loginButton.addClickListener(new LoginListener());
 
@@ -51,7 +61,6 @@ public class LoginWindow extends Window {
 
     }
 
-    //TODO: Autofocus
     /**
      * Listener to react on login button click.
      */

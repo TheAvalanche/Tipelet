@@ -35,6 +35,7 @@ public class StockView extends AbstractView {
     private Button updateGood;
     private Button deleteGood;
 
+    private TextField idField;
     private TextField nameField;
     private ComboBox userField;
     private ComboBox storeField;
@@ -58,6 +59,7 @@ public class StockView extends AbstractView {
         label = new Label(bundle.getString("stock.view.label"));
         label.setContentMode(ContentMode.HTML);
 
+        idField = FieldFactory.getTextField("search.stock.id");
         nameField = FieldFactory.getTextField("search.stock.name");
         userField = FieldFactory.getUserComboBox("search.user");
         storeField = FieldFactory.getStoreComboBox("search.store");
@@ -88,9 +90,10 @@ public class StockView extends AbstractView {
         };
         table.setImmediate(true);
         table.setWidth("1000px");
-        table.setContainerDataSource(container); //TODO: id column and locking
-        table.setVisibleColumns("store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
-        table.setColumnHeaders(bundle.getString("stock.good.store"),
+        table.setContainerDataSource(container); //TODO: locking
+        table.setVisibleColumns("id", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
+        table.setColumnHeaders(bundle.getString("stock.good.id"),
+                bundle.getString("stock.good.store"),
                 bundle.getString("stock.good.category"),
                 bundle.getString("stock.good.name"),
                 bundle.getString("stock.good.model"),
@@ -123,7 +126,7 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditStockGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, nameField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(idField, userField, storeField, categoryField, nameField);
         searchLayout1.setSpacing(true);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchButton, new Hr());
@@ -248,6 +251,9 @@ public class StockView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             Map<StockGoodCriteria, Object> map = new HashMap<>();
+            if (!Strings.isNullOrEmpty(idField.getValue())) {
+                map.put(StockGoodCriteria.ID, idField.getValue().trim().toLowerCase());
+            }
             if (!Strings.isNullOrEmpty(nameField.getValue())) {
                 map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
             }
