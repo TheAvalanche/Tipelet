@@ -76,7 +76,7 @@ public class CommonService {
         for (ChangeRecord cr : records) {
             list.addAll(RecordData.construct(cr));
         }
-        return list;//TODO: sort by date
+        return list;
     }
 
     public List<ChangeRecord> findChangeRecords(Map<ChangeRecordCriteria, Object> query) {

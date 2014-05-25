@@ -2,6 +2,7 @@ package lv.telepit.ui.view;
 
 import com.google.common.base.Strings;
 import com.itextpdf.text.DocumentException;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
@@ -19,6 +20,8 @@ import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +71,20 @@ public class ChangesView extends AbstractView {
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
         container = new BeanItemContainer<>(RecordData.class);
-        table = new Table();
+        table = new Table() {
+            @Override
+            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
+                Object v = property.getValue();
+                if (v instanceof Date) {
+                    Date dateValue = (Date) v;
+                    return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(dateValue);
+                } else if (v instanceof Double) {
+                    Double doubleValue = (Double) v;
+                    return String.format("%.2f", doubleValue);
+                }
+                return super.formatPropertyValue(rowId, colId, property);
+            }
+        };
         table.setImmediate(true);
         table.setWidth("1200px");
         table.setContainerDataSource(container);
@@ -142,6 +158,7 @@ public class ChangesView extends AbstractView {
         container.removeAllItems();
         container.addAll(records);
         table.refreshRowCache();
+        table.sort(new Object[]{"date"}, new boolean[]{false});
     }
 
     @Override

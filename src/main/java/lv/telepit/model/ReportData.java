@@ -1,7 +1,7 @@
 package lv.telepit.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,7 +11,7 @@ public class ReportData {
 
     private String user;
     private String store;
-    private String date;
+    private Date date;
     private String type;
     private String id;
     private String name;
@@ -25,7 +25,7 @@ public class ReportData {
             ReportData r = new ReportData();
             r.user = si.getUser().getName() + " " + si.getUser().getSurname();
             r.store = si.getStore().getName();
-            r.date = new SimpleDateFormat("dd-MM-YYYY HH:mm").format(si.getSoldDate());
+            r.date = si.getSoldDate();
             r.type = "Noliktavas prece";
             r.id = String.valueOf(si.getParent().getId());
             r.name = si.getParent().getName();
@@ -42,7 +42,7 @@ public class ReportData {
             ReportData r = new ReportData();
             r.user = sg.getUser().getName() + " " + sg.getUser().getSurname();
             r.store = sg.getStore().getName();
-            r.date = new SimpleDateFormat("dd-MM-YYYY HH:mm").format(sg.getReturnedDate());
+            r.date = sg.getReturnedDate();
             r.type = "Servisa prece";
             r.id = String.valueOf(sg.getId());
             r.name = sg.getName();
@@ -61,7 +61,7 @@ public class ReportData {
         return store;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 

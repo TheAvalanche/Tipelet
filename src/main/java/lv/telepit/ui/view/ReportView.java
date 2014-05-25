@@ -1,6 +1,7 @@
 package lv.telepit.ui.view;
 
 import com.itextpdf.text.DocumentException;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
@@ -20,10 +21,8 @@ import lv.telepit.utils.PdfUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Alex on 12/05/2014.
@@ -67,7 +66,20 @@ public class ReportView extends AbstractView {
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
         container = new BeanItemContainer<>(ReportData.class);
-        table = new Table();
+        table = new Table() {
+            @Override
+            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
+                Object v = property.getValue();
+                if (v instanceof Date) {
+                    Date dateValue = (Date) v;
+                    return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(dateValue);
+                } else if (v instanceof Double) {
+                    Double doubleValue = (Double) v;
+                    return String.format("%.2f", doubleValue);
+                }
+                return super.formatPropertyValue(rowId, colId, property);
+            }
+        };
         table.setImmediate(true);
         table.setWidth("1200px");
         table.setContainerDataSource(container);
@@ -142,10 +154,11 @@ public class ReportView extends AbstractView {
             records = new ArrayList<>();
             records.addAll(ui.getServiceGoodService().findReports(new HashMap<ServiceGoodCriteria, Object>()));
             records.addAll(ui.getStockService().findReports(new HashMap<SoldItemCriteria, Object>()));
-        } //todo add sorting
+        }
         container.removeAllItems();
         container.addAll(records);
         table.refreshRowCache();
+        table.sort(new Object[]{"date"}, new boolean[]{false});
         buildSumLabel(records);
     }
 

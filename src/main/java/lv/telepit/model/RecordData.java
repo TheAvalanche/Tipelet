@@ -1,7 +1,7 @@
 package lv.telepit.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -12,7 +12,7 @@ public class RecordData {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     private String user;
     private String store;
-    private String date;
+    private Date date;
     private String type;
     private String id;
     private String name;
@@ -26,7 +26,7 @@ public class RecordData {
             RecordData r = new RecordData();
             r.user = record.getUser().getName() + " " + record.getUser().getSurname();
             r.store = record.getUser().getStore().getName();
-            r.date = new SimpleDateFormat("dd-MM-YYYY HH:mm").format(record.getDate());
+            r.date = record.getDate();
             r.type = record.getServiceGood() != null ? "Servisa Prece" : "Noliktavas prece";
             r.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getId() : record.getStockGood().getId());
             r.name = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getName() : record.getStockGood().getName());
@@ -46,7 +46,7 @@ public class RecordData {
         return store;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
