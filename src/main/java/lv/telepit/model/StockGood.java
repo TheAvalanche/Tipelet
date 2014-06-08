@@ -16,6 +16,7 @@ import java.util.List;
 public class StockGood {
 
     private long id;
+    private long version;
     private Store store;
     private User user;
     private Category category;
@@ -38,6 +39,15 @@ public class StockGood {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Version
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     @ManyToOne(targetEntity = Store.class)
