@@ -5,7 +5,7 @@ import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.backend.dao.StockDao;
 import lv.telepit.backend.dao.StockDaoImpl;
 import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.ReportData;
+import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 

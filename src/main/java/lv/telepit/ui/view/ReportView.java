@@ -13,7 +13,8 @@ import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.SoldItemCriteria;
-import lv.telepit.model.ReportData;
+import lv.telepit.model.dto.ReportData;
+import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.utils.PdfUtils;
@@ -157,6 +158,9 @@ public class ReportView extends AbstractView {
             records.addAll(ui.getServiceGoodService().findReports(new HashMap<ServiceGoodCriteria, Object>()));
             records.addAll(ui.getStockService().findReports(new HashMap<SoldItemCriteria, Object>()));
         }
+
+        Collections.sort(records, Collections.reverseOrder(new ReportDataComparator()));
+
         container.removeAllItems();
         container.addAll(records);
         table.refreshRowCache();
@@ -191,7 +195,8 @@ public class ReportView extends AbstractView {
                     pdfCreator.open();
                     List<ReportData> reports = new ArrayList<>();
                     reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
-                    reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));//todo sorting
+                    reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
+                    Collections.sort(reports, Collections.reverseOrder(new ReportDataComparator()));
                     pdfCreator.exportReports(reports);
                     pdfCreator.close();
                     return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());

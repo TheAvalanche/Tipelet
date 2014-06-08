@@ -4,7 +4,7 @@ import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.dao.ServiceDao;
 import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.ReportData;
+import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
 

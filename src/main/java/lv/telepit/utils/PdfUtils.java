@@ -6,7 +6,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.ReportData;
+import lv.telepit.model.dto.ReportData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

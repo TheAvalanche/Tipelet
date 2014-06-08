@@ -1,4 +1,6 @@
-package lv.telepit.model;
+package lv.telepit.model.dto;
+
+import lv.telepit.model.ChangeRecord;
 
 import java.util.ArrayList;
 import java.util.Date;

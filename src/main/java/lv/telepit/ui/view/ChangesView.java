@@ -13,7 +13,10 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
-import lv.telepit.model.RecordData;
+import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.dto.RecordData;
+import lv.telepit.model.utils.ChangesComparator;
+import lv.telepit.model.utils.RecordDataComparator;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.utils.PdfUtils;
@@ -22,8 +25,8 @@ import org.apache.commons.lang3.time.DateUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 /**
  * Created by Alex on 12/05/2014.
@@ -44,7 +47,6 @@ public class ChangesView extends AbstractView {
     private Label label;
 
     //TODO: filter by good type
-    //TODO: limit of records
     public ChangesView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
     }
@@ -154,6 +156,9 @@ public class ChangesView extends AbstractView {
         if (records == null) {
             records = ui.getCommonService().findRecords(new HashMap<ChangeRecordCriteria, Object>());
         }
+
+        Collections.sort(records, Collections.reverseOrder(new RecordDataComparator()));
+
         container.removeAllItems();
         container.addAll(records);
         table.refreshRowCache();
@@ -178,7 +183,10 @@ public class ChangesView extends AbstractView {
                 try {
                     PdfUtils pdfCreator = new PdfUtils();
                     pdfCreator.open();
-                    pdfCreator.exportChanges(ui.getCommonService().findChangeRecords(buildMap()));
+                    List<ChangeRecord> changeRecords = new ArrayList<>();
+                    changeRecords.addAll(ui.getCommonService().findChangeRecords(buildMap()));
+                    Collections.sort(changeRecords, Collections.reverseOrder(new ChangesComparator()));
+                    pdfCreator.exportChanges(changeRecords);
                     pdfCreator.close();
                     return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
                 } catch (DocumentException e) {

@@ -1,4 +1,7 @@
-package lv.telepit.model;
+package lv.telepit.model.dto;
+
+import lv.telepit.model.ServiceGood;
+import lv.telepit.model.SoldItem;
 
 import java.util.ArrayList;
 import java.util.Date;

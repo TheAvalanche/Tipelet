@@ -3,7 +3,11 @@ package lv.telepit.backend;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.backend.dao.CommonDao;
 import lv.telepit.backend.dao.CommonDaoImpl;
-import lv.telepit.model.*;
+import lv.telepit.model.Category;
+import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.Store;
+import lv.telepit.model.User;
+import lv.telepit.model.dto.RecordData;
 
 import java.util.ArrayList;
 import java.util.List;
