@@ -187,9 +187,16 @@ public class ChangesView extends AbstractView {
                 return null;
             }
         };
-        return new StreamResource (source, "report.pdf"); //TODO: dynamic name
+        return new StreamResource (source, createReportName());
     }
 
+    private String createReportName() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("changeReport");
+        builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
+        builder.append(".pdf");
+        return builder.toString();
+    }
 
     private class RefreshListener implements Button.ClickListener {
         @Override

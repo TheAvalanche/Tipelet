@@ -6,9 +6,11 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.ReportData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
@@ -23,6 +25,7 @@ public class PdfUtils {
 
     private Font boldFont;
     private Font normalFont;
+    private Font boldBlueFont;
 
 
     public PdfUtils() throws DocumentException {
@@ -30,6 +33,7 @@ public class PdfUtils {
             BaseFont arial = BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             boldFont = new Font(arial, 10, Font.BOLD);
             normalFont = new Font(arial, 10, Font.NORMAL);
+            boldBlueFont = new Font(arial, 12, Font.NORMAL, BaseColor.BLUE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,21 +51,16 @@ public class PdfUtils {
         document.close();
     }
 
-    public void addMetaData() {
-        document.addTitle("My first PDF");
-        document.addSubject("Using iText");
-        document.addKeywords("Java, PDF, iText");
-        document.addAuthor("Lars Vogel");
-        document.addCreator("Lars Vogel");
-    }
-
-    //TODO: Pretty formatting
     public void exportChanges(java.util.List<ChangeRecord> changes) throws DocumentException {
 
         for (ChangeRecord change : changes) {
-            Paragraph header = new Paragraph(composeChengeRecordHeader(change), boldFont);
+            Paragraph headerOne = new Paragraph(composeHeaderOne(change), boldBlueFont);
+            headerOne.setAlignment(Element.ALIGN_CENTER);
+            Paragraph headerTwo = new Paragraph(composeHeaderTwo(change));
+            headerTwo.setAlignment(Element.ALIGN_CENTER);
             document.add(new Paragraph(" "));
-            document.add(header);
+            document.add(headerOne);
+            document.add(headerTwo);
             document.add(new Paragraph(" "));
 
             PdfPTable table = new PdfPTable(3);
@@ -89,34 +88,74 @@ public class PdfUtils {
         }
     }
 
-    private String composeChengeRecordHeader(ChangeRecord change) {
+    private String composeHeaderOne(ChangeRecord change) {
         StringBuilder builder = new StringBuilder();
-        builder.append(change.getStockGood() != null ? "Noliktavas Prece" : "Servisa prece");
+        builder.append(change.getStockGood() != null ? "Noliktavas Prece:" : "Servisa prece:");
         builder.append(" ");
         builder.append(change.getStockGood() != null ? change.getStockGood().getName() : change.getServiceGood().getName());
-        builder.append(" ");
+        builder.append(" (ID=");
         builder.append(change.getStockGood() != null ? change.getStockGood().getId() : change.getServiceGood().getId());
-        builder.append(" : ");
+        builder.append(")");
+        return builder.toString();
+    }
+
+    private String composeHeaderTwo(ChangeRecord change) {
+        StringBuilder builder = new StringBuilder();
         builder.append(new SimpleDateFormat("dd-MM-YYYY HH:mm").format(change.getDate()));
-        builder.append(" : ");
+        builder.append(" / ");
         builder.append(change.getUser().getName());
         builder.append(" ");
         builder.append(change.getUser().getSurname());
         return builder.toString();
     }
 
-    private static void createList(Section subCatPart) {
-        List list = new List(true, false, 10);
-        list.add(new ListItem("First point"));
-        list.add(new ListItem("Second point"));
-        list.add(new ListItem("Third point"));
-        subCatPart.add(list);
-    }
+    public void exportReports(java.util.List<ReportData> reports) throws DocumentException {
+        PdfPTable table = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(0f);
+        table.setSpacingAfter(0f);
 
-    private static void addEmptyLine(Paragraph paragraph, int number) {
-        for (int i = 0; i < number; i++) {
-            paragraph.add(new Paragraph(" "));
+        PdfPCell h1 = new PdfPCell(new Phrase("Veikals", boldFont));
+        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h1);
+
+        PdfPCell h2 = new PdfPCell(new Phrase("Datums", boldFont));
+        h2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h2);
+
+        PdfPCell h3 = new PdfPCell(new Phrase("ID", boldFont));
+        h3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h3);
+
+        PdfPCell h4 = new PdfPCell(new Phrase("Kods", boldFont));
+        h4.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h4);
+
+        PdfPCell h5 = new PdfPCell(new Phrase("Nosaukums", boldFont));
+        h5.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h5);
+
+        PdfPCell h6 = new PdfPCell(new Phrase("Cena", boldFont));
+        h6.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h6);
+
+        table.setHeaderRows(1);
+
+        BigDecimal sum = new BigDecimal("0");
+
+        for (ReportData report : reports) {
+            table.addCell(new Phrase(report.getStore(), normalFont));
+            table.addCell(new Phrase(new SimpleDateFormat().format(report.getDate()), normalFont));
+            table.addCell(new Phrase(report.getId(), normalFont));
+            table.addCell(new Phrase(report.getCode(), normalFont));
+            table.addCell(new Phrase(report.getName(), normalFont));
+            table.addCell(new Phrase(report.getPrice() + "€", normalFont));
+
+            sum = sum.add(new BigDecimal(report.getPrice()));
         }
+        document.setMargins(20, 20, 20, 20);
+        document.add(table);
+        document.add(new Paragraph("Kopā: " + sum + "€", boldFont));
     }
 
     public ByteArrayOutputStream getOutputStream() {

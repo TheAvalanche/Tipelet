@@ -189,7 +189,10 @@ public class ReportView extends AbstractView {
                 try {
                     PdfUtils pdfCreator = new PdfUtils();
                     pdfCreator.open();
-                    //pdfCreator.exportChanges(ui.getCommonService().findChangeRecords(buildMap()));
+                    List<ReportData> reports = new ArrayList<>();
+                    reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+                    reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));//todo sorting
+                    pdfCreator.exportReports(reports);
                     pdfCreator.close();
                     return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
                 } catch (DocumentException e) {
@@ -198,8 +201,17 @@ public class ReportView extends AbstractView {
                 return null;
             }
         };
-        return new StreamResource (source, "report.pdf"); //TODO: dynamic name
+        return new StreamResource (source, createReportName());
     }
+
+    private String createReportName() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("financialReport");
+        builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
+        builder.append(".pdf");
+        return builder.toString();
+    }
+
 
 
     private class RefreshListener implements Button.ClickListener {
