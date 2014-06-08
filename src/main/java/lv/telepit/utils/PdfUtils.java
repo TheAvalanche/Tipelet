@@ -110,6 +110,12 @@ public class PdfUtils {
     }
 
     public void exportReports(java.util.List<ReportData> reports) throws DocumentException {
+        Paragraph headerOne = new Paragraph(composeHeaderOne(reports), boldBlueFont);
+        headerOne.setAlignment(Element.ALIGN_CENTER);
+        document.add(new Paragraph(" "));
+        document.add(headerOne);
+        document.add(new Paragraph(" "));
+
         PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
         table.setSpacingBefore(0f);
@@ -156,6 +162,15 @@ public class PdfUtils {
         document.setMargins(20, 20, 20, 20);
         document.add(table);
         document.add(new Paragraph("Kopā: " + sum + "€", boldFont));
+    }
+
+    private String composeHeaderOne(java.util.List<ReportData> reports) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Finanšu pārskats ");
+        builder.append(new SimpleDateFormat("dd.MM.YYYY").format(reports.get(0).getDate()));
+        builder.append("-");
+        builder.append(new SimpleDateFormat("dd.MM.YYYY").format(reports.get(reports.size() - 1).getDate()));
+        return builder.toString();
     }
 
     public ByteArrayOutputStream getOutputStream() {
