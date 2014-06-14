@@ -26,7 +26,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class UserView extends AbstractView {
 
-
+    //todo required store
     private Button addUser;
     private Button updateUser;
     private Button deleteUser;

@@ -17,6 +17,7 @@ import java.util.List;
 })
 public class Category {
     private long id;
+    private long version;
     private List<Category> children = new ArrayList<>();
     private Category parent;
     private String name;
@@ -41,6 +42,15 @@ public class Category {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Version
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     // adds a category to this category

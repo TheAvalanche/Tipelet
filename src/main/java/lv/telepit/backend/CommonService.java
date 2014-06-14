@@ -1,5 +1,6 @@
 package lv.telepit.backend;
 
+import com.vaadin.ui.Notification;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.backend.dao.CommonDao;
 import lv.telepit.backend.dao.CommonDaoImpl;
@@ -9,6 +10,7 @@ import lv.telepit.model.Store;
 import lv.telepit.model.User;
 import lv.telepit.model.dto.RecordData;
 
+import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,16 +27,28 @@ public class CommonService {
     }
 
     public void saveUser(User user) throws Exception {
-        commonDao.createUser(user);
+        try {
+            commonDao.createUser(user);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public void updateUser(User user) throws Exception {
-        commonDao.updateUser(user);
+        try {
+            commonDao.updateUser(user);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public void deleteUser(User user) throws Exception {
         user.setDeleted(true);
-        commonDao.updateUser(user);
+        try {
+            commonDao.updateUser(user);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public User getUser(String username, String password) {
@@ -46,16 +60,28 @@ public class CommonService {
     }
 
     public void saveStore(Store store) throws Exception {
-        commonDao.createStore(store);
+        try {
+            commonDao.createStore(store);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public void updateStore(Store store) throws Exception {
-        commonDao.updateStore(store);
+        try {
+            commonDao.updateStore(store);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public void deleteStore(Store store) throws Exception {
         store.setDeleted(true);
-        commonDao.updateStore(store);
+        try {
+            commonDao.updateStore(store);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public List<Store> getAllStores() {
@@ -63,7 +89,11 @@ public class CommonService {
     }
 
     public void addOrUpdateCategory(Category category) {
-        commonDao.addOrUpdateCategory(category);
+        try {
+            commonDao.addOrUpdateCategory(category);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public List<Category> getAllCategories() {
@@ -71,7 +101,11 @@ public class CommonService {
     }
 
     public void removeCategory(Category category) {
-        commonDao.removeCategory(category);
+        try {
+            commonDao.removeCategory(category);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public List<RecordData> findRecords(Map<ChangeRecordCriteria, Object> query) {
@@ -85,6 +119,10 @@ public class CommonService {
 
     public List<ChangeRecord> findChangeRecords(Map<ChangeRecordCriteria, Object> query) {
         return commonDao.findRecords(query);
+    }
+
+    private void catchOptimisticLockException() {
+        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izamainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
     }
 
 }

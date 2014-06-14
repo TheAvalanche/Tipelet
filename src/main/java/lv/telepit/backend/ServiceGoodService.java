@@ -1,14 +1,19 @@
 package lv.telepit.backend;
 
+import com.vaadin.ui.Notification;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.dao.ServiceDao;
 import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
+import lv.telepit.model.dto.ReportData;
 
-import java.util.*;
+import javax.persistence.OptimisticLockException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 04/03/14.
@@ -22,15 +27,27 @@ public class ServiceGoodService {
     }
 
     public void saveGood(ServiceGood good) {
-        serviceDao.createGood(good);
+        try {
+            serviceDao.createGood(good);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public void updateGood(ServiceGood good) {
-        serviceDao.updateGood(good);
+        try {
+            serviceDao.updateGood(good);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public void deleteGood(ServiceGood good) {
-        serviceDao.deleteGood(good);
+        try {
+            serviceDao.deleteGood(good);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public List<ServiceGood> getAllGoods() {
@@ -64,7 +81,11 @@ public class ServiceGoodService {
                 serviceGood.setFinishDate(new Date());
             }
         }
-        serviceDao.updateGood(serviceGood);
+        try {
+            serviceDao.updateGood(serviceGood);
+        } catch (OptimisticLockException e) {
+            catchOptimisticLockException();
+        }
     }
 
     public List<ReportData> findReports(Map<ServiceGoodCriteria, Object> map) {
@@ -75,5 +96,9 @@ public class ServiceGoodService {
         List<ReportData> list = new ArrayList<>(serviceGoods.size());
         list.addAll(ReportData.constructFromServiceGoods(serviceGoods));
         return list;
+    }
+
+    private void catchOptimisticLockException() {
+        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izamainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
     }
 }

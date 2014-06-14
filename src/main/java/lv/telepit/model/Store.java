@@ -19,6 +19,7 @@ import java.util.List;
 public class Store {
 
     private long id;
+    private long version;
     private String name;
     private String city;
     private String address;
@@ -34,6 +35,15 @@ public class Store {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Version
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     public String getName() {

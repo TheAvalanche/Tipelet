@@ -21,6 +21,7 @@ import java.util.List;
 })
 public class User {
     private long id;
+    private long version;
     private String name;
     private String surname;
     private String login;
@@ -39,6 +40,15 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Version
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     public String getName() {
