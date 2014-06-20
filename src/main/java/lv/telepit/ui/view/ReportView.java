@@ -13,10 +13,13 @@ import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.SoldItemCriteria;
+import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.dto.ReportData;
+import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.utils.ExcelUtils;
 import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -44,6 +47,7 @@ public class ReportView extends AbstractView {
     private BeanItemContainer<ReportData> container;
     private Label label;
     private Label sumLabel;
+    private Button xlsButton;
 
     public ReportView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
@@ -125,10 +129,18 @@ public class ReportView extends AbstractView {
         FileDownloader fileDownloader = new FileDownloader(sr);
         fileDownloader.extend(pdfButton);
 
+        xlsButton = new Button("Excel export");
+        xlsButton.setIcon(new ThemeResource("img/excel.png"));
+        xlsButton.setWidth("150");
+        StreamResource excelStream = getExcelStream();
+        excelStream.setMIMEType("application/vnd.ms-excel");
+        FileDownloader excelDownloader = new FileDownloader(excelStream);
+        excelDownloader.extend(xlsButton);
+
         sumLabel = new Label();
         sumLabel.setContentMode(ContentMode.HTML);
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(pdfButton, refreshButton);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(pdfButton, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
@@ -206,14 +218,36 @@ public class ReportView extends AbstractView {
                 return null;
             }
         };
-        return new StreamResource (source, createReportName());
+        return new StreamResource (source, createReportName("pdf"));
     }
 
-    private String createReportName() {
+    private StreamResource getExcelStream() {
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+            @Override
+            public InputStream getStream() {
+                try {
+                    ExcelUtils excelUtils = new ExcelUtils();
+                    List<ReportData> reports = new ArrayList<>();
+                    reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+                    reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
+                    Collections.sort(reports, Collections.reverseOrder(new ReportDataComparator()));
+                    excelUtils.exportReports(reports);
+                    excelUtils.close();
+                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        return new StreamResource(source, createReportName("xls"));
+    }
+
+    private String createReportName(String extension) {
         StringBuilder builder = new StringBuilder();
         builder.append("financialReport");
         builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
-        builder.append(".pdf");
+        builder.append("." + extension);
         return builder.toString();
     }
 

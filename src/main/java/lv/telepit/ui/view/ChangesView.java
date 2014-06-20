@@ -11,6 +11,7 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import jxl.write.WriteException;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.model.ChangeRecord;
@@ -19,10 +20,12 @@ import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.RecordDataComparator;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.utils.ExcelUtils;
 import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,6 +48,7 @@ public class ChangesView extends AbstractView {
     private Table table;
     private BeanItemContainer<RecordData> container;
     private Label label;
+    private Button xlsButton;
 
     //TODO: filter by good type
     public ChangesView(Navigator navigator, TelepitUI ui, String name) {
@@ -124,13 +128,21 @@ public class ChangesView extends AbstractView {
         pdfButton = new Button("PDF export");
         pdfButton.setIcon(new ThemeResource("img/pdf.png"));
         pdfButton.setWidth("150");
-        StreamResource sr = getPDFStream();
-        sr.setMIMEType("application/pdf");
-        FileDownloader fileDownloader = new FileDownloader(sr);
-        fileDownloader.extend(pdfButton);
+        StreamResource pdfStream = getPDFStream();
+        pdfStream.setMIMEType("application/pdf");
+        FileDownloader pdfDownloader = new FileDownloader(pdfStream);
+        pdfDownloader.extend(pdfButton);
+
+        xlsButton = new Button("Excel export");
+        xlsButton.setIcon(new ThemeResource("img/excel.png"));
+        xlsButton.setWidth("150");
+        StreamResource excelStream = getExcelStream();
+        excelStream.setMIMEType("application/vnd.ms-excel");
+        FileDownloader excelDownloader = new FileDownloader(excelStream);
+        excelDownloader.extend(xlsButton);
 
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(pdfButton, refreshButton);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(pdfButton, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
@@ -195,14 +207,35 @@ public class ChangesView extends AbstractView {
                 return null;
             }
         };
-        return new StreamResource (source, createReportName());
+        return new StreamResource (source, createReportName("pdf"));
     }
 
-    private String createReportName() {
+    private StreamResource getExcelStream() {
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+            @Override
+            public InputStream getStream() {
+                try {
+                    ExcelUtils excelUtils = new ExcelUtils();
+                    List<ChangeRecord> changeRecords = new ArrayList<>();
+                    changeRecords.addAll(ui.getCommonService().findChangeRecords(buildMap()));
+                    Collections.sort(changeRecords, Collections.reverseOrder(new ChangesComparator()));
+                    excelUtils.exportChanges(changeRecords);
+                    excelUtils.close();
+                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        return new StreamResource(source, createReportName("xls"));
+    }
+
+    private String createReportName(String extension) {
         StringBuilder builder = new StringBuilder();
         builder.append("changeReport");
         builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
-        builder.append(".pdf");
+        builder.append("." + extension);
         return builder.toString();
     }
 

@@ -52,6 +52,7 @@ public class PdfUtils {
     }
 
     public void exportChanges(java.util.List<ChangeRecord> changes) throws DocumentException {
+        if (changes == null || changes.isEmpty()) return;
 
         for (ChangeRecord change : changes) {
             Paragraph headerOne = new Paragraph(composeHeaderOne(change), boldBlueFont);
@@ -110,6 +111,8 @@ public class PdfUtils {
     }
 
     public void exportReports(java.util.List<ReportData> reports) throws DocumentException {
+        if (reports == null || reports.isEmpty()) return;
+
         Paragraph headerOne = new Paragraph(composeHeaderOne(reports), boldBlueFont);
         headerOne.setAlignment(Element.ALIGN_CENTER);
         document.add(new Paragraph(" "));
