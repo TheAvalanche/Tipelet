@@ -137,7 +137,6 @@ public class CategoryView extends AbstractView {
         content.addComponent(new Hr());
         content.addComponent(treeAndButtons);
 
-        refreshView();
     }
 
     @Override

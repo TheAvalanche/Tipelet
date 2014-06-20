@@ -184,9 +184,6 @@ public class ServiceView extends AbstractView {
         content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);
-
-        refreshView();
-
     }
 
     @Override
@@ -220,7 +217,11 @@ public class ServiceView extends AbstractView {
 
     @Override
     public void checkAuthority() {
-
+        if (!ui.getCurrentUser().isAdmin()) {
+            storeField.setVisible(false);
+            userField.setVisible(false);
+            deleteGood.setVisible(false);
+        }
     }
 
     private class EditServiceGoodListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {
@@ -326,6 +327,10 @@ public class ServiceView extends AbstractView {
         }
         if (returnedField.getValue() != null) {
             map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(returnedField.getValue(), Calendar.DATE));
+        }
+
+        if (!ui.getCurrentUser().isAdmin()) {
+            map.put(ServiceGoodCriteria.STORE, ui.getCurrentUser().getStore());
         }
         return map;
     }

@@ -52,11 +52,14 @@ public abstract class AbstractView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         if (ui.getCurrentUser() == null) {
             ui.getNavigator().navigateTo("");
+            return;
         } else if (!AuthUtil.isAllowed(name, ui.getCurrentUser())) {
             ui.getNavigator().navigateTo("service");
+            return;
         }
         menuBar.checkAuthority(ui.getCurrentUser());
         checkAuthority();
+        refreshView();
     }
 
     public abstract void buildContent();

@@ -157,9 +157,6 @@ public class ReportView extends AbstractView {
         content.addComponent(table);
         content.addComponent(sumLabel);
         content.setComponentAlignment(sumLabel, Alignment.BOTTOM_RIGHT);
-
-        refreshView();
-
     }
 
     @Override

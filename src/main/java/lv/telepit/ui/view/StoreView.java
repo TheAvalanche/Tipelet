@@ -78,9 +78,6 @@ public class StoreView extends AbstractView {
         content.addComponent(label);
         content.addComponent(new Hr());
         content.addComponent(tableButtonsLayout);
-
-        refreshView();
-
     }
 
     @Override

@@ -151,8 +151,6 @@ public class StockView extends AbstractView {
         content.addComponent(buttonLayout);
         content.addComponent(table);
 
-        refreshView();
-
     }
 
     @Override
@@ -182,7 +180,13 @@ public class StockView extends AbstractView {
 
     @Override
     public void checkAuthority() {
-
+        if (!ui.getCurrentUser().isAdmin()) {
+            storeField.setVisible(false);
+            userField.setVisible(false);
+            addGood.setVisible(false);
+            updateGood.setVisible(false);
+            deleteGood.setVisible(false);
+        }
     }
 
     private class RefreshListener implements Button.ClickListener {
@@ -274,6 +278,10 @@ public class StockView extends AbstractView {
         }
         if (categoryField.getValue() != null) {
             map.put(StockGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
+        }
+
+        if (ui.getCurrentUser() != null && !ui.getCurrentUser().isAdmin()) {
+            map.put(StockGoodCriteria.STORE, ui.getCurrentUser().getStore());
         }
         return map;
     }

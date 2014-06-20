@@ -122,8 +122,6 @@ public class UserView extends AbstractView {
         content.addComponent(new Hr());
         content.addComponent(searchButtonLayout);
         content.addComponent(tableButtonsLayout);
-
-        refreshView();
     }
 
     public void refreshView() {

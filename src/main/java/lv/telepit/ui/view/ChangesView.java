@@ -154,8 +154,6 @@ public class ChangesView extends AbstractView {
         content.addComponent(buttonLayout);
         content.addComponent(table);
 
-        refreshView();
-
     }
 
     @Override
