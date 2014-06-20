@@ -50,10 +50,6 @@ public class ServiceGoodService {
         }
     }
 
-    public List<ServiceGood> getAllGoods() {
-        return serviceDao.getAllGoods();
-    }
-
     public List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> query) {
         return serviceDao.findGoods(query);
     }

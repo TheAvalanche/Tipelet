@@ -74,16 +74,6 @@ public class StockDaoImpl implements StockDao {
     }
 
     @Override
-    public List<StockGood> getAllGoods() {
-
-        EntityManager em = emf.createEntityManager();
-        Query q = em.createNamedQuery("StockGood.findAll");
-        List<StockGood> list = q.getResultList();
-        em.close();
-        return list;
-    }
-
-    @Override
     public List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap) {
         EntityManager em = emf.createEntityManager();
         StringBuilder queryBuilder = new StringBuilder("select sg from StockGood sg where 1=1");

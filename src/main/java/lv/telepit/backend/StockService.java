@@ -50,10 +50,6 @@ public class StockService {
         }
     }
 
-    public List<StockGood> getAllGoods() {
-        return stockDao.getAllGoods();
-    }
-
     public List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap) {
         return stockDao.findGoods(criteriaMap);
     }

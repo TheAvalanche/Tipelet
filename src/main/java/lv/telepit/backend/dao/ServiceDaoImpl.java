@@ -74,15 +74,6 @@ public class ServiceDaoImpl implements ServiceDao {
     }
 
     @Override
-    public List<ServiceGood> getAllGoods() {
-        EntityManager em = emf.createEntityManager();
-        Query q = em.createNamedQuery("ServiceGood.getAll");
-        List<ServiceGood> goods = q.getResultList();
-        em.close();
-        return goods;
-    }
-
-    @Override
     public List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> criteriaMap) {
         EntityManager em = emf.createEntityManager();
         StringBuilder queryBuilder = new StringBuilder("select sg from ServiceGood sg where 1=1");

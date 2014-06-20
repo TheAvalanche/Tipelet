@@ -21,10 +21,7 @@ import lv.telepit.ui.view.context.StockContext;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Alex on 21/02/14.
@@ -170,7 +167,7 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
 
         if (stockGoods == null) {
-            stockGoods = ui.getStockService().getAllGoods();
+            stockGoods = ui.getStockService().findGoods(buildMap());
         }
         container.removeAllItems();
         container.addAll(stockGoods);
@@ -256,25 +253,28 @@ public class StockView extends AbstractView {
     private class SearchListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            Map<StockGoodCriteria, Object> map = new HashMap<>();
-            if (!Strings.isNullOrEmpty(idField.getValue())) {
-                map.put(StockGoodCriteria.ID, idField.getValue().trim().toLowerCase());
-            }
-            if (!Strings.isNullOrEmpty(nameField.getValue())) {
-                map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
-            }
-            if (userField.getValue() != null) {
-                map.put(StockGoodCriteria.USER, userField.getValue());
-            }
-            if (storeField.getValue() != null) {
-                map.put(StockGoodCriteria.STORE, storeField.getValue());
-            }
-            if (categoryField.getValue() != null) {
-                map.put(StockGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
-            }
-
-            List<StockGood> list = ui.getStockService().findGoods(map);
+            List<StockGood> list = ui.getStockService().findGoods(buildMap());
             refreshView(list);
         }
+    }
+
+    private Map<StockGoodCriteria, Object> buildMap() {
+        Map<StockGoodCriteria, Object> map = new HashMap<>();
+        if (!Strings.isNullOrEmpty(idField.getValue())) {
+            map.put(StockGoodCriteria.ID, idField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(nameField.getValue())) {
+            map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
+        }
+        if (userField.getValue() != null) {
+            map.put(StockGoodCriteria.USER, userField.getValue());
+        }
+        if (storeField.getValue() != null) {
+            map.put(StockGoodCriteria.STORE, storeField.getValue());
+        }
+        if (categoryField.getValue() != null) {
+            map.put(StockGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
+        }
+        return map;
     }
 }

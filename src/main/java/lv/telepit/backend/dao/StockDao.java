@@ -19,8 +19,6 @@ public interface StockDao {
 
     void deleteGood(StockGood good);
 
-    List<StockGood> getAllGoods();
-
     List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap);
 
     List<ChangeRecord> findChanges(StockGood stockGood);

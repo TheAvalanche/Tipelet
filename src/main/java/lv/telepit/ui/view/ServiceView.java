@@ -22,8 +22,8 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 /**
  * Created by Alex on 21/02/14.
@@ -200,7 +200,7 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
 
         if (serviceGoods == null) {
-            serviceGoods = ui.getServiceGoodService().getAllGoods();
+            serviceGoods = ui.getServiceGoodService().findGoods(buildMap());
         }
         container.removeAllItems();
         container.addAll(serviceGoods);
@@ -290,39 +290,43 @@ public class ServiceView extends AbstractView {
     private class SearchListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            Map<ServiceGoodCriteria, Object> map = new HashMap<>();
-            if (!Strings.isNullOrEmpty(idField.getValue())) {
-                map.put(ServiceGoodCriteria.ID, idField.getValue().trim().toLowerCase());
-            }
-            if (!Strings.isNullOrEmpty(nameField.getValue())) {
-                map.put(ServiceGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
-            }
-            if (!Strings.isNullOrEmpty(imeiField.getValue())) {
-                map.put(ServiceGoodCriteria.IMEI, imeiField.getValue().trim().toLowerCase());
-            }
-            if (!Strings.isNullOrEmpty(accumNumField.getValue())) {
-                map.put(ServiceGoodCriteria.ACCUM_NUM, accumNumField.getValue().trim().toLowerCase());
-            }
-            if (userField.getValue() != null) {
-                map.put(ServiceGoodCriteria.USER, userField.getValue());
-            }
-            if (storeField.getValue() != null) {
-                map.put(ServiceGoodCriteria.STORE, storeField.getValue());
-            }
-            if (categoryField.getValue() != null) {
-                map.put(ServiceGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
-            }
-            if (statusField.getValue() != null) {
-                map.put(ServiceGoodCriteria.STATUS, statusField.getValue());
-            }
-            if (deliveredField.getValue() != null) {
-                map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, DateUtils.truncate(deliveredField.getValue(), Calendar.DATE));
-            }
-            if (returnedField.getValue() != null) {
-                map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(returnedField.getValue(), Calendar.DATE));
-            }
-            List<ServiceGood> list = ui.getServiceGoodService().findGoods(map);
+            List<ServiceGood> list = ui.getServiceGoodService().findGoods(buildMap());
             refreshView(list);
         }
+    }
+
+    private Map<ServiceGoodCriteria, Object> buildMap() {
+        Map<ServiceGoodCriteria, Object> map = new HashMap<>();
+        if (!Strings.isNullOrEmpty(idField.getValue())) {
+            map.put(ServiceGoodCriteria.ID, idField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(nameField.getValue())) {
+            map.put(ServiceGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(imeiField.getValue())) {
+            map.put(ServiceGoodCriteria.IMEI, imeiField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(accumNumField.getValue())) {
+            map.put(ServiceGoodCriteria.ACCUM_NUM, accumNumField.getValue().trim().toLowerCase());
+        }
+        if (userField.getValue() != null) {
+            map.put(ServiceGoodCriteria.USER, userField.getValue());
+        }
+        if (storeField.getValue() != null) {
+            map.put(ServiceGoodCriteria.STORE, storeField.getValue());
+        }
+        if (categoryField.getValue() != null) {
+            map.put(ServiceGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
+        }
+        if (statusField.getValue() != null) {
+            map.put(ServiceGoodCriteria.STATUS, statusField.getValue());
+        }
+        if (deliveredField.getValue() != null) {
+            map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, DateUtils.truncate(deliveredField.getValue(), Calendar.DATE));
+        }
+        if (returnedField.getValue() != null) {
+            map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(returnedField.getValue(), Calendar.DATE));
+        }
+        return map;
     }
 }
