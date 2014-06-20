@@ -13,12 +13,11 @@ import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.SoldItemCriteria;
-import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.dto.ReportData;
-import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.ui.form.fields.SimpleTypeComboBox;
 import lv.telepit.utils.ExcelUtils;
 import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -39,15 +38,17 @@ public class ReportView extends AbstractView {
     private ComboBox storeField;
     private DateField fromDateField;
     private DateField toDateField;
+    private ComboBox typeField;
     private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
     private Button pdfButton;
+    private Button xlsButton;
     private Table table;
     private BeanItemContainer<ReportData> container;
     private Label label;
     private Label sumLabel;
-    private Button xlsButton;
+
 
     public ReportView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
@@ -63,6 +64,9 @@ public class ReportView extends AbstractView {
         storeField = FieldFactory.getStoreComboBox("search.store");
         fromDateField = FieldFactory.getDateField("search.change.fromDate");
         toDateField = FieldFactory.getDateField("search.change.toDate");
+        typeField = FieldFactory.getTypeComboBox("search.type");
+        typeField.setNullSelectionAllowed(false);
+        typeField.setValue(SimpleTypeComboBox.Type.ALL);
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
@@ -105,7 +109,7 @@ public class ReportView extends AbstractView {
 
         final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
         searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
         searchLayout2.setSpacing(true);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
@@ -183,6 +187,7 @@ public class ReportView extends AbstractView {
         storeField.setValue(null);
         fromDateField.setValue(null);
         toDateField.setValue(null);
+        typeField.setValue(SimpleTypeComboBox.Type.ALL);
     }
 
     @Override
@@ -205,11 +210,7 @@ public class ReportView extends AbstractView {
                 try {
                     PdfUtils pdfCreator = new PdfUtils();
                     pdfCreator.open();
-                    List<ReportData> reports = new ArrayList<>();
-                    reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
-                    reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
-                    Collections.sort(reports, Collections.reverseOrder(new ReportDataComparator()));
-                    pdfCreator.exportReports(reports);
+                    pdfCreator.exportReports(getReportData());
                     pdfCreator.close();
                     return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
                 } catch (DocumentException e) {
@@ -227,11 +228,7 @@ public class ReportView extends AbstractView {
             public InputStream getStream() {
                 try {
                     ExcelUtils excelUtils = new ExcelUtils();
-                    List<ReportData> reports = new ArrayList<>();
-                    reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
-                    reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
-                    Collections.sort(reports, Collections.reverseOrder(new ReportDataComparator()));
-                    excelUtils.exportReports(reports);
+                    excelUtils.exportReports(getReportData());
                     excelUtils.close();
                     return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
                 } catch (Exception e) {
@@ -251,7 +248,21 @@ public class ReportView extends AbstractView {
         return builder.toString();
     }
 
+    private List<ReportData> getReportData() {
+        List<ReportData> reports = new ArrayList<>();
 
+        if (typeField.getValue() == SimpleTypeComboBox.Type.SERVICE) {
+            reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+        } else if (typeField.getValue() == SimpleTypeComboBox.Type.STOCK) {
+            reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
+        } else {
+            reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+            reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
+        }
+
+        Collections.sort(reports, Collections.reverseOrder(new ReportDataComparator()));
+        return reports;
+    }
 
     private class RefreshListener implements Button.ClickListener {
         @Override
@@ -263,10 +274,7 @@ public class ReportView extends AbstractView {
     private class SearchListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            List<ReportData> list = new ArrayList<>();
-            list.addAll(ui.getStockService().findReports(buildSoldItemMap()));
-            list.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
-            refreshView(list);
+            refreshView(getReportData());
         }
     }
 

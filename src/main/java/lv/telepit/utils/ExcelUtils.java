@@ -1,20 +1,11 @@
 package lv.telepit.utils;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import jxl.CellView;
 import jxl.Workbook;
-import jxl.format.*;
-import jxl.format.BoldStyle;
 import jxl.format.Border;
 import jxl.format.BorderLineStyle;
 import jxl.format.Colour;
 import jxl.write.*;
-import jxl.write.biff.RowsExceededException;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.dto.ReportData;
 

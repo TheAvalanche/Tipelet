@@ -106,6 +106,16 @@ public final class FieldFactory {
     }
 
     /**
+     * Partners combobox with change record types.
+     * @param key field's key
+     * @return combo box
+     */
+    public static ComboBox getTypeComboBox(final String key) {
+        return new SimpleTypeComboBox(getCaption(key),
+                getRequired(key));
+    }
+
+    /**
      * Partners combobox with all partners prefilled.
      * @param key field's key
      * @return combo box

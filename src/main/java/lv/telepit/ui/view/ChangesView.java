@@ -1,6 +1,5 @@
 package lv.telepit.ui.view;
 
-import com.google.common.base.Strings;
 import com.itextpdf.text.DocumentException;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
@@ -11,7 +10,6 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
-import jxl.write.WriteException;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.model.ChangeRecord;
@@ -20,37 +18,37 @@ import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.RecordDataComparator;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.ui.form.fields.SimpleTypeComboBox;
 import lv.telepit.utils.ExcelUtils;
 import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by Alex on 12/05/2014.
  */
 public class ChangesView extends AbstractView {
 
-    private TextField nameField;
     private ComboBox userField;
     private ComboBox storeField;
     private DateField fromDateField;
     private DateField toDateField;
+    private ComboBox typeField;
     private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
     private Button pdfButton;
+    private Button xlsButton;
     private Table table;
     private BeanItemContainer<RecordData> container;
     private Label label;
-    private Button xlsButton;
 
-    //TODO: filter by good type
+
     public ChangesView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
     }
@@ -65,7 +63,9 @@ public class ChangesView extends AbstractView {
         storeField = FieldFactory.getStoreComboBox("search.store");
         fromDateField = FieldFactory.getDateField("search.change.fromDate");
         toDateField = FieldFactory.getDateField("search.change.toDate");
-        nameField = FieldFactory.getTextField("search.change.name");
+        typeField = FieldFactory.getTypeComboBox("search.type");
+        typeField.setNullSelectionAllowed(false);
+        typeField.setValue(SimpleTypeComboBox.Type.ALL);
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
@@ -107,9 +107,9 @@ public class ChangesView extends AbstractView {
         table.setSelectable(true);
         table.setImmediate(true);
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, nameField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
         searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, fromDateField, toDateField);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
         searchLayout2.setSpacing(true);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
@@ -180,7 +180,7 @@ public class ChangesView extends AbstractView {
         storeField.setValue(null);
         fromDateField.setValue(null);
         toDateField.setValue(null);
-        nameField.setValue(null);
+        typeField.setValue(SimpleTypeComboBox.Type.ALL);
     }
 
     @Override
@@ -256,9 +256,6 @@ public class ChangesView extends AbstractView {
 
     private Map<ChangeRecordCriteria, Object> buildMap() {
         Map<ChangeRecordCriteria, Object> map = new HashMap<>();
-        if (!Strings.isNullOrEmpty(nameField.getValue())) {
-            map.put(ChangeRecordCriteria.NAME, nameField.getValue().trim().toLowerCase());
-        }
         if (userField.getValue() != null) {
             map.put(ChangeRecordCriteria.USER, userField.getValue());
         }
@@ -270,6 +267,12 @@ public class ChangesView extends AbstractView {
         }
         if (toDateField.getValue() != null) {
             map.put(ChangeRecordCriteria.DATE_TO, DateUtils.ceiling(toDateField.getValue(), Calendar.DATE));
+        }
+        if (typeField.getValue() == SimpleTypeComboBox.Type.SERVICE) {
+            map.put(ChangeRecordCriteria.TYPE_SERVICE, null);
+        }
+        if (typeField.getValue() == SimpleTypeComboBox.Type.STOCK) {
+            map.put(ChangeRecordCriteria.TYPE_STOCK, null);
         }
         return map;
     }
