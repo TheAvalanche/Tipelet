@@ -86,6 +86,6 @@ public class StockService {
     }
 
     private void catchOptimisticLockException() {
-        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izamainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
+        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izmainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
     }
 }
