@@ -37,7 +37,7 @@ public class StockContext implements Action.Handler {
     public Action[] getActions(Object target, Object sender) {
         return new Action[]{sell, showHistory};
     }
-
+    //todo mark good as bestseller
     @Override
     public void handleAction(Action action, Object sender, Object target) {
          if (action == sell) {

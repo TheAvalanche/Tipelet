@@ -8,6 +8,7 @@ import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
 import lv.telepit.ui.view.ServiceView;
+import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -40,31 +41,41 @@ public class ServiceContext implements Action.Handler {
     public Action[] getActions(Object target, Object sender) {
         return new Action[]{inWaiting, inRepair, repaired, broken, returned, onDetails, showHistory};
     }
-
+    //todo status change restrictions
     @Override
-    public void handleAction(Action action, Object sender, Object target) {
+    public void handleAction(final Action action, final Object sender, final Object target) {
         if (action == inWaiting) {
-            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.WAITING);
-            view.refreshView();
+            changeStatusIfConfirmed(target, ServiceStatus.WAITING);
         } else if (action == inRepair) {
-            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.IN_REPAIR);
-            view.refreshView();
+            changeStatusIfConfirmed(target, ServiceStatus.IN_REPAIR);
         } else if (action == repaired) {
-            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.REPAIRED);
-            view.refreshView();
+            changeStatusIfConfirmed(target, ServiceStatus.REPAIRED);
         } else if (action == broken) {
-            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.BROKEN);
-            view.refreshView();
+            changeStatusIfConfirmed(target, ServiceStatus.BROKEN);
         } else if (action == returned) {
-            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.RETURNED);
-            view.refreshView();
+            changeStatusIfConfirmed(target, ServiceStatus.RETURNED);
         } else if (action == onDetails) {
-            view.getUi().getServiceGoodService().changeStatus((ServiceGood) target, ServiceStatus.ON_DETAILS);
-            view.refreshView();
+            changeStatusIfConfirmed(target, ServiceStatus.ON_DETAILS);
         } else if (action == showHistory) {
             showHistory((ServiceGood) target);
             view.refreshView();
         }
+    }
+
+    private void changeStatusIfConfirmed(final Object fromObject, final ServiceStatus toStatus){
+        ConfirmDialog.show(view.getUi(),
+                bundle.getString("service.view.changeStatus.header"),
+                String.format(bundle.getString("service.view.changeStatus.message"), ((ServiceGood) fromObject).getStatus().toString(), toStatus.toString()),
+                bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
+                    @Override
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            view.getUi().getServiceGoodService().changeStatus((ServiceGood) fromObject, toStatus);
+                            view.refreshView();
+                        }
+                    }
+                }
+        );
     }
 
     private void showHistory(ServiceGood serviceGood) {
@@ -107,5 +118,9 @@ public class ServiceContext implements Action.Handler {
         }
 
         subWindow.setContent(layout);
+    }
+
+    private interface ContextAction {
+        public void execute();
     }
 }
