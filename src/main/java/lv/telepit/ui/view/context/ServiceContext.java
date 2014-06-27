@@ -39,9 +39,25 @@ public class ServiceContext implements Action.Handler {
 
     @Override
     public Action[] getActions(Object target, Object sender) {
-        return new Action[]{inWaiting, inRepair, repaired, broken, returned, onDetails, showHistory};
+        if (target == null) return new Action[]{};
+
+        switch (((ServiceGood) target).getStatus()) {
+
+            case WAITING:
+                return new Action[] {inRepair, showHistory};
+            case IN_REPAIR:
+                return new Action[] {repaired, broken, showHistory};
+            case REPAIRED:
+            case BROKEN:
+                return new Action[] {returned, onDetails, showHistory};
+            case RETURNED:
+            case ON_DETAILS:
+                return new Action[] {showHistory};
+            default:
+                return new Action[]{inWaiting, inRepair, repaired, broken, returned, onDetails, showHistory};
+        }
     }
-    //todo status change restrictions
+
     @Override
     public void handleAction(final Action action, final Object sender, final Object target) {
         if (action == inWaiting) {
