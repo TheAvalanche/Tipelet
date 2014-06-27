@@ -22,6 +22,8 @@ import java.util.ResourceBundle;
  */
 public class StockContext implements Action.Handler {
 
+    private final Action checkAsBestseller = new Action("Atzimēt kā populāro");
+    private final Action uncheckAsBestseller = new Action("Noņemt kā populāro");
     private final Action sell = new Action("Pārdot");
     private final Action showHistory = new Action("Radīt vēsturi");
 
@@ -35,18 +37,34 @@ public class StockContext implements Action.Handler {
 
     @Override
     public Action[] getActions(Object target, Object sender) {
-        return new Action[]{sell, showHistory};
+        if (target == null) return new Action[]{};
+
+        if (((StockGood) target).isBestseller()) {
+            return new Action[]{sell, uncheckAsBestseller, showHistory};
+        } else {
+            return new Action[]{sell, checkAsBestseller, showHistory};
+        }
     }
-    //todo mark good as bestseller
+
     @Override
     public void handleAction(Action action, Object sender, Object target) {
          if (action == sell) {
-            showSell((StockGood) target);
-            view.refreshView();
-        } else if (action == showHistory) {
-            showHistory((StockGood) target);
-            view.refreshView();
-        }
+             showSell((StockGood) target);
+             view.refreshView();
+         } else if (action == checkAsBestseller) {
+             StockGood good = (StockGood) target;
+             good.setBestseller(true);
+             view.getUi().getStockService().updateGood(good);
+             view.refreshView();
+         } else if (action == uncheckAsBestseller) {
+             StockGood good = (StockGood) target;
+             good.setBestseller(false);
+             view.getUi().getStockService().updateGood(good);
+             view.refreshView();
+         } else if (action == showHistory) {
+             showHistory((StockGood) target);
+             view.refreshView();
+         }
     }
 
     private void showSell(final StockGood stockGood) {

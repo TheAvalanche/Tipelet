@@ -21,7 +21,10 @@ import lv.telepit.ui.view.context.StockContext;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alex on 21/02/14.
@@ -99,6 +102,16 @@ public class StockView extends AbstractView {
                 bundle.getString("stock.good.count"),
                 bundle.getString("stock.good.total"),
                 bundle.getString("stock.good.lastSoldDate"));
+        table.setCellStyleGenerator(new Table.CellStyleGenerator() {
+            @Override
+            public String getStyle(Table source, Object itemId, Object propertyId) {
+                StockGood sg = container.getItem(itemId).getBean();
+                if (sg.isBestseller()) {
+                    return "bestseller";
+                }
+                return "";
+            }
+        });
         table.setSelectable(true);
         table.setImmediate(true);
         table.addItemClickListener(new EditStockGoodListener());

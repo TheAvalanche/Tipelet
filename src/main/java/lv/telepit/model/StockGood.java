@@ -17,6 +17,7 @@ public class StockGood {
 
     private long id;
     private long version;
+    private boolean bestseller = false;
     private Store store;
     private User user;
     private Category category;
@@ -48,6 +49,18 @@ public class StockGood {
 
     public void setVersion(long version) {
         this.version = version;
+    }
+
+
+    public boolean isBestseller() {
+        return bestseller;
+    }
+
+    public void setBestseller(boolean bestseller) {
+        change.addChange("bestseller",
+                String.valueOf(this.bestseller),
+                String.valueOf(bestseller));
+        this.bestseller = bestseller;
     }
 
     @ManyToOne(targetEntity = Store.class)
