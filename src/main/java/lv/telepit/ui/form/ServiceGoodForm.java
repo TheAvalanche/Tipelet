@@ -76,7 +76,7 @@ public class ServiceGoodForm extends FormLayout {
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setDeliveredDate(new Date());
             good.setStatus(ServiceStatus.WAITING);
-            good.setPrice(0.0);
+            good.setPrice(0.00);
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {

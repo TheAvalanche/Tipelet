@@ -48,7 +48,7 @@ public class StockGoodForm extends FormLayout {
         if (good.getId() == 0) {
             good.setUser(view.getUi().getCurrentUser());
             good.setStore(view.getUi().getCurrentUser().getStore());
-            good.setPrice(0.0);
+            good.setPrice(0.00);
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {
