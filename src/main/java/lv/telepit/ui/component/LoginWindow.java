@@ -7,6 +7,8 @@ import lv.telepit.TelepitUI;
 import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
 
+import java.util.ResourceBundle;
+
 /**
  * LoginWindow.
  *
@@ -22,6 +24,8 @@ public class LoginWindow extends Window {
     private final AbstractField<String> usernameField, passwordField;
 
     private CommonService commonService;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     /**
      * Creates login window with field for username,
@@ -83,10 +87,10 @@ public class LoginWindow extends Window {
                 application.removeWindow(LoginWindow.this);
                 application.setCurrentUser(user);
                 application.getNavigator().navigateTo("service");
-                Notification.show("Veismīga ielogošana!");
+                Notification.show(bundle.getString("login.success"));
             } else {
                 application.setCurrentUser(null);
-                Notification.show("Neizdēvas ielogoties!", Notification.Type.ERROR_MESSAGE);
+                Notification.show(bundle.getString("login.fail"), Notification.Type.ERROR_MESSAGE);
             }
         }
     }

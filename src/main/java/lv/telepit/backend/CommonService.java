@@ -14,6 +14,7 @@ import javax.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Created by Alex on 21/02/14.
@@ -21,6 +22,8 @@ import java.util.Map;
 public class CommonService {
 
     private CommonDao commonDao;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public CommonService() {
         this.commonDao = new CommonDaoImpl();
@@ -122,7 +125,7 @@ public class CommonService {
     }
 
     private void catchOptimisticLockException() {
-        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izmainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
+        Notification.show(bundle.getString("exception.lock.header"), bundle.getString("exception.lock.message"), Notification.Type.ERROR_MESSAGE);
     }
 
 }

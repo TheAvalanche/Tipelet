@@ -68,13 +68,13 @@ public class ExcelUtils {
 
             ++y;
 
-            Label h1 = new Label(0, y, "Vertība", boldCellWithBorder);
+            Label h1 = new Label(0, y, bundle.getString("history.property"), boldCellWithBorder);
             sheet.addCell(h1);
 
-            Label h2 = new Label(1, y, "Vecā vertība", boldCellWithBorder);
+            Label h2 = new Label(1, y, bundle.getString("history.old"), boldCellWithBorder);
             sheet.addCell(h2);
 
-            Label h3 = new Label(2, y, "Jaunā vertība", boldCellWithBorder);
+            Label h3 = new Label(2, y, bundle.getString("history.new"), boldCellWithBorder);
             sheet.addCell(h3);
 
             for (ChangeRecord.PropertyChange p : change.getChangeList()) {
@@ -90,7 +90,7 @@ public class ExcelUtils {
 
     private String composeHeaderOne(ChangeRecord change) {
         StringBuilder builder = new StringBuilder();
-        builder.append(change.getStockGood() != null ? "Noliktavas Prece:" : "Servisa prece:");
+        builder.append(change.getStockGood() != null ? bundle.getString("stock.type") : bundle.getString("service.type"));
         builder.append(" ");
         builder.append(change.getStockGood() != null ? change.getStockGood().getName() : change.getServiceGood().getName());
         builder.append(" (ID=");
@@ -120,25 +120,25 @@ public class ExcelUtils {
         ++y;
         ++y;
 
-        Label h1 = new Label(0, y, "Veikals", boldCellWithBorder);
+        Label h1 = new Label(0, y, bundle.getString("report.data.store"), boldCellWithBorder);
         sheet.addCell(h1);
 
-        Label h2 = new Label(1, y, "Datums", boldCellWithBorder);
+        Label h2 = new Label(1, y, bundle.getString("report.data.date"), boldCellWithBorder);
         sheet.addCell(h2);
 
-        Label h3 = new Label(2, y, "ID", boldCellWithBorder);
+        Label h3 = new Label(2, y, bundle.getString("report.data.id"), boldCellWithBorder);
         sheet.addCell(h3);
 
-        Label h4 = new Label(3, y, "Kods", boldCellWithBorder);
+        Label h4 = new Label(3, y, bundle.getString("report.data.code"), boldCellWithBorder);
         sheet.addCell(h4);
 
-        Label h5 = new Label(4, y, "Nosaukums", boldCellWithBorder);
+        Label h5 = new Label(4, y, bundle.getString("report.data.name"), boldCellWithBorder);
         sheet.addCell(h5);
 
-        Label h6 = new Label(5, y, "Avots", boldCellWithBorder);
+        Label h6 = new Label(5, y, bundle.getString("report.data.type"), boldCellWithBorder);
         sheet.addCell(h6);
 
-        Label h7 = new Label(6, y, "Cena", boldCellWithBorder);
+        Label h7 = new Label(6, y, bundle.getString("report.data.price"), boldCellWithBorder);
         sheet.addCell(h7);
 
         BigDecimal sum = new BigDecimal("0");

@@ -66,15 +66,15 @@ public class PdfUtils {
 
             PdfPTable table = new PdfPTable(3);
 
-            PdfPCell h1 = new PdfPCell(new Phrase("Vertība", boldFont));
+            PdfPCell h1 = new PdfPCell(new Phrase(bundle.getString("history.property"), boldFont));
             h1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(h1);
 
-            PdfPCell h2 = new PdfPCell(new Phrase("Vecā vertība", boldFont));
+            PdfPCell h2 = new PdfPCell(new Phrase(bundle.getString("history.old"), boldFont));
             h2.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(h2);
 
-            PdfPCell h3 = new PdfPCell(new Phrase("Jaunā vertība", boldFont));
+            PdfPCell h3 = new PdfPCell(new Phrase(bundle.getString("history.new"), boldFont));
             h3.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(h3);
 
@@ -91,7 +91,7 @@ public class PdfUtils {
 
     private String composeHeaderOne(ChangeRecord change) {
         StringBuilder builder = new StringBuilder();
-        builder.append(change.getStockGood() != null ? "Noliktavas Prece:" : "Servisa prece:");
+        builder.append(change.getStockGood() != null ? bundle.getString("stock.type") : bundle.getString("service.type"));
         builder.append(" ");
         builder.append(change.getStockGood() != null ? change.getStockGood().getName() : change.getServiceGood().getName());
         builder.append(" (ID=");
@@ -124,27 +124,27 @@ public class PdfUtils {
         table.setSpacingBefore(0f);
         table.setSpacingAfter(0f);
 
-        PdfPCell h1 = new PdfPCell(new Phrase("Veikals", boldFont));
+        PdfPCell h1 = new PdfPCell(new Phrase(bundle.getString("report.data.store"), boldFont));
         h1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h1);
 
-        PdfPCell h2 = new PdfPCell(new Phrase("Datums", boldFont));
+        PdfPCell h2 = new PdfPCell(new Phrase(bundle.getString("report.data.date"), boldFont));
         h2.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h2);
 
-        PdfPCell h3 = new PdfPCell(new Phrase("ID", boldFont));
+        PdfPCell h3 = new PdfPCell(new Phrase(bundle.getString("report.data.id"), boldFont));
         h3.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h3);
 
-        PdfPCell h4 = new PdfPCell(new Phrase("Kods", boldFont));
+        PdfPCell h4 = new PdfPCell(new Phrase(bundle.getString("report.data.code"), boldFont));
         h4.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h4);
 
-        PdfPCell h5 = new PdfPCell(new Phrase("Nosaukums", boldFont));
+        PdfPCell h5 = new PdfPCell(new Phrase(bundle.getString("report.data.name"), boldFont));
         h5.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h5);
 
-        PdfPCell h6 = new PdfPCell(new Phrase("Cena", boldFont));
+        PdfPCell h6 = new PdfPCell(new Phrase(bundle.getString("report.data.price"), boldFont));
         h6.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h6);
 

@@ -3,9 +3,13 @@ package lv.telepit.ui.form.fields;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.ComboBox;
 
+import java.util.ResourceBundle;
+
 public class SimpleTypeComboBox extends ComboBox {
     /**Fields default width.*/
     private static final int DEFAULT_WIDTH = 200;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     /**
      * Constructor.
@@ -27,7 +31,7 @@ public class SimpleTypeComboBox extends ComboBox {
     }
 
     public enum Type {
-        ALL("Visi"), STOCK("Noliktavas preces"), SERVICE("Servisa preces");
+        ALL(bundle.getString("all.types")), STOCK(bundle.getString("stock.types")), SERVICE(bundle.getString("service.types"));
 
         private String value;
 

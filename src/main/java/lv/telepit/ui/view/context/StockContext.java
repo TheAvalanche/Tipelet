@@ -22,12 +22,12 @@ import java.util.ResourceBundle;
  */
 public class StockContext implements Action.Handler {
 
-    private final Action checkAsBestseller = new Action("Atzimēt kā populāro");
-    private final Action uncheckAsBestseller = new Action("Noņemt kā populāro");
-    private final Action sell = new Action("Pārdot");
-    private final Action showHistory = new Action("Radīt vēsturi");
-
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
+
+    private final Action checkAsBestseller = new Action(bundle.getString("popular.item"));
+    private final Action uncheckAsBestseller = new Action(bundle.getString("unpopular.item"));
+    private final Action sell = new Action(bundle.getString("sell.item"));
+    private final Action showHistory = new Action(bundle.getString("show.history"));
 
     private StockView view;
 
@@ -87,24 +87,24 @@ public class StockContext implements Action.Handler {
         final List<SoldItem> soldItems = new ArrayList<>();
         addSoldItem(soldItems, subLayout);
 
-        Button addButton = new Button("Pievienot...");
+        Button addButton = new Button(bundle.getString("default.button.add"));
         addButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (soldItems.size() < stockGood.getCount()) {
                     addSoldItem(soldItems, subLayout);
                 } else {
-                    Notification.show("Nedrikst pārsniegt pieejamo preču skaitu.");
+                    Notification.show(bundle.getString("add.fail"));
                 }
             }
         });
 
-        Button sellButton = new Button("Pārdot...");
+        Button sellButton = new Button(bundle.getString("sell.item"));
         sellButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 view.getUi().getStockService().sell(stockGood, soldItems);
-                Notification.show("Saglabāts.");
+                Notification.show(bundle.getString("save.success"));
                 subWindow.close();
             }
         });
@@ -135,7 +135,7 @@ public class StockContext implements Action.Handler {
         CheckBox billField = new CheckBox("Ar čeku", beanItem.getItemProperty("withBill"));
         billField.setImmediate(true);
 
-        Button deleteButton = new Button("Nodzēst");
+        Button deleteButton = new Button(bundle.getString("default.button.delete"));
         deleteButton.setStyleName("small");
         if (soldItems.size() == 1) {
             deleteButton.setEnabled(false);
@@ -182,7 +182,7 @@ public class StockContext implements Action.Handler {
             Table table = new Table();
             table.setContainerDataSource(container);
             table.setVisibleColumns("name", "oldValue", "newValue");
-            table.setColumnHeaders("Vertība", "Vecā vertība", "Jaunā vertība");
+            table.setColumnHeaders(bundle.getString("history.property"), bundle.getString("history.old"), bundle.getString("history.new"));
             table.setColumnExpandRatio("name", 0.33f);
             table.setColumnExpandRatio("oldValue", 0.33f);
             table.setColumnExpandRatio("newValue", 0.33f);

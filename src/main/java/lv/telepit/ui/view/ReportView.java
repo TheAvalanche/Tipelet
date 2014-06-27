@@ -116,7 +116,7 @@ public class ReportView extends AbstractView {
         searchLayout.setSpacing(true);
         searchLayout.setVisible(false);
 
-        expandButton = new Button("Radīt/Slēpt meklēšanas rīkus");
+        expandButton = new Button(bundle.getString("show.hide.search"));
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
         expandButton.addClickListener(new Button.ClickListener() {
             @Override
@@ -125,7 +125,7 @@ public class ReportView extends AbstractView {
             }
         });
 
-        pdfButton = new Button("PDF export");
+        pdfButton = new Button(bundle.getString("pdf.export"));
         pdfButton.setIcon(new ThemeResource("img/pdf.png"));
         pdfButton.setWidth("150");
         StreamResource sr = getPDFStream();
@@ -133,7 +133,7 @@ public class ReportView extends AbstractView {
         FileDownloader fileDownloader = new FileDownloader(sr);
         fileDownloader.extend(pdfButton);
 
-        xlsButton = new Button("Excel export");
+        xlsButton = new Button(bundle.getString("excel.export"));
         xlsButton.setIcon(new ThemeResource("img/excel.png"));
         xlsButton.setWidth("150");
         StreamResource excelStream = getExcelStream();

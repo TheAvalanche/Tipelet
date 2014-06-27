@@ -10,10 +10,7 @@ import lv.telepit.model.ServiceStatus;
 import lv.telepit.model.dto.ReportData;
 
 import javax.persistence.OptimisticLockException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Alex on 04/03/14.
@@ -21,6 +18,8 @@ import java.util.Map;
 public class ServiceGoodService {
 
     private ServiceDao serviceDao;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public ServiceGoodService() {
         this.serviceDao = new ServiceDaoImpl();
@@ -95,6 +94,6 @@ public class ServiceGoodService {
     }
 
     private void catchOptimisticLockException() {
-        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izmainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
+        Notification.show(bundle.getString("exception.lock.header"), bundle.getString("exception.lock.message"), Notification.Type.ERROR_MESSAGE);
     }
 }

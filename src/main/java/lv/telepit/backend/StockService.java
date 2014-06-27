@@ -11,16 +11,15 @@ import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 
 import javax.persistence.OptimisticLockException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Alex on 07/04/2014.
  */
 public class StockService {
     private StockDao stockDao;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public StockService() {
         this.stockDao = new StockDaoImpl();
@@ -86,6 +85,6 @@ public class StockService {
     }
 
     private void catchOptimisticLockException() {
-        Notification.show("Izmaiņas netiek saglabātas", "Šo priekšmetu tikai izmainīja cits lietotājs. Lūdzu atjaunojiet tabulu un atkārtojiet vēl reiz.", Notification.Type.ERROR_MESSAGE);
+        Notification.show(bundle.getString("exception.lock.header"), bundle.getString("exception.lock.message"), Notification.Type.ERROR_MESSAGE);
     }
 }

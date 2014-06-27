@@ -6,6 +6,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import lv.telepit.ui.view.AbstractView;
 
+import java.util.ResourceBundle;
+
 
 /**
  * UpdateOnClick.
@@ -22,6 +24,8 @@ public abstract class UpdateOnClick<T> implements Button.ClickListener {
     private FieldGroup binder;
     /**Parent view.*/
     protected AbstractView view;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
 
     /**
@@ -43,11 +47,11 @@ public abstract class UpdateOnClick<T> implements Button.ClickListener {
 
             businessMethod();
 
-            Notification.show("Veiksīgi saglabāts!");
+            Notification.show(bundle.getString("save.success"));
             view.refreshView();
 
         } catch (Exception e) {
-            Notification.show("Kļūdaini dati!", Notification.Type.ERROR_MESSAGE);
+            Notification.show(bundle.getString("save.fail"), Notification.Type.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }

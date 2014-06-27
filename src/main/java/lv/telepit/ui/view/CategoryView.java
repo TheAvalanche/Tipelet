@@ -37,14 +37,14 @@ public class CategoryView extends AbstractView {
         label = new Label(bundle.getString("category.view.label"));
         label.setContentMode(ContentMode.HTML);
 
-        nameField = new TextField("Kategorijas Nosaukums");
+        nameField = new TextField(bundle.getString("category.name"));
         nameField.setImmediate(true);
         nameField.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
         tree = new Tree();
         tree.setImmediate(true);
 
-        addRoot = new Button("Pievienot Kategoriju");
+        addRoot = new Button(bundle.getString("category.add"));
         addRoot.setEnabled(false);
         addRoot.setImmediate(true);
         addRoot.addClickListener(new Button.ClickListener() {
@@ -60,7 +60,7 @@ public class CategoryView extends AbstractView {
             }
         });
 
-        addChildren = new Button("Pievienot Apakškategoriju");
+        addChildren = new Button(bundle.getString("subcategory.add"));
         addChildren.setEnabled(false);
         addChildren.setImmediate(true);
         addChildren.addClickListener(new Button.ClickListener() {
@@ -75,7 +75,7 @@ public class CategoryView extends AbstractView {
             }
         });
 
-        changeChildren = new Button("Izmainīt nosaukumu");
+        changeChildren = new Button(bundle.getString("category.change.name"));
         changeChildren.setEnabled(false);
         changeChildren.setImmediate(true);
         changeChildren.addClickListener(new Button.ClickListener() {
@@ -91,7 +91,7 @@ public class CategoryView extends AbstractView {
             }
         });
 
-        removeChildren = new Button("Nodzēst Kategoriju");
+        removeChildren = new Button(bundle.getString("category.delete"));
         removeChildren.setEnabled(false);
         removeChildren.setImmediate(true);
         removeChildren.addClickListener(new Button.ClickListener() {

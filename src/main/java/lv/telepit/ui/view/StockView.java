@@ -143,7 +143,7 @@ public class StockView extends AbstractView {
         searchLayout.setSpacing(true);
         searchLayout.setVisible(false);
 
-        expandButton = new Button("Radīt/Slēpt meklēšanas rīkus");
+        expandButton = new Button(bundle.getString("show.hide.search"));
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
         expandButton.addClickListener(new Button.ClickListener() {
             @Override

@@ -6,11 +6,14 @@ import lv.telepit.model.SoldItem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by Alex on 21/05/2014.
  */
 public class ReportData {
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     private String user;
     private String store;
@@ -29,7 +32,7 @@ public class ReportData {
             r.user = si.getUser().getName() + " " + si.getUser().getSurname();
             r.store = si.getStore().getName();
             r.date = si.getSoldDate();
-            r.type = "Noliktavas prece";
+            r.type = bundle.getString("stock.type");
             r.id = String.valueOf(si.getParent().getId());
             r.name = si.getParent().getName();
             r.code = si.getCode();
@@ -46,7 +49,7 @@ public class ReportData {
             r.user = sg.getUser().getName() + " " + sg.getUser().getSurname();
             r.store = sg.getStore().getName();
             r.date = sg.getReturnedDate();
-            r.type = "Servisa prece";
+            r.type = bundle.getString("service.type");
             r.id = String.valueOf(sg.getId());
             r.name = sg.getName();
             r.code = sg.getImei();

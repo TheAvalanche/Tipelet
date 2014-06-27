@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Created by Alex on 21/02/14.
@@ -19,6 +20,8 @@ import java.util.Map;
 public class CommonDaoImpl implements CommonDao {
 
     private EntityManagerFactory emf;
+
+    private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public CommonDaoImpl() {
 
@@ -34,7 +37,7 @@ public class CommonDaoImpl implements CommonDao {
         q.setParameter("login", user.getLogin());
         List<User> duplicates = q.getResultList();
         if (!duplicates.isEmpty()) {
-            throw new Exception("Lietotājs ar tādu loginu jau eksistē datubasē!");
+            throw new Exception(bundle.getString("exception.user.exists"));
         }
 
         em.getTransaction().begin();
@@ -51,7 +54,7 @@ public class CommonDaoImpl implements CommonDao {
         q.setParameter("login", user.getLogin());
         List<User> duplicates = q.getResultList();
         if (!duplicates.isEmpty() && duplicates.get(0).getId() != user.getId()) {
-            throw new Exception("Lietotājs ar tādu loginu jau eksistē datubasē!");
+            throw new Exception(bundle.getString("exception.user.exists"));
         }
 
         em.getTransaction().begin();
@@ -92,7 +95,7 @@ public class CommonDaoImpl implements CommonDao {
         q.setParameter("name", store.getName());
         List<Store> duplicates = q.getResultList();
         if (!duplicates.isEmpty()) {
-            throw new Exception("Veikals ar tādu nosaukumu jau eksistē datubasē!");
+            throw new Exception(bundle.getString("exception.store.exists"));
         }
 
         em.getTransaction().begin();
@@ -109,7 +112,7 @@ public class CommonDaoImpl implements CommonDao {
         q.setParameter("name", store.getName());
         List<Store> duplicates = q.getResultList();
         if (!duplicates.isEmpty() && duplicates.get(0).getId() != store.getId()) {
-            throw new Exception("Veikals ar tādu nosaukumu jau eksistē datubasē!");
+            throw new Exception(bundle.getString("exception.store.exists"));
         }
 
         em.getTransaction().begin();
