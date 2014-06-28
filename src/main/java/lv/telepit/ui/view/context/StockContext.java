@@ -5,11 +5,13 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.Action;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.StockView;
 
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ public class StockContext implements Action.Handler {
     private final Action checkAsBestseller = new Action(bundle.getString("popular.item"));
     private final Action uncheckAsBestseller = new Action(bundle.getString("unpopular.item"));
     private final Action sell = new Action(bundle.getString("sell.item"));
+    private final Action changeShop = new Action(bundle.getString("change.shop.item"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
 
     private StockView view;
@@ -40,9 +43,9 @@ public class StockContext implements Action.Handler {
         if (target == null) return new Action[]{};
 
         if (((StockGood) target).isBestseller()) {
-            return new Action[]{sell, uncheckAsBestseller, showHistory};
+            return new Action[]{sell, uncheckAsBestseller, changeShop, showHistory};
         } else {
-            return new Action[]{sell, checkAsBestseller, showHistory};
+            return new Action[]{sell, checkAsBestseller, changeShop, showHistory};
         }
     }
 
@@ -63,6 +66,9 @@ public class StockContext implements Action.Handler {
              view.refreshView();
          } else if (action == showHistory) {
              showHistory((StockGood) target);
+             view.refreshView();
+         } else if (action == changeShop) {
+             changeShop((StockGood) target);
              view.refreshView();
          }
     }
@@ -106,6 +112,7 @@ public class StockContext implements Action.Handler {
                 view.getUi().getStockService().sell(stockGood, soldItems);
                 Notification.show(bundle.getString("save.success"));
                 subWindow.close();
+                view.refreshView();
             }
         });
 
@@ -157,6 +164,38 @@ public class StockContext implements Action.Handler {
 
         layout.addComponent(subLayout);
 
+    }
+
+    private void changeShop(final StockGood stockGood) {
+        final Window subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("500px");
+        subWindow.setWidth("500px");
+        subWindow.setClosable(true);
+        view.getUi().addWindow(subWindow);
+
+        VerticalLayout layout = new VerticalLayout();
+
+        final ComboBox storeField = FieldFactory.getStoreComboBox("search.store");
+
+        final Slider slider = new Slider(bundle.getString("item.count"), 0, stockGood.getCount());
+        slider.setOrientation(SliderOrientation.HORIZONTAL);
+        slider.setWidth("200px");
+
+        Button moveButton = new Button(bundle.getString("default.button.move"));
+        moveButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+
+            }
+        });
+
+        layout.addComponent(storeField);
+        layout.addComponent(slider);
+        layout.addComponent(new Hr());
+        layout.addComponent(moveButton);
+
+        subWindow.setContent(layout);
     }
 
     private void showHistory(StockGood stockGood) {
