@@ -18,6 +18,7 @@ public class StockGood {
     private long id;
     private long version;
     private boolean bestseller = false;
+    private Long referenceId;
     private Store store;
     private User user;
     private Category category;
@@ -51,6 +52,13 @@ public class StockGood {
         this.version = version;
     }
 
+    public Long getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(Long referenceId) {
+        this.referenceId = referenceId;
+    }
 
     public boolean isBestseller() {
         return bestseller;
