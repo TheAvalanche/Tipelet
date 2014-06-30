@@ -26,7 +26,6 @@ public class StockGood {
     private String name;
     private String model;
     private String compatibleModels;
-    private Date lastDeliveredDate;
     private Date lastSoldDate;
     private List<SoldItem> soldItemList = new ArrayList<>();
 
@@ -151,18 +150,6 @@ public class StockGood {
                 this.model != null ? this.compatibleModels : "-",
                 compatibleModels != null ? compatibleModels : "-");
         this.compatibleModels = compatibleModels;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    public Date getLastDeliveredDate() {
-        return lastDeliveredDate;
-    }
-
-    public void setLastDeliveredDate(Date lastDeliveredDate) {
-        change.addChange("lastDeliveredDate",
-                this.lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(this.lastDeliveredDate) : "-",
-                lastDeliveredDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(lastDeliveredDate) : "-");
-        this.lastDeliveredDate = lastDeliveredDate;
     }
 
     @Temporal(TemporalType.TIMESTAMP)

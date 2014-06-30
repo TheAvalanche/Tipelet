@@ -6,6 +6,8 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
@@ -18,8 +20,11 @@ import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.StockGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.context.StockContext;
+import lv.telepit.utils.ExcelUtils;
 import org.vaadin.dialogs.ConfirmDialog;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +39,7 @@ public class StockView extends AbstractView {
     private Button addGood;
     private Button updateGood;
     private Button deleteGood;
+    private Button xlsButton;
 
     private TextField idField;
     private TextField nameField;
@@ -72,6 +78,14 @@ public class StockView extends AbstractView {
         refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
+
+        xlsButton = new Button(bundle.getString("excel.export"));
+        xlsButton.setIcon(new ThemeResource("img/excel.png"));
+        xlsButton.setWidth("150");
+        StreamResource excelStream = getExcelStream();
+        excelStream.setMIMEType("application/vnd.ms-excel");
+        FileDownloader excelDownloader = new FileDownloader(excelStream);
+        excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(StockGood.class);
         table = new Table() {
@@ -152,7 +166,7 @@ public class StockView extends AbstractView {
             }
         });
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, refreshButton);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1000px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
@@ -200,6 +214,32 @@ public class StockView extends AbstractView {
             updateGood.setVisible(false);
             deleteGood.setVisible(false);
         }
+    }
+
+    private StreamResource getExcelStream() {
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+            @Override
+            public InputStream getStream() {
+                try {
+                    ExcelUtils excelUtils = new ExcelUtils();
+                    excelUtils.stockGoodsToExcel(ui.getStockService().findGoods(buildMap()));
+                    excelUtils.close();
+                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        return new StreamResource(source, createReportName("xls"));
+    }
+
+    private String createReportName(String extension) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("service");
+        builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
+        builder.append("." + extension);
+        return builder.toString();
     }
 
     private class RefreshListener implements Button.ClickListener {
