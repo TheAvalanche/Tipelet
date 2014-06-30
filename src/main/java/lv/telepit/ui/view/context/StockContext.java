@@ -5,19 +5,15 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.Action;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
-import lv.telepit.model.Store;
 import lv.telepit.ui.component.Hr;
-import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.StockView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -31,7 +27,6 @@ public class StockContext implements Action.Handler {
     private final Action checkAsBestseller = new Action(bundle.getString("popular.item"));
     private final Action uncheckAsBestseller = new Action(bundle.getString("unpopular.item"));
     private final Action sell = new Action(bundle.getString("sell.item"));
-    private final Action changeShop = new Action(bundle.getString("change.shop.item"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
 
     private StockView view;
@@ -45,9 +40,9 @@ public class StockContext implements Action.Handler {
         if (target == null) return new Action[]{};
 
         if (((StockGood) target).isBestseller()) {
-            return new Action[]{sell, uncheckAsBestseller, changeShop, showHistory};
+            return new Action[]{sell, uncheckAsBestseller, showHistory};
         } else {
-            return new Action[]{sell, checkAsBestseller, changeShop, showHistory};
+            return new Action[]{sell, checkAsBestseller, showHistory};
         }
     }
 
@@ -68,9 +63,6 @@ public class StockContext implements Action.Handler {
              view.refreshView();
          } else if (action == showHistory) {
              showHistory((StockGood) target);
-             view.refreshView();
-         } else if (action == changeShop) {
-             changeShop((StockGood) target);
              view.refreshView();
          }
     }
@@ -166,59 +158,6 @@ public class StockContext implements Action.Handler {
 
         layout.addComponent(subLayout);
 
-    }
-
-    private void changeShop(final StockGood stockGood) {
-        final Window subWindow = new Window();
-        subWindow.setModal(true);
-        subWindow.setHeight("500px");
-        subWindow.setWidth("500px");
-        subWindow.setClosable(true);
-        view.getUi().addWindow(subWindow);
-
-        VerticalLayout layout = new VerticalLayout();
-        layout.setWidth("100%");
-        layout.setMargin(true);
-        layout.setSpacing(true);
-
-        final ComboBox storeField = FieldFactory.getStoreComboBox("search.store");
-
-        final Slider slider = new Slider(bundle.getString("item.count"), 0, stockGood.getCount());
-        slider.setOrientation(SliderOrientation.HORIZONTAL);
-        slider.setWidth("100%");
-
-        Button moveButton = new Button(bundle.getString("default.button.move"));
-        moveButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                //todo implement on demand
-                StockGood createdGood = new StockGood();
-                createdGood.setReferenceId(stockGood.getReferenceId() != null ? stockGood.getReferenceId() : stockGood.getId());
-                createdGood.setPrice(stockGood.getPrice());
-                createdGood.setBestseller(stockGood.isBestseller());
-                createdGood.setCategory(stockGood.getCategory());
-                createdGood.setCompatibleModels(stockGood.getCompatibleModels());
-                createdGood.setLastDeliveredDate(new Date());
-                createdGood.setModel(stockGood.getModel());
-                createdGood.setName(stockGood.getName());
-                createdGood.setUser(view.getUi().getCurrentUser());
-                createdGood.setStore((Store) storeField.getValue());
-                createdGood.setCount(slider.getValue().intValue());
-
-                view.getUi().getStockService().createGood(createdGood);
-
-                stockGood.setCount(stockGood.getCount() - slider.getValue().intValue());
-                stockGood.setReferenceId(stockGood.getId());
-                view.getUi().getStockService().updateGood(stockGood);
-            }
-        });
-
-        layout.addComponent(storeField);
-        layout.addComponent(slider);
-        layout.addComponent(new Hr());
-        layout.addComponent(moveButton);
-
-        subWindow.setContent(layout);
     }
 
     private void showHistory(StockGood stockGood) {
