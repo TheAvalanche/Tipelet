@@ -133,7 +133,7 @@ public class ChangesView extends AbstractView {
         FileDownloader pdfDownloader = new FileDownloader(pdfStream);
         pdfDownloader.extend(pdfButton);
 
-        xlsButton = new Button("excel.export");
+        xlsButton = new Button(bundle.getString("excel.export"));
         xlsButton.setIcon(new ThemeResource("img/excel.png"));
         xlsButton.setWidth("150");
         StreamResource excelStream = getExcelStream();

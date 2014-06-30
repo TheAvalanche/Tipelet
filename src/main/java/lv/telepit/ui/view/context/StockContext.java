@@ -1,9 +1,13 @@
 package lv.telepit.ui.view.context;
 
+import com.itextpdf.text.DocumentException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.Action;
+import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Sizeable;
+import com.vaadin.server.StreamResource;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
@@ -11,9 +15,13 @@ import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.view.StockView;
+import lv.telepit.utils.PdfUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -170,9 +178,18 @@ public class StockContext implements Action.Handler {
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
+        final Button pdfButton = new Button(bundle.getString("pdf.export"));
+        pdfButton.setIcon(new ThemeResource("img/pdf.png"));
+        pdfButton.setWidth("150");
+        StreamResource pdfStream = getPDFStream(view.getUi().getStockService().findChanges(stockGood));
+        pdfStream.setMIMEType("application/pdf");
+        FileDownloader pdfDownloader = new FileDownloader(pdfStream);
+        pdfDownloader.extend(pdfButton);
+
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
         layout.setSpacing(true);
+        layout.addComponent(pdfButton);
 
         for (ChangeRecord record : historyList) {
             for (ChangeRecord.PropertyChange p : record.getChangeList()) {
@@ -200,5 +217,32 @@ public class StockContext implements Action.Handler {
         }
 
         subWindow.setContent(layout);
+    }
+
+    private StreamResource getPDFStream(final List<ChangeRecord> records) {
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+
+            public InputStream getStream() {
+                try {
+                    PdfUtils pdfCreator = new PdfUtils();
+                    pdfCreator.open();
+                    pdfCreator.exportChanges(records);
+                    pdfCreator.close();
+                    return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        return new StreamResource (source, createReportName("pdf"));
+    }
+
+    private String createReportName(String extension) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("changeReport");
+        builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
+        builder.append("." + extension);
+        return builder.toString();
     }
 }
