@@ -98,13 +98,12 @@ public class ServiceView extends AbstractView {
         table.setImmediate(true);
         table.setWidth("1200px");
         table.setContainerDataSource(container);
-        table.setVisibleColumns("id", "store", "category", "name", "status", "imei", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table.setVisibleColumns("id", "store", "category", "name", "status", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setColumnHeaders(bundle.getString("service.good.id"),
                 bundle.getString("service.good.store"),
                 bundle.getString("service.good.category"),
                 bundle.getString("service.good.name"),
                 bundle.getString("service.good.status"),
-                bundle.getString("service.good.imei"),
                 bundle.getString("service.good.accumNum"),
                 bundle.getString("service.good.problem"),
                 bundle.getString("service.good.price"),
@@ -266,7 +265,7 @@ public class ServiceView extends AbstractView {
 
             subWindow = new Window();
             subWindow.setModal(true);
-            subWindow.setHeight("650px");
+            subWindow.setHeight("800px");
             subWindow.setWidth("450px");
             subWindow.setClosable(true);
             ui.addWindow(subWindow);

@@ -9,6 +9,7 @@ import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ResourceBundle;
 
@@ -81,8 +82,12 @@ public class UserForm extends FormLayout {
 
             CommonService service = view.getUi().getCommonService();
             if (entity.getId() == 0) {
+                entity.setPassword(DigestUtils.md5Hex(entity.getPassword()));
                 service.saveUser(entity);
             } else {
+                if (entity.getPassword().length() != 32) {
+                    entity.setPassword(DigestUtils.md5Hex(entity.getPassword()));
+                }
                 service.updateUser(entity);
             }
 

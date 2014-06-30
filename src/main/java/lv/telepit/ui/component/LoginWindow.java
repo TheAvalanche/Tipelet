@@ -6,6 +6,7 @@ import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ResourceBundle;
 
@@ -73,7 +74,7 @@ public class LoginWindow extends Window {
         public void buttonClick(final Button.ClickEvent event) {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
-            User user = commonService.getUser(username, password);
+            User user = commonService.getUser(username, DigestUtils.md5Hex(password));
             if (user == null && "test".equals(username) && "123456".equals(password)) {
                 user = new User();
                 user.setAdmin(true);
