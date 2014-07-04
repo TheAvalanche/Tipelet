@@ -186,7 +186,7 @@ public class ServiceView extends AbstractView {
             }
         });
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, xlsButton, refreshButton);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood/*, deleteGood*/, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);

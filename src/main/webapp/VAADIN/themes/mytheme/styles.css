@@ -7047,3 +7047,7 @@ body .mytheme.v-app .v-app-loading {
 .mytheme .v-table-row-bestseller {
 	background: #FF3333;
 }
+
+.mytheme .v-menubar-menuitem-align-right {
+	float: right;
+}
