@@ -48,6 +48,7 @@ public class StockView extends AbstractView {
     private ComboBox categoryField;
     private Button expandButton;
     private Button searchButton;
+    private Button resetButton;
 
     private Label label;
     private Button refreshButton;
@@ -55,6 +56,7 @@ public class StockView extends AbstractView {
     private BeanItemContainer<StockGood> container;
 
     private Window subWindow;
+    private ResetListener resetListener;
 
     public StockView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
@@ -74,6 +76,11 @@ public class StockView extends AbstractView {
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
         searchButton.setIcon(new ThemeResource("img/search.png"));
+
+        resetButton = new Button(bundle.getString("default.button.reset"));
+        resetListener = new ResetListener();
+        resetButton.addClickListener(resetListener);
+        resetButton.setIcon(new ThemeResource("img/reset.png"));
 
         refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
@@ -153,7 +160,8 @@ public class StockView extends AbstractView {
         final HorizontalLayout searchLayout1 = new HorizontalLayout(idField, userField, storeField, categoryField, nameField);
         searchLayout1.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchButton, new Hr());
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1,
+                new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(false);
 
@@ -192,17 +200,12 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
 
         if (stockGoods == null) {
+            resetListener.buttonClick(null);
             stockGoods = ui.getStockService().findGoods(buildMap());
         }
         container.removeAllItems();
         container.addAll(stockGoods);
         table.refreshRowCache();
-
-        idField.setValue(null);
-        nameField.setValue(null);
-        userField.setValue(null);
-        storeField.setValue(null);
-        categoryField.setValue(null);
     }
 
     @Override
@@ -246,6 +249,7 @@ public class StockView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
+            resetListener.buttonClick(null);
         }
     }
 
@@ -307,6 +311,17 @@ public class StockView extends AbstractView {
         }
     }
 
+    private class ResetListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent clickEvent) {
+            idField.setValue(null);
+            nameField.setValue(null);
+            userField.setValue(null);
+            storeField.setValue(ui.getCurrentUser().getStore());
+            categoryField.setValue(null);
+        }
+    }
+
     private class SearchListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
@@ -333,9 +348,6 @@ public class StockView extends AbstractView {
             map.put(StockGoodCriteria.CATEGORY, ((Category) categoryField.getValue()).getAllIds());
         }
 
-        if (ui.getCurrentUser() != null && !ui.getCurrentUser().isAdmin()) {
-            map.put(StockGoodCriteria.STORE, ui.getCurrentUser().getStore());
-        }
         return map;
     }
 }

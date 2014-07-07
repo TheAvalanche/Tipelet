@@ -27,8 +27,10 @@ public class SimpleUserComboBox extends ComboBox {
         setWidth(DEFAULT_WIDTH, Sizeable.Unit.PIXELS);
         try {
             for (User user : commonService.getAllUsers()) {
-                addItem(user);
-                setItemCaption(user, user.getName() + " " + user.getSurname());
+                if (!user.isDeleted()) {
+                    addItem(user);
+                    setItemCaption(user, user.getName() + " " + user.getSurname());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

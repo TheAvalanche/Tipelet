@@ -33,8 +33,10 @@ public class SimpleStoreComboBox extends ComboBox {
         setWidth(DEFAULT_WIDTH, Unit.PIXELS);
         try {
             for (Store store : commonService.getAllStores()) {
-                addItem(store);
-                setItemCaption(store, store.getName());
+                if (!store.isDeleted()) {
+                    addItem(store);
+                    setItemCaption(store, store.getName());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

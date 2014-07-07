@@ -52,10 +52,12 @@ public class ServiceView extends AbstractView {
     private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
+    private Button resetButton;
     private Table table;
     private BeanItemContainer<ServiceGood> container;
     private Label label;
     private Window subWindow;
+    private ResetListener resetListener;
 
     public ServiceView(Navigator navigator, TelepitUI ui, String name) {
         super(navigator, ui, name);
@@ -81,6 +83,11 @@ public class ServiceView extends AbstractView {
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
         searchButton.setIcon(new ThemeResource("img/search.png"));
+
+        resetButton = new Button(bundle.getString("default.button.reset"));
+        resetListener = new ResetListener();
+        resetButton.addClickListener(resetListener);
+        resetButton.setIcon(new ThemeResource("img/reset.png"));
 
         refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
@@ -173,7 +180,8 @@ public class ServiceView extends AbstractView {
         final HorizontalLayout searchLayout2 = new HorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
         searchLayout2.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
+                new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(false);
 
@@ -210,22 +218,13 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
 
         if (serviceGoods == null) {
+            resetListener.buttonClick(null);
             serviceGoods = ui.getServiceGoodService().findGoods(buildMap());
         }
         container.removeAllItems();
         container.addAll(serviceGoods);
         table.refreshRowCache();
 
-        idField.setValue(null);
-        nameField.setValue(null);
-        imeiField.setValue(null);
-        accumNumField.setValue(null);
-        userField.setValue(null);
-        storeField.setValue(null);
-        statusField.setValue(null);
-        categoryField.setValue(null);
-        deliveredField.setValue(null);
-        returnedField.setValue(null);
     }
 
     @Override
@@ -324,6 +323,23 @@ public class ServiceView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
+            resetListener.buttonClick(null);
+        }
+    }
+
+    private class ResetListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent clickEvent) {
+            idField.setValue(null);
+            nameField.setValue(null);
+            imeiField.setValue(null);
+            accumNumField.setValue(null);
+            userField.setValue(null);
+            storeField.setValue(ui.getCurrentUser().getStore());
+            statusField.setValue(null);
+            categoryField.setValue(null);
+            deliveredField.setValue(DateUtils.addMonths(new Date(), -1));
+            returnedField.setValue(null);
         }
     }
 
@@ -368,9 +384,6 @@ public class ServiceView extends AbstractView {
             map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(returnedField.getValue(), Calendar.DATE));
         }
 
-        if (!ui.getCurrentUser().isAdmin()) {
-            map.put(ServiceGoodCriteria.STORE, ui.getCurrentUser().getStore());
-        }
         return map;
     }
 }

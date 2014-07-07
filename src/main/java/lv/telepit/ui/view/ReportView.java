@@ -42,12 +42,14 @@ public class ReportView extends AbstractView {
     private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
+    private Button resetButton;
     private Button pdfButton;
     private Button xlsButton;
     private Table table;
     private BeanItemContainer<ReportData> container;
     private Label label;
     private Label sumLabel;
+    private ResetListener resetListener;
 
 
     public ReportView(Navigator navigator, TelepitUI ui, String name) {
@@ -71,6 +73,11 @@ public class ReportView extends AbstractView {
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
         searchButton.setIcon(new ThemeResource("img/search.png"));
+
+        resetButton = new Button(bundle.getString("default.button.reset"));
+        resetListener = new ResetListener();
+        resetButton.addClickListener(resetListener);
+        resetButton.setIcon(new ThemeResource("img/reset.png"));
 
         refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
@@ -112,7 +119,7 @@ public class ReportView extends AbstractView {
         final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
         searchLayout2.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(false);
 
@@ -167,6 +174,7 @@ public class ReportView extends AbstractView {
     public void refreshView(List<ReportData> records) {
 
         if (records == null) {
+            resetListener.buttonClick(null);
             records = new ArrayList<>();
             records.addAll(ui.getServiceGoodService().findReports(new HashMap<ServiceGoodCriteria, Object>()));
             records.addAll(ui.getStockService().findReports(new HashMap<SoldItemCriteria, Object>()));
@@ -180,11 +188,6 @@ public class ReportView extends AbstractView {
         table.sort(new Object[]{"date"}, new boolean[]{false});
         buildSumLabel(records);
 
-        userField.setValue(null);
-        storeField.setValue(null);
-        fromDateField.setValue(null);
-        toDateField.setValue(null);
-        typeField.setValue(SimpleTypeComboBox.Type.ALL);
     }
 
     @Override
@@ -265,6 +268,7 @@ public class ReportView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
+            resetListener.buttonClick(null);
         }
     }
 
@@ -272,6 +276,17 @@ public class ReportView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView(getReportData());
+        }
+    }
+
+    private class ResetListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent clickEvent) {
+            userField.setValue(null);
+            storeField.setValue(null);
+            fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
+            toDateField.setValue(null);
+            typeField.setValue(SimpleTypeComboBox.Type.ALL);
         }
     }
 

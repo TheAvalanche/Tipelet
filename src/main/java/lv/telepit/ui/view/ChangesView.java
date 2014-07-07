@@ -41,12 +41,14 @@ public class ChangesView extends AbstractView {
     private ComboBox typeField;
     private Button expandButton;
     private Button searchButton;
+    private Button resetButton;
     private Button refreshButton;
     private Button pdfButton;
     private Button xlsButton;
     private Table table;
     private BeanItemContainer<RecordData> container;
     private Label label;
+    private ResetListener resetListener;
 
 
     public ChangesView(Navigator navigator, TelepitUI ui, String name) {
@@ -70,6 +72,11 @@ public class ChangesView extends AbstractView {
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
         searchButton.setIcon(new ThemeResource("img/search.png"));
+
+        resetButton = new Button(bundle.getString("default.button.reset"));
+        resetListener = new ResetListener();
+        resetButton.addClickListener(resetListener);
+        resetButton.setIcon(new ThemeResource("img/reset.png"));
 
         refreshButton = new Button();
         refreshButton.addClickListener(new RefreshListener());
@@ -112,7 +119,8 @@ public class ChangesView extends AbstractView {
         final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
         searchLayout2.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchButton, new Hr());
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
+                new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(false);
 
@@ -164,6 +172,7 @@ public class ChangesView extends AbstractView {
     public void refreshView(List<RecordData> records) {
 
         if (records == null) {
+            resetListener.buttonClick(null);
             records = ui.getCommonService().findRecords(new HashMap<ChangeRecordCriteria, Object>());
         }
 
@@ -174,11 +183,6 @@ public class ChangesView extends AbstractView {
         table.refreshRowCache();
         table.sort(new Object[]{"date"}, new boolean[]{false});
 
-        userField.setValue(null);
-        storeField.setValue(null);
-        fromDateField.setValue(null);
-        toDateField.setValue(null);
-        typeField.setValue(SimpleTypeComboBox.Type.ALL);
     }
 
     @Override
@@ -241,6 +245,7 @@ public class ChangesView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
+            resetListener.buttonClick(null);
         }
     }
 
@@ -249,6 +254,17 @@ public class ChangesView extends AbstractView {
         public void buttonClick(Button.ClickEvent event) {
             List<RecordData> list = ui.getCommonService().findRecords(buildMap());
             refreshView(list);
+        }
+    }
+
+    private class ResetListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent clickEvent) {
+            userField.setValue(null);
+            storeField.setValue(null);
+            fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
+            toDateField.setValue(null);
+            typeField.setValue(SimpleTypeComboBox.Type.ALL);
         }
     }
 
