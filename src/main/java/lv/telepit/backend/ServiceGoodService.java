@@ -87,6 +87,7 @@ public class ServiceGoodService {
         if (!map.containsKey(ServiceGoodCriteria.RETURNED_DATE_FROM) && !map.containsKey(ServiceGoodCriteria.RETURNED_DATE_TO)) {
             map.put(ServiceGoodCriteria.RETURNED_DATE_TO, new Date()); //to return where returned date is not null only
         }
+        map.put(ServiceGoodCriteria.STATUS, ServiceStatus.RETURNED);
         List<ServiceGood> serviceGoods = serviceDao.findGoods(map);
         List<ReportData> list = new ArrayList<>(serviceGoods.size());
         list.addAll(ReportData.constructFromServiceGoods(serviceGoods));

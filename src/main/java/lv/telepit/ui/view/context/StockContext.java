@@ -79,7 +79,7 @@ public class StockContext implements Action.Handler {
         final Window subWindow = new Window();
         subWindow.setModal(true);
         subWindow.setHeight("500px");
-        subWindow.setWidth("500px");
+        subWindow.setWidth("450px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
@@ -93,14 +93,14 @@ public class StockContext implements Action.Handler {
         subLayout.setSpacing(true);
 
         final List<SoldItem> soldItems = new ArrayList<>();
-        addSoldItem(soldItems, subLayout);
+        addSoldItem(soldItems, subLayout, stockGood.getPrice());
 
         Button addButton = new Button(bundle.getString("default.button.add"));
         addButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (soldItems.size() < stockGood.getCount()) {
-                    addSoldItem(soldItems, subLayout);
+                    addSoldItem(soldItems, subLayout, stockGood.getPrice());
                 } else {
                     Notification.show(bundle.getString("add.fail"));
                 }
@@ -122,6 +122,7 @@ public class StockContext implements Action.Handler {
         buttonLayout.setWidth("100%");
         buttonLayout.setComponentAlignment(sellButton, Alignment.BOTTOM_RIGHT);
 
+        layout.addComponent(new Label("<h2>" + stockGood.getName() + " (" + stockGood.getModel() + ")</h2>", ContentMode.HTML));
         layout.addComponent(subLayout);
         layout.addComponent(new Hr());
         layout.addComponent(buttonLayout);
@@ -129,7 +130,7 @@ public class StockContext implements Action.Handler {
         subWindow.setContent(layout);
     }
 
-    private void addSoldItem(final List<SoldItem> soldItems, final Layout layout) {
+    private void addSoldItem(final List<SoldItem> soldItems, final Layout layout, final Double price) {
         final SoldItem item = new SoldItem();
         item.setUser(view.getUi().getCurrentUser());
         item.setStore(view.getUi().getCurrentUser().getStore());
@@ -139,10 +140,11 @@ public class StockContext implements Action.Handler {
 
         TextField codeField = new TextField("Code", beanItem.getItemProperty("code"));
         codeField.setImmediate(true);
-        codeField.setWidth(200f, Sizeable.Unit.PIXELS);
+        codeField.setWidth(100f, Sizeable.Unit.PIXELS);
         codeField.setNullRepresentation("");
         CheckBox billField = new CheckBox("Ar čeku", beanItem.getItemProperty("withBill"));
         billField.setImmediate(true);
+        Label priceLabel = new Label(String.format("%.2f", price) + "€");
 
         Button deleteButton = new Button(bundle.getString("default.button.delete"));
         deleteButton.setStyleName("small");
@@ -150,10 +152,11 @@ public class StockContext implements Action.Handler {
             deleteButton.setEnabled(false);
         }
 
-        final HorizontalLayout subLayout = new HorizontalLayout(codeField, billField, deleteButton);
+        final HorizontalLayout subLayout = new HorizontalLayout(codeField, priceLabel, billField, deleteButton);
         subLayout.setWidth("100%");
         subLayout.setSpacing(true);
-        subLayout.setComponentAlignment(billField, Alignment.BOTTOM_CENTER);
+        subLayout.setComponentAlignment(priceLabel, Alignment.BOTTOM_RIGHT);
+        subLayout.setComponentAlignment(billField, Alignment.BOTTOM_LEFT);
         subLayout.setComponentAlignment(deleteButton, Alignment.BOTTOM_RIGHT);
 
         deleteButton.addClickListener(new Button.ClickListener() {

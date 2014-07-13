@@ -158,9 +158,9 @@ public class PdfUtils {
             table.addCell(new Phrase(report.getId(), normalFont));
             table.addCell(new Phrase(report.getCode(), normalFont));
             table.addCell(new Phrase(report.getName(), normalFont));
-            table.addCell(new Phrase(report.getPrice() + "€", normalFont));
+            table.addCell(new Phrase(String.format("%.2f", report.getPrice()) + "€", normalFont));
 
-            sum = sum.add(new BigDecimal(report.getPrice()));
+            sum = sum.add(new BigDecimal(String.valueOf(report.getPrice())));
         }
         document.setMargins(20, 20, 20, 20);
         document.add(table);

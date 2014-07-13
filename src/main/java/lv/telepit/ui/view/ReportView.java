@@ -198,7 +198,7 @@ public class ReportView extends AbstractView {
     private void buildSumLabel(List<ReportData> reportDatas) {
         BigDecimal sum = new BigDecimal("0");
         for (ReportData reportData : reportDatas) {
-            sum = sum.add(new BigDecimal(reportData.getPrice()));
+            sum = sum.add(new BigDecimal(String.valueOf(reportData.getPrice())));
         }
         sumLabel.setValue("<b>Kopā: </b>" + sum + "€");
     }

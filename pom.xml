@@ -167,6 +167,8 @@
                 <version>2.2</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <warName>telepit-inner</warName>
+                    <outputDirectory>F:\Development\apache-tomcat-7.0.54\webapps\</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

@@ -155,14 +155,14 @@ public class ExcelUtils {
             sheet.addCell(new Label(3, y, report.getCode(), normalCellWithBorder));
             sheet.addCell(new Label(4, y, report.getName(), normalCellWithBorder));
             sheet.addCell(new Label(5, y, report.getType(), normalCellWithBorder));
-            sheet.addCell(new Label(6, y, report.getPrice() + "€", normalCellWithBorder));
+            sheet.addCell(new Label(6, y, String.format("%.2f", report.getPrice()) + "€", normalCellWithBorder));
 
-            sum = sum.add(new BigDecimal(report.getPrice()));
+            sum = sum.add(new BigDecimal(String.valueOf(report.getPrice())));
         }
 
         ++y;
-        sheet.addCell(new Label(6, y, "Kopā: ", boldCellWithBorder));
-        sheet.addCell(new Label(7, y,  sum + "€", boldCellWithBorder));
+        sheet.addCell(new Label(5, y, "Kopā: ", boldCellWithBorder));
+        sheet.addCell(new Label(6, y,  sum + "€", boldCellWithBorder));
     }
 
     private String composeHeaderOne(java.util.List<ReportData> reports) {
