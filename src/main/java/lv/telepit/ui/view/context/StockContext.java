@@ -19,6 +19,7 @@ import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,15 +93,19 @@ public class StockContext implements Action.Handler {
         subLayout.setWidth("100%");
         subLayout.setSpacing(true);
 
+        final Label total = new Label("", ContentMode.HTML);
+
+        final PriceListener priceListener = new PriceListener(total, stockGood.getPrice());
+
         final List<SoldItem> soldItems = new ArrayList<>();
-        addSoldItem(soldItems, subLayout, stockGood.getPrice());
+        addSoldItem(soldItems, subLayout, priceListener);
 
         Button addButton = new Button(bundle.getString("default.button.add"));
         addButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (soldItems.size() < stockGood.getCount()) {
-                    addSoldItem(soldItems, subLayout, stockGood.getPrice());
+                    addSoldItem(soldItems, subLayout, priceListener);
                 } else {
                     Notification.show(bundle.getString("add.fail"));
                 }
@@ -124,17 +129,19 @@ public class StockContext implements Action.Handler {
 
         layout.addComponent(new Label("<h2>" + stockGood.getName() + " (" + stockGood.getModel() + ")</h2>", ContentMode.HTML));
         layout.addComponent(subLayout);
+        layout.addComponent(total);
         layout.addComponent(new Hr());
         layout.addComponent(buttonLayout);
 
         subWindow.setContent(layout);
     }
 
-    private void addSoldItem(final List<SoldItem> soldItems, final Layout layout, final Double price) {
+    private void addSoldItem(final List<SoldItem> soldItems, final Layout layout, final PriceListener priceL) {
         final SoldItem item = new SoldItem();
         item.setUser(view.getUi().getCurrentUser());
         item.setStore(view.getUi().getCurrentUser().getStore());
         soldItems.add(item);
+        priceL.add();
 
         BeanItem<SoldItem> beanItem = new BeanItem<>(item);
 
@@ -144,7 +151,7 @@ public class StockContext implements Action.Handler {
         codeField.setNullRepresentation("");
         CheckBox billField = new CheckBox("Ar čeku", beanItem.getItemProperty("withBill"));
         billField.setImmediate(true);
-        Label priceLabel = new Label(String.format("%.2f", price) + "€");
+        Label priceLabel = new Label(String.format("%.2f", priceL.price) + "€");
 
         Button deleteButton = new Button(bundle.getString("default.button.delete"));
         deleteButton.setStyleName("small");
@@ -163,6 +170,7 @@ public class StockContext implements Action.Handler {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 soldItems.remove(item);
+                priceL.substract();
                 layout.removeComponent(subLayout);
             }
         });
@@ -247,5 +255,28 @@ public class StockContext implements Action.Handler {
         builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
         builder.append("." + extension);
         return builder.toString();
+    }
+
+    private class PriceListener {
+        Label label;
+        Double price = 0D;
+        Double total = 0D;
+
+        private PriceListener(Label label, Double price) {
+            this.label = label;
+            this.price = price;
+        }
+
+        private void add() {
+            BigDecimal totalBig = new BigDecimal(String.valueOf(total)).add(new BigDecimal(String.valueOf(price)));
+            total = totalBig.doubleValue();
+            label.setValue("Kopā: " + totalBig + "€");
+        }
+
+        private void substract(){
+            BigDecimal totalBig = new BigDecimal(String.valueOf(total)).subtract(new BigDecimal(String.valueOf(price)));
+            total = totalBig.doubleValue();
+            label.setValue("Kopā: " + totalBig + "€");
+        }
     }
 }
