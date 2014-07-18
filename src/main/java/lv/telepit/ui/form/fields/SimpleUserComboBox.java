@@ -24,6 +24,7 @@ public class SimpleUserComboBox extends ComboBox {
     public SimpleUserComboBox(final String caption, final boolean required) {
         super(caption);
         setRequired(required);
+        setImmediate(true);
         setWidth(DEFAULT_WIDTH, Sizeable.Unit.PIXELS);
         try {
             for (User user : commonService.getAllUsers()) {

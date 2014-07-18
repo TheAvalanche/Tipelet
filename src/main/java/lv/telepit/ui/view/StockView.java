@@ -129,6 +129,8 @@ public class StockView extends AbstractView {
                 StockGood sg = container.getItem(itemId).getBean();
                 if (sg.isBestseller()) {
                     return "bestseller";
+                } else if (sg.getCount() == 0) {
+                    return "sold";
                 }
                 return "";
             }

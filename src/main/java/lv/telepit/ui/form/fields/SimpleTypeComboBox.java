@@ -19,6 +19,7 @@ public class SimpleTypeComboBox extends ComboBox {
     public SimpleTypeComboBox(final String caption, final boolean required) {
         super(caption);
         setRequired(required);
+        setImmediate(true);
         setWidth(DEFAULT_WIDTH, Sizeable.Unit.PIXELS);
         try {
             for (Type type : Type.values()) {

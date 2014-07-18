@@ -19,6 +19,7 @@ public class SimpleCategoryComboBox extends ComboBox {
     public SimpleCategoryComboBox(final String caption, final boolean required) {
         super(caption);
         setRequired(required);
+        setImmediate(true);
         setWidth(DEFAULT_WIDTH, Unit.PIXELS);
         try {
             for (Category category : commonService.getAllCategories()) {

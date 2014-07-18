@@ -30,6 +30,7 @@ public class SimpleStoreComboBox extends ComboBox {
     public SimpleStoreComboBox(final String caption, final boolean required) {
         super(caption);
         setRequired(required);
+        setImmediate(true);
         setWidth(DEFAULT_WIDTH, Unit.PIXELS);
         try {
             for (Store store : commonService.getAllStores()) {

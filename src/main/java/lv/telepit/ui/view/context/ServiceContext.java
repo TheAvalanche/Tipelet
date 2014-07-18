@@ -36,6 +36,7 @@ public class ServiceContext implements Action.Handler {
     private final Action broken = new Action(bundle.getString("service.status.broken"));
     private final Action returned = new Action(bundle.getString("service.status.returned"));
     private final Action onDetails = new Action(bundle.getString("service.status.on.details"));
+    private final Action printBill = new Action(bundle.getString("service.generate.bill"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
 
 
@@ -53,17 +54,17 @@ public class ServiceContext implements Action.Handler {
         switch (((ServiceGood) target).getStatus()) {
 
             case WAITING:
-                return new Action[] {inRepair, showHistory};
+                return new Action[] {inRepair, printBill, showHistory};
             case IN_REPAIR:
-                return new Action[] {repaired, broken, showHistory};
+                return new Action[] {repaired, broken, printBill, showHistory};
             case REPAIRED:
             case BROKEN:
-                return new Action[] {returned, onDetails, showHistory};
+                return new Action[] {returned, onDetails, printBill, showHistory};
             case RETURNED:
             case ON_DETAILS:
-                return new Action[] {showHistory};
+                return new Action[] {printBill, showHistory};
             default:
-                return new Action[]{inWaiting, inRepair, repaired, broken, returned, onDetails, showHistory};
+                return new Action[]{inWaiting, inRepair, repaired, broken, returned, onDetails, printBill, showHistory};
         }
     }
 
@@ -81,6 +82,8 @@ public class ServiceContext implements Action.Handler {
             changeStatusIfConfirmed(target, ServiceStatus.RETURNED);
         } else if (action == onDetails) {
             changeStatusIfConfirmed(target, ServiceStatus.ON_DETAILS);
+        } else if (action == printBill) {
+            generateBill((ServiceGood) target);
         } else if (action == showHistory) {
             showHistory((ServiceGood) target);
             view.refreshView();
@@ -101,6 +104,38 @@ public class ServiceContext implements Action.Handler {
                     }
                 }
         );
+    }
+
+    private void generateBill(ServiceGood serviceGood) {
+        Window subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("170px");
+        subWindow.setWidth("280px");
+        subWindow.setClosable(true);
+        view.getUi().addWindow(subWindow);
+
+        final Button pdfButton = new Button("Tīrs kvīts");
+        StreamResource sr = getPDFStream(new ServiceGood());
+        sr.setMIMEType("application/pdf");
+        FileDownloader fileDownloader = new FileDownloader(sr);
+        fileDownloader.extend(pdfButton);
+
+        final Button pdfButton2 = new Button("Aizpildīts kvīts");
+        StreamResource sr2 = getPDFStream(serviceGood);
+        sr2.setMIMEType("application/pdf");
+        FileDownloader fileDownloader2 = new FileDownloader(sr2);
+        fileDownloader2.extend(pdfButton2);
+
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.setSpacing(true);
+        layout.addComponent(new Label("Izvelēties, kādu kvītu Jūs gribētu izveidot?"));
+        HorizontalLayout buttons = new HorizontalLayout(pdfButton, pdfButton2);
+        buttons.setSpacing(true);
+        buttons.setMargin(true);
+        layout.addComponent(buttons);
+
+        subWindow.setContent(layout);
     }
 
     private void showHistory(ServiceGood serviceGood) {
@@ -162,6 +197,25 @@ public class ServiceContext implements Action.Handler {
                     PdfUtils pdfCreator = new PdfUtils();
                     pdfCreator.open();
                     pdfCreator.exportChanges(records);
+                    pdfCreator.close();
+                    return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        return new StreamResource (source, createReportName("pdf"));
+    }
+
+    private StreamResource getPDFStream(final ServiceGood good) {
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+
+            public InputStream getStream() {
+                try {
+                    PdfUtils pdfCreator = new PdfUtils();
+                    pdfCreator.open();
+                    pdfCreator.createBill(good);
                     pdfCreator.close();
                     return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
                 } catch (DocumentException e) {

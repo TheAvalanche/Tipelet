@@ -7045,7 +7045,11 @@ body .mytheme.v-app .v-app-loading {
 }
 
 .mytheme .v-table-row-bestseller {
-	background: #FF3333;
+	background: #1cd71b;
+}
+
+.mytheme .v-table-row-sold {
+	background: #ffb2b3;
 }
 
 .mytheme .v-menubar-menuitem-align-right {

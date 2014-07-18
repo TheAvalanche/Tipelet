@@ -20,6 +20,7 @@ public class SimpleStatusComboBox extends ComboBox {
     public SimpleStatusComboBox(final String caption, final boolean required) {
         super(caption);
         setRequired(required);
+        setImmediate(true);
         setWidth(DEFAULT_WIDTH, Unit.PIXELS);
         try {
             for (ServiceStatus status : ServiceStatus.values()) {
