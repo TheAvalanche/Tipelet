@@ -109,7 +109,7 @@ public class ServiceContext implements Action.Handler {
     private void generateBill(ServiceGood serviceGood) {
         Window subWindow = new Window();
         subWindow.setModal(true);
-        subWindow.setHeight("170px");
+        subWindow.setHeight("180px");
         subWindow.setWidth("280px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
@@ -224,12 +224,20 @@ public class ServiceContext implements Action.Handler {
                 return null;
             }
         };
-        return new StreamResource (source, createReportName("pdf"));
+        return new StreamResource (source, createBillName("pdf"));
     }
 
     private String createReportName(String extension) {
         StringBuilder builder = new StringBuilder();
         builder.append("changeReport");
+        builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
+        builder.append("." + extension);
+        return builder.toString();
+    }
+
+    private String createBillName(String extension) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("kvits");
         builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
         builder.append("." + extension);
         return builder.toString();
