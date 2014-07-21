@@ -184,7 +184,7 @@ public class PdfUtils {
         return builder.toString();
     }
 
-    public void createBill(ServiceGood serviceGood) throws DocumentException {
+    public void createBill(ServiceGood serviceGood) throws DocumentException, IOException {
         PdfPTable headerTable = new PdfPTable(2);
         headerTable.setWidthPercentage(100);
         headerTable.setSpacingBefore(0f);
@@ -302,6 +302,16 @@ public class PdfUtils {
         document.add(new Paragraph("\n\n"));
         document.add(headerTable);
         document.add(footerTable);
+
+        document.newPage();
+
+        Image image = Image.getInstance(getClass().getResource("/kvits.png"));
+        float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                - document.rightMargin()) / image.getWidth()) * 100;
+        image.scalePercent(scaler);
+        image.setSpacingAfter(0);
+        document.add(image);
+        document.add(image);
     }
 
     public ByteArrayOutputStream getOutputStream() {
