@@ -283,7 +283,7 @@ public class StockView extends AbstractView {
         @Override
         public void itemClick(ItemClickEvent event) {
 
-            if (event.isDoubleClick() && event.getItem() != null) {
+            if (event.isDoubleClick() && event.getItem() != null && ui.getCurrentUser().isAdmin()) {
                 openStockGoodForm((BeanItem<StockGood>) event.getItem());
             }
         }
