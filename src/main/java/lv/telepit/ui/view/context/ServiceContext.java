@@ -218,7 +218,7 @@ public class ServiceContext implements Action.Handler {
                     pdfCreator.createBill(good);
                     pdfCreator.close();
                     return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
-                } catch (DocumentException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return null;
