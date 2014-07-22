@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "Store.getAll", query = "select s from Store s"),
+        @NamedQuery(name = "Store.getAll", query = "select s from Store s where s.deleted <> true"),
         @NamedQuery(name = "Store.getByName", query = "select s from Store s where s.name=:name")
 })
 public class Store {
