@@ -6,9 +6,9 @@ import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.backend.dao.StockDao;
 import lv.telepit.backend.dao.StockDaoImpl;
 import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
+import lv.telepit.model.dto.ReportData;
 
 import javax.persistence.OptimisticLockException;
 import java.util.*;
@@ -60,12 +60,12 @@ public class StockService {
     public void sell(StockGood stockGood, List<SoldItem> soldItems) {
         for (SoldItem soldItem : soldItems) {
             soldItem.setParent(stockGood);
-            soldItem.setPrice(stockGood.getPrice());
             soldItem.setSoldDate(new Date());
             stockGood.getChange().addChange("sold",
                     "", (soldItem.getCode() != null ? soldItem.getCode() : "-")
                             + " | " + soldItem.getPrice().toString()
-                            + " | " + (soldItem.isWithBill() ? "+" : "-"));
+                            + " | " + (soldItem.isWithBill() ? "+" : "-")
+                            + (soldItem.getInfo() != null ? " | (" + soldItem.getInfo() + ")" : ""));
         }
         stockGood.getSoldItemList().addAll(soldItems);
         stockGood.setCount(stockGood.getCount() - soldItems.size());

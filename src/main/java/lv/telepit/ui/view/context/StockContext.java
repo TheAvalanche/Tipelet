@@ -1,6 +1,8 @@
 package lv.telepit.ui.view.context;
 
 import com.itextpdf.text.DocumentException;
+import com.vaadin.data.Property;
+import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.Action;
@@ -14,6 +16,7 @@ import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.form.converters.StringToDoubleConverter;
 import lv.telepit.ui.view.StockView;
 import lv.telepit.utils.PdfUtils;
 
@@ -80,7 +83,7 @@ public class StockContext implements Action.Handler {
         final Window subWindow = new Window();
         subWindow.setModal(true);
         subWindow.setHeight("500px");
-        subWindow.setWidth("450px");
+        subWindow.setWidth("550px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
@@ -95,17 +98,18 @@ public class StockContext implements Action.Handler {
 
         final Label total = new Label("", ContentMode.HTML);
 
-        final PriceListener priceListener = new PriceListener(total, stockGood.getPrice());
+
 
         final List<SoldItem> soldItems = new ArrayList<>();
-        addSoldItem(soldItems, subLayout, priceListener);
+        final PriceListener priceListener = new PriceListener(total, soldItems);
+        addSoldItem(soldItems, stockGood, subLayout, priceListener);
 
         Button addButton = new Button(bundle.getString("default.button.add"));
         addButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (soldItems.size() < stockGood.getCount()) {
-                    addSoldItem(soldItems, subLayout, priceListener);
+                    addSoldItem(soldItems, stockGood, subLayout, priceListener);
                 } else {
                     Notification.show(bundle.getString("add.fail"));
                 }
@@ -116,10 +120,15 @@ public class StockContext implements Action.Handler {
         sellButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                view.getUi().getStockService().sell(stockGood, soldItems);
-                Notification.show(bundle.getString("save.success"));
-                subWindow.close();
-                view.refreshView();
+                try {
+                    validate(soldItems, stockGood);
+                    view.getUi().getStockService().sell(stockGood, soldItems);
+                    Notification.show(bundle.getString("save.success"));
+                    subWindow.close();
+                    view.refreshView();
+                } catch (IllegalStateException e) {
+                    Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -136,12 +145,19 @@ public class StockContext implements Action.Handler {
         subWindow.setContent(layout);
     }
 
-    private void addSoldItem(final List<SoldItem> soldItems, final Layout layout, final PriceListener priceL) {
+    private void validate(List<SoldItem> soldItems, StockGood good) throws IllegalStateException {
+        for (SoldItem soldItem : soldItems) {
+
+        }
+    }
+
+    private void addSoldItem(final List<SoldItem> soldItems, final StockGood stockGood, final Layout layout, final PriceListener priceListener) {
         final SoldItem item = new SoldItem();
         item.setUser(view.getUi().getCurrentUser());
         item.setStore(view.getUi().getCurrentUser().getStore());
+        item.setPrice(stockGood.getPrice());
         soldItems.add(item);
-        priceL.add();
+        priceListener.update();
 
         BeanItem<SoldItem> beanItem = new BeanItem<>(item);
 
@@ -149,9 +165,33 @@ public class StockContext implements Action.Handler {
         codeField.setImmediate(true);
         codeField.setWidth(100f, Sizeable.Unit.PIXELS);
         codeField.setNullRepresentation("");
+
         CheckBox billField = new CheckBox("Ar čeku", beanItem.getItemProperty("withBill"));
         billField.setImmediate(true);
-        Label priceLabel = new Label(String.format("%.2f", priceL.price) + "€");
+
+        final TextField priceField = new TextField("Cena", beanItem.getItemProperty("price"));
+        priceField.setImmediate(true);
+        priceField.setRequired(true);
+        priceField.setWidth(100f, Sizeable.Unit.PIXELS);
+        priceField.setConverter(new StringToDoubleConverter());
+        priceField.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                try {
+                    priceField.validate();
+                } catch (Validator.InvalidValueException e) {
+                    Notification.show("Nepareiza cena!", Notification.Type.ERROR_MESSAGE);
+                    item.setPrice(stockGood.getPrice());
+                    priceField.setValue(String.valueOf(stockGood.getPrice()));
+                }
+                priceListener.update();
+            }
+        });
+
+        TextField infoField = new TextField("Info", beanItem.getItemProperty("info"));
+        infoField.setImmediate(true);
+        infoField.setNullRepresentation("");
+        infoField.setWidth(100f, Sizeable.Unit.PIXELS);
 
         Button deleteButton = new Button(bundle.getString("default.button.delete"));
         deleteButton.setStyleName("small");
@@ -159,10 +199,11 @@ public class StockContext implements Action.Handler {
             deleteButton.setEnabled(false);
         }
 
-        final HorizontalLayout subLayout = new HorizontalLayout(codeField, priceLabel, billField, deleteButton);
+        final HorizontalLayout subLayout = new HorizontalLayout(codeField, priceField, infoField, billField, deleteButton);
         subLayout.setWidth("100%");
         subLayout.setSpacing(true);
-        subLayout.setComponentAlignment(priceLabel, Alignment.BOTTOM_RIGHT);
+        subLayout.setComponentAlignment(priceField, Alignment.BOTTOM_RIGHT);
+        subLayout.setComponentAlignment(infoField, Alignment.BOTTOM_RIGHT);
         subLayout.setComponentAlignment(billField, Alignment.BOTTOM_LEFT);
         subLayout.setComponentAlignment(deleteButton, Alignment.BOTTOM_RIGHT);
 
@@ -170,8 +211,8 @@ public class StockContext implements Action.Handler {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 soldItems.remove(item);
-                priceL.substract();
                 layout.removeComponent(subLayout);
+                priceListener.update();
             }
         });
 
@@ -259,24 +300,19 @@ public class StockContext implements Action.Handler {
 
     private class PriceListener {
         Label label;
-        Double price = 0D;
-        Double total = 0D;
+        List<SoldItem> list;
 
-        private PriceListener(Label label, Double price) {
+        private PriceListener(Label label, List<SoldItem> list) {
             this.label = label;
-            this.price = price;
+            this.list = list;
         }
 
-        private void add() {
-            BigDecimal totalBig = new BigDecimal(String.valueOf(total)).add(new BigDecimal(String.valueOf(price)));
-            total = totalBig.doubleValue();
-            label.setValue("Kopā: " + totalBig + "€");
-        }
-
-        private void substract(){
-            BigDecimal totalBig = new BigDecimal(String.valueOf(total)).subtract(new BigDecimal(String.valueOf(price)));
-            total = totalBig.doubleValue();
-            label.setValue("Kopā: " + totalBig + "€");
+        private void update() {
+            BigDecimal total = new BigDecimal("0");
+            for (SoldItem soldItem : list) {
+                total = total.add(new BigDecimal(String.valueOf(soldItem.getPrice())));
+            }
+            label.setValue("Kopā: " + total + "€");
         }
     }
 }

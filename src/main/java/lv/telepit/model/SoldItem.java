@@ -12,6 +12,7 @@ public class SoldItem {
     private long id;
     private Store store;
     private String code;
+    private String info;
     private User user;
     private Double price;
     private Date soldDate;
@@ -75,6 +76,14 @@ public class SoldItem {
 
     public String getCode() {
         return code;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public void setCode(String code) {
