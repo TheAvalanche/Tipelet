@@ -19,6 +19,7 @@ import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.converters.StringToDoubleConverter;
 import lv.telepit.ui.view.StockView;
 import lv.telepit.utils.PdfUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -147,7 +148,9 @@ public class StockContext implements Action.Handler {
 
     private void validate(List<SoldItem> soldItems, StockGood good) throws IllegalStateException {
         for (SoldItem soldItem : soldItems) {
-
+            if (!soldItem.getPrice().equals(good.getPrice()) && StringUtils.isBlank(soldItem.getInfo())) {
+                throw new IllegalStateException("Pievieno informāciju par cenas izmaiņu.");
+            }
         }
     }
 
