@@ -7052,6 +7052,14 @@ body .mytheme.v-app .v-app-loading {
 	background: #ffb2b3;
 }
 
+.mytheme .v-table-row-attention {
+	background: #cd62f1;
+}
+
+.mytheme .v-table-row-order {
+	background: #5fb1f1;
+}
+
 .mytheme .v-menubar-menuitem-align-right {
 	float: right;
 }
