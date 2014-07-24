@@ -62,14 +62,16 @@ public class StockService {
             soldItem.setParent(stockGood);
             soldItem.setSoldDate(new Date());
             stockGood.getChange().addChange("sold",
-                    "", (soldItem.getCode() != null ? soldItem.getCode() : "-")
-                            + " | " + soldItem.getPrice().toString()
+                    "", soldItem.getPrice().toString() + "€"
                             + " | " + (soldItem.isWithBill() ? "+" : "-")
+                            + (soldItem.getCode() != null ? " | " + soldItem.getCode() : "")
                             + (soldItem.getInfo() != null ? " | (" + soldItem.getInfo() + ")" : ""));
         }
         stockGood.getSoldItemList().addAll(soldItems);
-        stockGood.setCount(stockGood.getCount() - soldItems.size());
-        stockGood.setLastSoldDate(new Date());
+        if (!stockGood.isOrdered()) {
+            stockGood.setCount(stockGood.getCount() - soldItems.size());
+            stockGood.setLastSoldDate(new Date());
+        }
         try {
             stockDao.updateGood(stockGood);
         } catch (OptimisticLockException e) {

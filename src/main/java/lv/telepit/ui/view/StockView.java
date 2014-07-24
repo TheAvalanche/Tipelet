@@ -127,10 +127,12 @@ public class StockView extends AbstractView {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
                 StockGood sg = container.getItem(itemId).getBean();
-                if (sg.isBestseller()) {
-                    return "bestseller";
+                if (sg.isOrdered()) {
+                    return "ordered";
                 } else if (sg.getCount() == 0) {
                     return "sold";
+                } else if (sg.isBestseller()) {
+                    return "bestseller";
                 }
                 return "";
             }
@@ -215,7 +217,6 @@ public class StockView extends AbstractView {
         if (!ui.getCurrentUser().isAdmin()) {
             storeField.setVisible(false);
             userField.setVisible(false);
-            addGood.setVisible(false);
             updateGood.setVisible(false);
             deleteGood.setVisible(false);
         }

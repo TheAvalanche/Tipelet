@@ -18,10 +18,12 @@ public class StockGood {
     private long id;
     private long version;
     private boolean bestseller = false;
+    private boolean ordered = false;
     private Store store;
     private User user;
     private Category category;
     private Double price;
+    private Double advance;
     private Integer count;
     private String name;
     private String model;
@@ -59,6 +61,17 @@ public class StockGood {
                 String.valueOf(this.bestseller),
                 String.valueOf(bestseller));
         this.bestseller = bestseller;
+    }
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean order) {
+        change.addChange("ordered",
+                String.valueOf(this.ordered),
+                String.valueOf(order));
+        this.ordered = order;
     }
 
     @ManyToOne(targetEntity = Store.class)
@@ -106,6 +119,17 @@ public class StockGood {
                 this.price != null ? this.price.toString() : "-",
                 price != null ? price.toString() : "-");
         this.price = price;
+    }
+
+    public Double getAdvance() {
+        return advance;
+    }
+
+    public void setAdvance(Double advance) {
+        change.addChange("advance",
+                this.advance != null ? this.advance.toString() : "-",
+                advance != null ? advance.toString() : "-");
+        this.advance = advance;
     }
 
     public Integer getCount() {

@@ -39,6 +39,7 @@ public class StockContext implements Action.Handler {
 
     private final Action checkAsBestseller = new Action(bundle.getString("popular.item"));
     private final Action uncheckAsBestseller = new Action(bundle.getString("unpopular.item"));
+    private final Action uncheckAsOrdered = new Action(bundle.getString("ordered.item"));
     private final Action sell = new Action(bundle.getString("sell.item"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
 
@@ -51,6 +52,10 @@ public class StockContext implements Action.Handler {
     @Override
     public Action[] getActions(Object target, Object sender) {
         if (target == null) return new Action[]{};
+
+        if (((StockGood) target).isOrdered()) {
+            return new Action[]{uncheckAsOrdered, showHistory};
+        }
 
         if (((StockGood) target).isBestseller()) {
             return new Action[]{sell, uncheckAsBestseller, showHistory};
@@ -76,6 +81,12 @@ public class StockContext implements Action.Handler {
              view.refreshView();
          } else if (action == showHistory) {
              showHistory((StockGood) target);
+             view.refreshView();
+         } else if (action == uncheckAsOrdered) {
+             StockGood good = (StockGood) target;
+             good.setOrdered(false);
+             good.setAdvance(null);
+             view.getUi().getStockService().updateGood(good);
              view.refreshView();
          }
     }

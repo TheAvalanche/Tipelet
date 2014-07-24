@@ -5,12 +5,14 @@ import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
 import lv.telepit.backend.StockService;
+import lv.telepit.backend.criteria.StockGoodCriteria;
+import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Created by Alex on 07/04/2014.
@@ -40,6 +42,9 @@ public class StockGoodForm extends FormLayout {
     @PropertyId("count")
     private TextField countField = FieldFactory.getNumberField("stock.count");
 
+    @PropertyId("advance")
+    private TextField advanceField = FieldFactory.getNumberField("stock.advance");
+
 
     public StockGoodForm(BeanItem<StockGood> stockGoodItem, AbstractView view) {
 
@@ -49,6 +54,10 @@ public class StockGoodForm extends FormLayout {
             good.setUser(view.getUi().getCurrentUser());
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setPrice(0.00);
+            if (!view.getUi().getCurrentUser().isAdmin()) {
+                good.setOrdered(true);
+                good.setAdvance(0.00);
+            }
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {
@@ -64,8 +73,13 @@ public class StockGoodForm extends FormLayout {
         addComponent(nameField);
         addComponent(modelField);
         addComponent(compatibleModelsField);
-        addComponent(priceField);
         addComponent(countField);
+        if (view.getUi().getCurrentUser().isAdmin()) {
+            addComponent(priceField);
+        }
+        if (good.isOrdered() && !view.getUi().getCurrentUser().isAdmin()) {
+            addComponent(advanceField);
+        }
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, stockGoodItem.getBean(), view));
@@ -92,6 +106,23 @@ public class StockGoodForm extends FormLayout {
             StockService service = view.getUi().getStockService();
             if (entity.getId() == 0) {
                 service.createGood(entity);
+
+                if (entity.isOrdered()) {
+                    Map<StockGoodCriteria, Object> criteria = new HashMap<>();
+                    criteria.put(StockGoodCriteria.ID, entity.getId());
+                    entity = service.findGoods(criteria).get(0);
+
+                    SoldItem soldItem = new SoldItem();
+                    soldItem.setPrice(entity.getAdvance());
+                    soldItem.setCode(null);
+                    soldItem.setInfo("Avanss");
+                    soldItem.setSoldDate(new Date());
+                    soldItem.setStore(entity.getStore());
+                    soldItem.setUser(entity.getUser());
+                    soldItem.setWithBill(false);
+
+                    service.sell(entity, Collections.singletonList(soldItem));
+                }
             } else {
                 service.updateGood(entity);
             }
