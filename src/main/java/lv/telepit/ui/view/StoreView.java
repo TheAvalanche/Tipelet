@@ -98,6 +98,11 @@ public class StoreView extends AbstractView {
 
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     private class EditStoreListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {
         @Override
         public void buttonClick(Button.ClickEvent clickEvent) {

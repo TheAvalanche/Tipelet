@@ -149,6 +149,11 @@ public class UserView extends AbstractView {
 
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     private class EditUserListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {
         @Override
         public void buttonClick(Button.ClickEvent clickEvent) {

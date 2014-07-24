@@ -59,12 +59,15 @@ public abstract class AbstractView extends VerticalLayout implements View {
         }
         menuBar.checkAuthority(ui.getCurrentUser());
         checkAuthority();
+        reset();
         refreshView();
     }
 
     public abstract void buildContent();
 
     public abstract void refreshView();
+
+    public abstract void reset();
 
     public abstract void checkAuthority();
 

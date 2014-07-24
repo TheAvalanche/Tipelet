@@ -204,7 +204,6 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
 
         if (stockGoods == null) {
-            resetListener.buttonClick(null);
             stockGoods = ui.getStockService().findGoods(buildMap());
         }
         container.removeAllItems();
@@ -220,6 +219,11 @@ public class StockView extends AbstractView {
             updateGood.setVisible(false);
             deleteGood.setVisible(false);
         }
+    }
+
+    @Override
+    public void reset() {
+        resetListener.buttonClick(null);
     }
 
     private StreamResource getExcelStream() {
@@ -252,7 +256,6 @@ public class StockView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
-            resetListener.buttonClick(null);
         }
     }
 

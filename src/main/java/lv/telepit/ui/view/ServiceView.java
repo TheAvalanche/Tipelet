@@ -218,7 +218,6 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
 
         if (serviceGoods == null) {
-            resetListener.buttonClick(null);
             serviceGoods = ui.getServiceGoodService().findGoods(buildMap());
         }
         container.removeAllItems();
@@ -234,6 +233,11 @@ public class ServiceView extends AbstractView {
             userField.setVisible(false);
             deleteGood.setVisible(false);
         }
+    }
+
+    @Override
+    public void reset() {
+        resetListener.buttonClick(null);
     }
 
     private StreamResource getExcelStream() {
@@ -323,7 +327,6 @@ public class ServiceView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
-            resetListener.buttonClick(null);
         }
     }
 

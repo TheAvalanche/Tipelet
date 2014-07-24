@@ -162,6 +162,11 @@ public class CategoryView extends AbstractView {
 
     }
 
+    @Override
+    public void reset() {
+
+    }
+
     private void loadChildren(Category parent) {
 
         if (parent.getChildren().isEmpty()) {

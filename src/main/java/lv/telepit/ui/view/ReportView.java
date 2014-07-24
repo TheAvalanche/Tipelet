@@ -174,7 +174,6 @@ public class ReportView extends AbstractView {
     public void refreshView(List<ReportData> records) {
 
         if (records == null) {
-            resetListener.buttonClick(null);
             records = new ArrayList<>();
             records.addAll(ui.getServiceGoodService().findReports(new HashMap<ServiceGoodCriteria, Object>()));
             records.addAll(ui.getStockService().findReports(new HashMap<SoldItemCriteria, Object>()));
@@ -193,6 +192,11 @@ public class ReportView extends AbstractView {
     @Override
     public void checkAuthority() {
 
+    }
+
+    @Override
+    public void reset() {
+        resetListener.buttonClick(null);
     }
 
     private void buildSumLabel(List<ReportData> reportDatas) {
@@ -268,7 +272,6 @@ public class ReportView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
-            resetListener.buttonClick(null);
         }
     }
 

@@ -172,7 +172,6 @@ public class ChangesView extends AbstractView {
     public void refreshView(List<RecordData> records) {
 
         if (records == null) {
-            resetListener.buttonClick(null);
             records = ui.getCommonService().findRecords(new HashMap<ChangeRecordCriteria, Object>());
         }
 
@@ -188,6 +187,11 @@ public class ChangesView extends AbstractView {
     @Override
     public void checkAuthority() {
 
+    }
+
+    @Override
+    public void reset() {
+        resetListener.buttonClick(null);
     }
 
     private StreamResource getPDFStream() {
@@ -245,7 +249,6 @@ public class ChangesView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             refreshView();
-            resetListener.buttonClick(null);
         }
     }
 
