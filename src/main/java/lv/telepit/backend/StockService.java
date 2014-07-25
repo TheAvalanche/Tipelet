@@ -66,6 +66,7 @@ public class StockService {
             dest.setBestseller(source.isBestseller());
             dest.setCategory(source.getCategory());
             dest.setPrice(source.getPrice());
+            dest.setCount(0);
             stockDao.createGood(dest);
             dest = stockDao.getByLinkAndStore(source.getLink(), destination);
         }

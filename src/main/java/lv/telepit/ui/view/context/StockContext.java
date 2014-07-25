@@ -116,6 +116,7 @@ public class StockContext implements Action.Handler {
         layout.setSpacing(true);
 
         final Slider slider = new Slider("Daudzums", 0, stockGood.getCount());
+        slider.setWidth("100%");
         final ComboBox stores = FieldFactory.getStoreComboBox("search.store");
         layout.addComponent(slider);
         layout.addComponent(stores);
@@ -137,8 +138,11 @@ public class StockContext implements Action.Handler {
                     return;
                 }
                 view.getUi().getStockService().moveToStore(stockGood, slider.getValue().intValue(), (Store) stores.getValue());
+                subWindow.close();
+                view.refreshView();
             }
         });
+        layout.addComponent(move);
 
         subWindow.setContent(layout);
     }
