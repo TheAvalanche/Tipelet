@@ -80,6 +80,7 @@ public class StockGoodForm extends FormLayout {
             addComponent(priceField);
         }
         if (good.isOrdered() && !view.getUi().getCurrentUser().isAdmin()) {
+            advanceField.setRequired(true);
             addComponent(advanceField);
         }
 

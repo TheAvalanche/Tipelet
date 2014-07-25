@@ -105,8 +105,8 @@ public class StockContext implements Action.Handler {
 
         final Window subWindow = new Window();
         subWindow.setModal(true);
-        subWindow.setHeight("500px");
-        subWindow.setWidth("550px");
+        subWindow.setHeight("300px");
+        subWindow.setWidth("400px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
@@ -150,8 +150,8 @@ public class StockContext implements Action.Handler {
     private void showSell(final StockGood stockGood) {
         final Window subWindow = new Window();
         subWindow.setModal(true);
-        subWindow.setHeight("300px");
-        subWindow.setWidth("400px");
+        subWindow.setHeight("500px");
+        subWindow.setWidth("550px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
