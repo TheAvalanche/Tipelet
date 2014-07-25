@@ -11,6 +11,7 @@ import lv.telepit.model.StockGood;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
 
@@ -54,6 +55,7 @@ public class StockGoodForm extends FormLayout {
             good.setUser(view.getUi().getCurrentUser());
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setPrice(0.00);
+            good.setLink(RandomStringUtils.random(16));
             if (!view.getUi().getCurrentUser().isAdmin()) {
                 good.setOrdered(true);
                 good.setAdvance(0.00);

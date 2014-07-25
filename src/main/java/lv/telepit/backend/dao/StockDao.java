@@ -5,6 +5,7 @@ import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
+import lv.telepit.model.Store;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +25,6 @@ public interface StockDao {
     List<ChangeRecord> findChanges(StockGood stockGood);
 
     List<SoldItem> findSoldItems(Map<SoldItemCriteria, Object> query);
+
+    StockGood getByLinkAndStore(String link, Store store);
 }

@@ -1,6 +1,8 @@
 package lv.telepit.backend;
 
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
+import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.SoldItemCriteria;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.backend.dao.StockDao;
@@ -8,6 +10,7 @@ import lv.telepit.backend.dao.StockDaoImpl;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
+import lv.telepit.model.Store;
 import lv.telepit.model.dto.ReportData;
 
 import javax.persistence.OptimisticLockException;
@@ -47,6 +50,29 @@ public class StockService {
         } catch (OptimisticLockException e) {
             catchOptimisticLockException();
         }
+    }
+
+
+    public void moveToStore(StockGood source, int count, Store destination) {
+        StockGood dest = stockDao.getByLinkAndStore(source.getLink(), destination);
+        if (dest == null) {
+            dest = new StockGood();
+            dest.setUser(((TelepitUI) UI.getCurrent()).getCurrentUser());
+            dest.setStore(destination);
+            dest.setLink(source.getLink());
+            dest.setName(source.getName());
+            dest.setModel(source.getModel());
+            dest.setCompatibleModels(source.getCompatibleModels());
+            dest.setBestseller(source.isBestseller());
+            dest.setCategory(source.getCategory());
+            dest.setPrice(source.getPrice());
+            stockDao.createGood(dest);
+            dest = stockDao.getByLinkAndStore(source.getLink(), destination);
+        }
+        dest.setCount(dest.getCount() + count);
+        stockDao.updateGood(dest);
+        source.setCount(source.getCount() - count);
+        stockDao.updateGood(source);
     }
 
     public List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap) {

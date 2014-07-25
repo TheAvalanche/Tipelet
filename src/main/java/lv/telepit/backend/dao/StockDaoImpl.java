@@ -8,6 +8,7 @@ import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
+import lv.telepit.model.Store;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -61,6 +62,20 @@ public class StockDaoImpl implements StockDao {
 
         em.getTransaction().commit();
         em.close();
+    }
+
+    @Override
+    public StockGood getByLinkAndStore(String link, Store store) {
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createNamedQuery("StockGood.findByLinkAndStore");
+        q.setParameter("link", link);
+        q.setParameter("store", store);
+        List<StockGood> goods = q.getResultList();
+        em.close();
+        if (goods.isEmpty()) {
+            return null;
+        }
+        return goods.get(0);
     }
 
     @Override

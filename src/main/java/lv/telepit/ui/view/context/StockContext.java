@@ -15,8 +15,10 @@ import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
+import lv.telepit.model.Store;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.converters.StringToDoubleConverter;
+import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.StockView;
 import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +43,7 @@ public class StockContext implements Action.Handler {
     private final Action uncheckAsBestseller = new Action(bundle.getString("unpopular.item"));
     private final Action uncheckAsOrdered = new Action(bundle.getString("ordered.item"));
     private final Action sell = new Action(bundle.getString("sell.item"));
+    private final Action move = new Action(bundle.getString("move.item"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
 
     private StockView view;
@@ -58,9 +61,9 @@ public class StockContext implements Action.Handler {
         }
 
         if (((StockGood) target).isBestseller()) {
-            return new Action[]{sell, uncheckAsBestseller, showHistory};
+            return new Action[]{sell, uncheckAsBestseller, move, showHistory};
         } else {
-            return new Action[]{sell, checkAsBestseller, showHistory};
+            return new Action[]{sell, checkAsBestseller, move, showHistory};
         }
     }
 
@@ -88,14 +91,63 @@ public class StockContext implements Action.Handler {
              good.setAdvance(null);
              view.getUi().getStockService().updateGood(good);
              view.refreshView();
+         } else if (action == move) {
+             move((StockGood) target);
+             view.refreshView();
          }
+    }
+
+    private void move(final StockGood stockGood) {
+        if (stockGood.getCount() == 0) {
+            Notification.show("Nav ko pārcelt");
+            return;
+        }
+
+        final Window subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("500px");
+        subWindow.setWidth("550px");
+        subWindow.setClosable(true);
+        view.getUi().addWindow(subWindow);
+
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setWidth("100%");
+        layout.setMargin(true);
+        layout.setSpacing(true);
+
+        final Slider slider = new Slider("Daudzums", 0, stockGood.getCount());
+        final ComboBox stores = FieldFactory.getStoreComboBox("search.store");
+        layout.addComponent(slider);
+        layout.addComponent(stores);
+
+        final Button move = new Button("Pārcelt");
+        move.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                if (slider.getValue().equals(0.0)) {
+                    Notification.show("Nav ko pārcelt");
+                    return;
+                }
+                if (stores.getValue() == null) {
+                    Notification.show("Veikals nav izvelēts");
+                    return;
+                }
+                if (stores.getValue().equals(stockGood.getStore())) {
+                    Notification.show("Izvelies citu veikalu");
+                    return;
+                }
+                view.getUi().getStockService().moveToStore(stockGood, slider.getValue().intValue(), (Store) stores.getValue());
+            }
+        });
+
+        subWindow.setContent(layout);
     }
 
     private void showSell(final StockGood stockGood) {
         final Window subWindow = new Window();
         subWindow.setModal(true);
-        subWindow.setHeight("500px");
-        subWindow.setWidth("550px");
+        subWindow.setHeight("300px");
+        subWindow.setWidth("400px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
@@ -109,8 +161,6 @@ public class StockContext implements Action.Handler {
         subLayout.setSpacing(true);
 
         final Label total = new Label("", ContentMode.HTML);
-
-
 
         final List<SoldItem> soldItems = new ArrayList<>();
         final PriceListener priceListener = new PriceListener(total, soldItems);

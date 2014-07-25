@@ -11,7 +11,8 @@ import java.util.List;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "StockGood.findAll", query = "select sg from StockGood sg")
+        @NamedQuery(name = "StockGood.findAll", query = "select sg from StockGood sg"),
+        @NamedQuery(name = "StockGood.findByLinkAndStore", query = "select sg from StockGood sg where sg.link = :link and sg.store = :store")
 })
 public class StockGood {
 
@@ -29,6 +30,7 @@ public class StockGood {
     private String model;
     private String compatibleModels;
     private Date lastSoldDate;
+    private String link;
     private List<SoldItem> soldItemList = new ArrayList<>();
 
     private ChangeRecord change = new ChangeRecord("stock.good");
@@ -195,6 +197,14 @@ public class StockGood {
 
     public void setSoldItemList(List<SoldItem> soldItemList) {
         this.soldItemList = soldItemList;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     @Transient
