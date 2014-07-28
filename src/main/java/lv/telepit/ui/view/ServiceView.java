@@ -222,6 +222,7 @@ public class ServiceView extends AbstractView {
         }
         container.removeAllItems();
         container.addAll(serviceGoods);
+        container.sort(new Object[]{"id"}, new boolean[]{false});
         table.refreshRowCache();
 
     }

@@ -129,6 +129,8 @@ public class StockView extends AbstractView {
                 StockGood sg = container.getItem(itemId).getBean();
                 if (sg.isOrdered()) {
                     return "ordered";
+                } else if (sg.isAttention()) {
+                    return "attention";
                 } else if (sg.getCount() == 0) {
                     return "sold";
                 } else if (sg.isBestseller()) {
@@ -208,6 +210,7 @@ public class StockView extends AbstractView {
         }
         container.removeAllItems();
         container.addAll(stockGoods);
+        container.sort(new Object[]{"id"}, new boolean[]{false});
         table.refreshRowCache();
     }
 

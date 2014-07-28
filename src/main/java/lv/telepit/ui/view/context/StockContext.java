@@ -42,6 +42,8 @@ public class StockContext implements Action.Handler {
     private final Action checkAsBestseller = new Action(bundle.getString("popular.item"));
     private final Action uncheckAsBestseller = new Action(bundle.getString("unpopular.item"));
     private final Action uncheckAsOrdered = new Action(bundle.getString("ordered.item"));
+    private final Action checkAttention = new Action(bundle.getString("attention.item"));
+    private final Action uncheckAttention = new Action(bundle.getString("unattention.item"));
     private final Action sell = new Action(bundle.getString("sell.item"));
     private final Action move = new Action(bundle.getString("move.item"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
@@ -60,11 +62,12 @@ public class StockContext implements Action.Handler {
             return new Action[]{uncheckAsOrdered, showHistory};
         }
 
-        if (((StockGood) target).isBestseller()) {
-            return new Action[]{sell, uncheckAsBestseller, move, showHistory};
-        } else {
-            return new Action[]{sell, checkAsBestseller, move, showHistory};
-        }
+        return new Action[]{sell,
+                ((StockGood) target).isBestseller() ? uncheckAsBestseller : checkAsBestseller,
+                ((StockGood) target).isAttention() ? uncheckAttention : checkAttention,
+                move,
+                showHistory};
+
     }
 
     @Override
@@ -80,6 +83,16 @@ public class StockContext implements Action.Handler {
          } else if (action == uncheckAsBestseller) {
              StockGood good = (StockGood) target;
              good.setBestseller(false);
+             view.getUi().getStockService().updateGood(good);
+             view.refreshView();
+         } else if (action == checkAttention) {
+             StockGood good = (StockGood) target;
+             good.setAttention(true);
+             view.getUi().getStockService().updateGood(good);
+             view.refreshView();
+         } else if (action == uncheckAttention) {
+             StockGood good = (StockGood) target;
+             good.setAttention(false);
              view.getUi().getStockService().updateGood(good);
              view.refreshView();
          } else if (action == showHistory) {

@@ -265,7 +265,7 @@ public class ChangesView extends AbstractView {
         public void buttonClick(Button.ClickEvent clickEvent) {
             userField.setValue(null);
             storeField.setValue(null);
-            fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
+            fromDateField.setValue(DateUtils.addWeeks(new Date(), -1));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);
         }

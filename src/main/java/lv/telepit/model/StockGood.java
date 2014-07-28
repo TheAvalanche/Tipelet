@@ -30,6 +30,7 @@ public class StockGood {
     private String model;
     private String compatibleModels;
     private Date lastSoldDate;
+    private boolean attention = false;
     private String link;
     private List<SoldItem> soldItemList = new ArrayList<>();
 
@@ -69,11 +70,11 @@ public class StockGood {
         return ordered;
     }
 
-    public void setOrdered(boolean order) {
+    public void setOrdered(boolean ordered) {
         change.addChange("ordered",
                 String.valueOf(this.ordered),
-                String.valueOf(order));
-        this.ordered = order;
+                String.valueOf(ordered));
+        this.ordered = ordered;
     }
 
     @ManyToOne(targetEntity = Store.class)
@@ -188,6 +189,17 @@ public class StockGood {
                 this.lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(this.lastSoldDate) : "-",
                 lastSoldDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(lastSoldDate) : "-");
         this.lastSoldDate = lastSoldDate;
+    }
+
+    public boolean isAttention() {
+        return attention;
+    }
+
+    public void setAttention(boolean attention) {
+        change.addChange("attention",
+                String.valueOf(this.attention),
+                String.valueOf(attention));
+        this.attention = attention;
     }
 
     @OneToMany(mappedBy = "parent")
