@@ -161,6 +161,7 @@ public class StockContext implements Action.Handler {
                 view.getUi().getStockService().moveToStore(stockGood, slider.getValue().intValue(), (Store) stores.getValue());
                 subWindow.close();
                 view.refreshView();
+                Notification.show(bundle.getString("save.success"));
             }
         });
         layout.addComponent(move);
