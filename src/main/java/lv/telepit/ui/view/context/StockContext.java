@@ -62,11 +62,19 @@ public class StockContext implements Action.Handler {
             return new Action[]{uncheckAsOrdered, showHistory};
         }
 
-        return new Action[]{sell,
-                ((StockGood) target).isBestseller() ? uncheckAsBestseller : checkAsBestseller,
-                ((StockGood) target).isAttention() ? uncheckAttention : checkAttention,
-                move,
-                showHistory};
+        if (view.getUi().getCurrentUser().isAdmin()) {
+            return new Action[]{sell,
+                    ((StockGood) target).isBestseller() ? uncheckAsBestseller : checkAsBestseller,
+                    ((StockGood) target).isAttention() ? uncheckAttention : checkAttention,
+                    move,
+                    showHistory};
+        } else {
+            return new Action[]{sell,
+                    ((StockGood) target).isBestseller() ? uncheckAsBestseller : checkAsBestseller,
+                    ((StockGood) target).isAttention() ? uncheckAttention : checkAttention,
+                    showHistory};
+        }
+
 
     }
 

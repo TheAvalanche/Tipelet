@@ -98,6 +98,7 @@ public class StockDaoImpl implements StockDao {
                 entry.getKey().setQuery(queryBuilder);
             }
         }
+        queryBuilder.append(" order by sg.id desc");
         final Query q = em.createQuery(queryBuilder.toString());
         if (criteriaMap != null) {
             for (Map.Entry<StockGoodCriteria, Object> entry : criteriaMap.entrySet()) {
@@ -131,6 +132,7 @@ public class StockDaoImpl implements StockDao {
                 entry.getKey().setQuery(queryBuilder);
             }
         }
+        queryBuilder.append(" order by si.id desc");
         final Query q = em.createQuery(queryBuilder.toString());
         if (query != null) {
             for (Map.Entry<SoldItemCriteria, Object> entry : query.entrySet()) {

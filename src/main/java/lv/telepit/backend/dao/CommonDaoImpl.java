@@ -202,6 +202,7 @@ public class CommonDaoImpl implements CommonDao {
                 entry.getKey().setQuery(queryBuilder);
             }
         }
+        queryBuilder.append(" order by cr.id desc");
         final Query q = em.createQuery(queryBuilder.toString());
         if (query != null) {
             for (Map.Entry<ChangeRecordCriteria, Object> entry : query.entrySet()) {

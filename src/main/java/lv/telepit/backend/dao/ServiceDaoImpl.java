@@ -83,6 +83,7 @@ public class ServiceDaoImpl implements ServiceDao {
                 entry.getKey().setQuery(queryBuilder);
             }
         }
+        queryBuilder.append(" order by sg.id desc");
         final Query q = em.createQuery(queryBuilder.toString());
         if (criteriaMap != null) {
             for (Map.Entry<ServiceGoodCriteria, Object> entry : criteriaMap.entrySet()) {
