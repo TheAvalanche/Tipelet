@@ -5,7 +5,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.dto.ReportData;
@@ -295,23 +294,17 @@ public class PdfUtils {
         footerTable.addCell(footerLeft);
         footerTable.addCell(footerRight);
 
-        document.add(headerTable);
-        document.add(footerTable);
-        document.add(new Paragraph("\n\n"));
-        document.add(new LineSeparator());
-        document.add(new Paragraph("\n\n"));
-        document.add(headerTable);
-        document.add(footerTable);
-
-        document.newPage();
-
         Image image = Image.getInstance(getClass().getResource("/kvits.png"));
         float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
                 - document.rightMargin()) / image.getWidth()) * 100;
         image.scalePercent(scaler);
         image.setSpacingAfter(0);
+
+        document.add(headerTable);
+        document.add(footerTable);
+        document.add(new Paragraph("\n\n"));
         document.add(image);
-        document.add(image);
+
     }
 
     public ByteArrayOutputStream getOutputStream() {
