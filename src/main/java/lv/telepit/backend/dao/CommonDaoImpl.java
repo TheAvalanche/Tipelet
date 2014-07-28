@@ -208,7 +208,7 @@ public class CommonDaoImpl implements CommonDao {
                 entry.getKey().setValue(q, entry.getValue());
             }
         }
-        q.setMaxResults(100);
+        q.setMaxResults(1000);
         List<ChangeRecord> list = q.getResultList();
         em.close();
         return list;

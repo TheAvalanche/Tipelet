@@ -104,7 +104,7 @@ public class StockDaoImpl implements StockDao {
                 entry.getKey().setValue(q, entry.getValue());
             }
         }
-        q.setMaxResults(100);
+        q.setMaxResults(1000);
         List<StockGood> list = q.getResultList();
         em.close();
         return list;
@@ -115,6 +115,7 @@ public class StockDaoImpl implements StockDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("ChangeRecord.findForStockGood");
         q.setParameter("stockGood", stockGood);
+        q.setMaxResults(1000);
         List<ChangeRecord> changeRecords =  q.getResultList();
         em.close();
         return changeRecords;
@@ -136,7 +137,7 @@ public class StockDaoImpl implements StockDao {
                 entry.getKey().setValue(q, entry.getValue());
             }
         }
-        q.setMaxResults(100);
+        q.setMaxResults(1000);
         List<SoldItem> list = q.getResultList();
         em.close();
         return list;

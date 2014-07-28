@@ -89,7 +89,7 @@ public class ServiceDaoImpl implements ServiceDao {
                 entry.getKey().setValue(q, entry.getValue());
             }
         }
-        q.setMaxResults(100);
+        q.setMaxResults(1000);
         List<ServiceGood> list = q.getResultList();
         em.close();
         return list;
@@ -101,6 +101,7 @@ public class ServiceDaoImpl implements ServiceDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("ChangeRecord.findForServiceGood");
         q.setParameter("serviceGood", serviceGood);
+        q.setMaxResults(1000);
         List<ChangeRecord> changeRecords = q.getResultList();
         em.close();
         return changeRecords;

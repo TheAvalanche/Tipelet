@@ -55,7 +55,7 @@ public class StockGoodForm extends FormLayout {
             good.setUser(view.getUi().getCurrentUser());
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setPrice(0.00);
-            good.setLink(RandomStringUtils.random(16));
+            good.setLink(RandomStringUtils.randomAlphabetic(16));
             if (!view.getUi().getCurrentUser().isAdmin()) {
                 good.setOrdered(true);
                 good.setAdvance(0.00);
