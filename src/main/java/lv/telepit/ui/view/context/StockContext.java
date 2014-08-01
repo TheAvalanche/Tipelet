@@ -12,10 +12,7 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
-import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.SoldItem;
-import lv.telepit.model.StockGood;
-import lv.telepit.model.Store;
+import lv.telepit.model.*;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.converters.StringToDoubleConverter;
 import lv.telepit.ui.form.fields.FieldFactory;
@@ -46,6 +43,7 @@ public class StockContext implements Action.Handler {
     private final Action uncheckAttention = new Action(bundle.getString("unattention.item"));
     private final Action sell = new Action(bundle.getString("sell.item"));
     private final Action move = new Action(bundle.getString("move.item"));
+    private final Action createWarrancy = new Action(bundle.getString("create.warranty"));
     private final Action showHistory = new Action(bundle.getString("show.history"));
 
     private StockView view;
@@ -59,7 +57,7 @@ public class StockContext implements Action.Handler {
         if (target == null) return new Action[]{};
 
         if (((StockGood) target).isOrdered()) {
-            return new Action[]{uncheckAsOrdered, showHistory};
+            return new Action[]{uncheckAsOrdered, createWarrancy, showHistory};
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {
@@ -67,11 +65,13 @@ public class StockContext implements Action.Handler {
                     ((StockGood) target).isBestseller() ? uncheckAsBestseller : checkAsBestseller,
                     ((StockGood) target).isAttention() ? uncheckAttention : checkAttention,
                     move,
+                    createWarrancy,
                     showHistory};
         } else {
             return new Action[]{sell,
                     ((StockGood) target).isBestseller() ? uncheckAsBestseller : checkAsBestseller,
                     ((StockGood) target).isAttention() ? uncheckAttention : checkAttention,
+                    createWarrancy,
                     showHistory};
         }
 
@@ -102,6 +102,9 @@ public class StockContext implements Action.Handler {
              StockGood good = (StockGood) target;
              good.setAttention(false);
              view.getUi().getStockService().updateGood(good);
+             view.refreshView();
+         } else if (action == createWarrancy) {
+             generateWarranty();
              view.refreshView();
          } else if (action == showHistory) {
              showHistory((StockGood) target);
@@ -236,7 +239,7 @@ public class StockContext implements Action.Handler {
     private void validate(List<SoldItem> soldItems, StockGood good) throws IllegalStateException {
         for (SoldItem soldItem : soldItems) {
             if (!soldItem.getPrice().equals(good.getPrice()) && StringUtils.isBlank(soldItem.getInfo())) {
-                throw new IllegalStateException("Pievieno informāciju par cenas izmaiņu.");
+                throw new IllegalStateException("Pievienojiet informāciju par cenas izmaiņu.");
             }
         }
     }
@@ -404,5 +407,58 @@ public class StockContext implements Action.Handler {
             }
             label.setValue("Kopā: " + total + "€");
         }
+    }
+
+    private void generateWarranty() {
+        Window subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("180px");
+        subWindow.setWidth("200px");
+        subWindow.setClosable(true);
+        view.getUi().addWindow(subWindow);
+
+        final Button pdfButton = new Button("Garantijas kvīts");
+        StreamResource sr2 = getPDFStream();
+        sr2.setMIMEType("application/pdf");
+        FileDownloader fileDownloader2 = new FileDownloader(sr2);
+        fileDownloader2.extend(pdfButton);
+
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.setSpacing(true);
+        layout.addComponent(new Label("Izveidot kvītu?"));
+        HorizontalLayout buttons = new HorizontalLayout(pdfButton);
+        buttons.setSpacing(true);
+        buttons.setMargin(true);
+        layout.addComponent(buttons);
+
+        subWindow.setContent(layout);
+    }
+
+    private StreamResource getPDFStream() {
+        StreamResource.StreamSource source = new StreamResource.StreamSource() {
+
+            public InputStream getStream() {
+                try {
+                    PdfUtils pdfCreator = new PdfUtils();
+                    pdfCreator.open();
+                    pdfCreator.createWarranty();
+                    pdfCreator.close();
+                    return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        return new StreamResource (source, createWarrantyName("pdf"));
+    }
+
+    private String createWarrantyName(String extension) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("kvits");
+        builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
+        builder.append("." + extension);
+        return builder.toString();
     }
 }

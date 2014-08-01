@@ -307,6 +307,34 @@ public class PdfUtils {
 
     }
 
+    public void createWarranty() throws DocumentException, IOException {
+        Image image = Image.getInstance(getClass().getResource("/garantija.png"));
+        float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                - document.rightMargin()) / image.getWidth()) * 100;
+        image.scalePercent(scaler);
+        image.setSpacingAfter(0);
+        document.add(image);
+
+        Paragraph footer = new Paragraph(
+                "         "
+                        + "Prece: "
+                        + "                                                   "
+                        + "Izsniedzējs:"
+                        + "                                                   "
+                        + "Datums:", normalFont);
+        Paragraph footerLines = new Paragraph(
+                "        "
+                        + "_________________"
+                        + "                  "
+                        + "_________________"
+                        + "                        "
+                        + "________________");
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph(" "));
+        document.add(footer);
+        document.add(footerLines);
+    }
+
     public ByteArrayOutputStream getOutputStream() {
         return outputStream;
     }

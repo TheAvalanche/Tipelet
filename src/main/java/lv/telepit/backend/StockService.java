@@ -71,8 +71,14 @@ public class StockService {
             dest = stockDao.getByLinkAndStore(source.getLink(), destination);
         }
         dest.setCount(dest.getCount() + count);
+        dest.getChange().addChange("move",
+                "No: " + source.getId(),
+                "Daudzums: " + count);
         stockDao.updateGood(dest);
         source.setCount(source.getCount() - count);
+        source.getChange().addChange("move",
+                "Uz: " + dest.getId(),
+                "Daudzums: " + count);
         stockDao.updateGood(source);
     }
 
