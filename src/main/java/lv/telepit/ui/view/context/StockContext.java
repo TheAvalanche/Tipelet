@@ -57,7 +57,12 @@ public class StockContext implements Action.Handler {
         if (target == null) return new Action[]{};
 
         if (((StockGood) target).isOrdered()) {
-            return new Action[]{uncheckAsOrdered, createWarrancy, showHistory};
+            if (view.getUi().getCurrentUser().isAdmin()) {
+                return new Action[]{uncheckAsOrdered, createWarrancy, showHistory};
+            } else {
+                return new Action[]{createWarrancy, showHistory};
+            }
+
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {

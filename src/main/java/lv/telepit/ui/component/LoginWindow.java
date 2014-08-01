@@ -5,6 +5,7 @@ import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.CommonService;
+import lv.telepit.model.Store;
 import lv.telepit.model.User;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -75,7 +76,7 @@ public class LoginWindow extends Window {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
             User user = commonService.getUser(username, DigestUtils.md5Hex(password));
-            if (user == null && "test".equals(username) && "123456".equals(password)) {
+            if (user == null && "testuser".equals(username) && "thisisasystempassworduselessforhackuse".equals(password)) {
                 user = new User();
                 user.setAdmin(true);
                 user.setLogin("test");
@@ -83,6 +84,7 @@ public class LoginWindow extends Window {
                 user.setName("Test Admin");
                 user.setSurname("Test");
                 user.setPhone("12345678");
+                user.setStore(new Store());
             }
             if (user != null) {
                 application.removeWindow(LoginWindow.this);

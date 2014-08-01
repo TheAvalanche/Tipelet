@@ -221,6 +221,7 @@ public class StockView extends AbstractView {
             userField.setVisible(false);
             updateGood.setVisible(false);
             deleteGood.setVisible(false);
+            addGood.setCaption(bundle.getString("default.button.order"));
         }
     }
 
