@@ -102,7 +102,7 @@ public class ServiceDaoImpl implements ServiceDao {
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("ChangeRecord.findForServiceGood");
         q.setParameter("serviceGood", serviceGood);
-        q.setMaxResults(100);
+        q.setMaxResults(50);
         List<ChangeRecord> changeRecords = q.getResultList();
         em.close();
         return changeRecords;
