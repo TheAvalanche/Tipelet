@@ -169,7 +169,7 @@ public class StockView extends AbstractView {
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1,
                 new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
-        searchLayout.setVisible(false);
+        searchLayout.setVisible(true);
 
         expandButton = new Button(bundle.getString("show.hide.search"));
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
