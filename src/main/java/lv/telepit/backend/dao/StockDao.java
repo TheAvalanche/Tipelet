@@ -18,6 +18,8 @@ public interface StockDao {
 
     void updateGood(StockGood good);
 
+    StockGood getByLink(String link);
+
     void deleteGood(StockGood good);
 
     List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap);

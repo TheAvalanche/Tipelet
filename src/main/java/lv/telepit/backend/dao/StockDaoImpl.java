@@ -79,6 +79,19 @@ public class StockDaoImpl implements StockDao {
     }
 
     @Override
+    public StockGood getByLink(String link) {
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createNamedQuery("StockGood.findByLink");
+        q.setParameter("link", link);
+        List<StockGood> goods = q.getResultList();
+        em.close();
+        if (goods.isEmpty()) {
+            return null;
+        }
+        return goods.get(0);
+    }
+
+    @Override
     public void deleteGood(StockGood good) {
         EntityManager em = emf.createEntityManager();
         good = em.find(StockGood.class, good.getId());

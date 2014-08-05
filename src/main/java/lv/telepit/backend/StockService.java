@@ -12,6 +12,7 @@ import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.model.Store;
 import lv.telepit.model.dto.ReportData;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.OptimisticLockException;
 import java.util.*;
@@ -117,6 +118,14 @@ public class StockService {
         List<ReportData> list = new ArrayList<>(soldItems.size());
         list.addAll(ReportData.constructFromSoldItems(soldItems));
         return list;
+    }
+
+    public String generateUniqueLink() {
+        String link = RandomStringUtils.randomAlphabetic(16);
+        while (stockDao.getByLink(link) != null) {
+            link = RandomStringUtils.randomAlphabetic(16);
+        }
+        return link;
     }
 
     private void catchOptimisticLockException() {

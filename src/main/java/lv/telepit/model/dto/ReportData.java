@@ -23,6 +23,7 @@ public class ReportData {
     private String name;
     private String code;
     private Double price;
+    private String info;
 
 
     public static List<ReportData> constructFromSoldItems(List<SoldItem> soldItems) {
@@ -37,6 +38,7 @@ public class ReportData {
             r.name = si.getParent().getName();
             r.code = si.getCode();
             r.price = si.getPrice();
+            r.info = si.getInfo();
             list.add(r);
         }
         return list;
@@ -54,6 +56,7 @@ public class ReportData {
             r.name = sg.getName();
             r.code = sg.getImei();
             r.price = sg.getPrice();
+            r.info = "";
             list.add(r);
         }
         return list;
@@ -89,5 +92,9 @@ public class ReportData {
 
     public Double getPrice() {
         return price;
+    }
+
+    public String getInfo() {
+        return info;
     }
 }

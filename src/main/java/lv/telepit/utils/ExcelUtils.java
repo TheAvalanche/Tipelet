@@ -145,6 +145,9 @@ public class ExcelUtils {
         Label h7 = new Label(6, y, bundle.getString("report.data.price"), boldCellWithBorder);
         sheet.addCell(h7);
 
+        Label h8 = new Label(7, y, bundle.getString("report.data.info"), boldCellWithBorder);
+        sheet.addCell(h8);
+
         BigDecimal sum = new BigDecimal("0");
 
         for (ReportData report : reports) {
@@ -156,6 +159,7 @@ public class ExcelUtils {
             sheet.addCell(new Label(4, y, report.getName(), normalCellWithBorder));
             sheet.addCell(new Label(5, y, report.getType(), normalCellWithBorder));
             sheet.addCell(new Label(6, y, String.format("%.2f", report.getPrice()) + "€", normalCellWithBorder));
+            sheet.addCell(new Label(7, y, report.getInfo(), normalCellWithBorder));
 
             sum = sum.add(new BigDecimal(String.valueOf(report.getPrice())));
         }

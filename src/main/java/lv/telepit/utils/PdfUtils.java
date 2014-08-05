@@ -126,7 +126,7 @@ public class PdfUtils {
         document.add(headerOne);
         document.add(new Paragraph(" "));
 
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100);
         table.setSpacingBefore(0f);
         table.setSpacingAfter(0f);
@@ -155,6 +155,10 @@ public class PdfUtils {
         h6.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(h6);
 
+        PdfPCell h7 = new PdfPCell(new Phrase(bundle.getString("report.data.info"), boldFont));
+        h7.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h7);
+
         table.setHeaderRows(1);
 
         BigDecimal sum = new BigDecimal("0");
@@ -166,6 +170,7 @@ public class PdfUtils {
             table.addCell(new Phrase(report.getCode(), normalFont));
             table.addCell(new Phrase(report.getName(), normalFont));
             table.addCell(new Phrase(String.format("%.2f", report.getPrice()) + "€", normalFont));
+            table.addCell(new Phrase(report.getInfo(), normalFont));
 
             sum = sum.add(new BigDecimal(String.valueOf(report.getPrice())));
         }

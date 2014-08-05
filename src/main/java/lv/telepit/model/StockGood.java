@@ -12,7 +12,8 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "StockGood.findAll", query = "select sg from StockGood sg"),
-        @NamedQuery(name = "StockGood.findByLinkAndStore", query = "select sg from StockGood sg where sg.link = :link and sg.store = :store")
+        @NamedQuery(name = "StockGood.findByLinkAndStore", query = "select sg from StockGood sg where sg.link = :link and sg.store = :store"),
+        @NamedQuery(name = "StockGood.findByLink", query = "select sg from StockGood sg where sg.link = :link")
 })
 public class StockGood {
 

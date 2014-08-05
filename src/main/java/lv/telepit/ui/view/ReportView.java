@@ -101,7 +101,7 @@ public class ReportView extends AbstractView {
         table.setImmediate(true);
         table.setWidth("1200px");
         table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "user", "date", "type", "id", "name", "code", "price");
+        table.setVisibleColumns("store", "user", "date", "type", "id", "name", "code", "price", "info");
         table.setColumnHeaders(bundle.getString("report.data.store"),
                 bundle.getString("report.data.user"),
                 bundle.getString("report.data.date"),
@@ -109,7 +109,8 @@ public class ReportView extends AbstractView {
                 bundle.getString("report.data.id"),
                 bundle.getString("report.data.name"),
                 bundle.getString("report.data.code"),
-                bundle.getString("report.data.price"));
+                bundle.getString("report.data.price"),
+                bundle.getString("report.data.info"));
 
         table.setSelectable(true);
         table.setImmediate(true);
