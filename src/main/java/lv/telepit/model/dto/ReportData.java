@@ -2,6 +2,7 @@ package lv.telepit.model.dto;
 
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.SoldItem;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +39,7 @@ public class ReportData {
             r.name = si.getParent().getName();
             r.code = si.getCode();
             r.price = si.getPrice();
-            r.info = si.getInfo();
+            r.info = StringUtils.defaultIfBlank(si.getInfo(), "") + (si.isWithBill() ? " (Ar čeku)" : " (Bez čeka)");
             list.add(r);
         }
         return list;
