@@ -28,7 +28,8 @@ public class Store {
     private List<ServiceGood> serviceGoodList;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "store_seq")
+    @SequenceGenerator(name = "store_seq", sequenceName = "user_seq", initialValue = 20000, allocationSize = 1)
     public long getId() {
         return id;
     }

@@ -11,6 +11,11 @@ import java.util.ResourceBundle;
  */
 public class CustomMenuBar extends MenuBar {
 
+    private final MenuItem reportItem;
+    private final MenuItem changesItem;
+    private final MenuItem storeItem;
+    private final MenuItem userItem;
+    private final MenuItem categoryItem;
     private Navigator navigator;
     private final MenuItem adminItem;
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
@@ -21,11 +26,11 @@ public class CustomMenuBar extends MenuBar {
         this.addItem(bundle.getString("menu.stock"), new NavigateCommand("stock"));
         this.addItem(bundle.getString("menu.service"), new NavigateCommand("service"));
         adminItem = this.addItem(bundle.getString("menu.admin"), null, null);
-        adminItem.addItem(bundle.getString("menu.financial"), new NavigateCommand("report"));
-        adminItem.addItem(bundle.getString("menu.changes"), new NavigateCommand("changes"));
-        adminItem.addItem(bundle.getString("menu.store"), new NavigateCommand("store"));
-        adminItem.addItem(bundle.getString("menu.user"), new NavigateCommand("user"));
-        adminItem.addItem(bundle.getString("menu.categories"), new NavigateCommand("category"));
+        reportItem = adminItem.addItem(bundle.getString("menu.financial"), new NavigateCommand("report"));
+        changesItem = adminItem.addItem(bundle.getString("menu.changes"), new NavigateCommand("changes"));
+        storeItem = adminItem.addItem(bundle.getString("menu.store"), new NavigateCommand("store"));
+        userItem = adminItem.addItem(bundle.getString("menu.user"), new NavigateCommand("user"));
+        categoryItem = adminItem.addItem(bundle.getString("menu.categories"), new NavigateCommand("category"));
         nameLabel = addItem("", null, null);
         nameLabel.setStyleName("align-right");
         nameLabel.setEnabled(false);
@@ -34,7 +39,10 @@ public class CustomMenuBar extends MenuBar {
     public void checkAuthority(User user) {
         if (user == null) return;
         if (!user.isAdmin()) {
-            adminItem.setVisible(false);
+            changesItem.setVisible(false);
+            storeItem.setVisible(false);
+            userItem.setVisible(false);
+            categoryItem.setVisible(false);
         }
         nameLabel.setText("Sveiki, " + user.getName() + " (" + user.getStore().getName() + ")");
     }

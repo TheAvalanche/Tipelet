@@ -39,7 +39,8 @@ public class ServiceGood {
     private ChangeRecord change = new ChangeRecord("service.good");
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "servicegood_seq")
+    @SequenceGenerator(name = "servicegood_seq", sequenceName = "servicegood_seq", initialValue = 200000, allocationSize = 1)
     public long getId() {
         return id;
     }

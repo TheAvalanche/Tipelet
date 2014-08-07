@@ -38,7 +38,8 @@ public class StockGood {
     private ChangeRecord change = new ChangeRecord("stock.good");
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "stockgood_seq")
+    @SequenceGenerator(name = "stockgood_seq", sequenceName = "stockgood_seq", initialValue = 100000, allocationSize = 1)
     public long getId() {
         return id;
     }

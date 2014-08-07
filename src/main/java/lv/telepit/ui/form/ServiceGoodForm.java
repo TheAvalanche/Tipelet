@@ -90,14 +90,18 @@ public class ServiceGoodForm extends FormLayout {
 
         addComponent(categoryField);
         addComponent(nameField);
-        //addComponent(statusField);
+        if (view.getUi().getCurrentUser().isAdmin()) {
+            addComponent(statusField);
+        }
         addComponent(imeiField);
         addComponent(accumNumField);
         addComponent(problemField);
-        //addComponent(deliveredDateField);
-        //addComponent(startDateField);
-        //addComponent(finishDateField);
-        //addComponent(returnedDateField);
+        if (view.getUi().getCurrentUser().isAdmin()) {
+            addComponent(deliveredDateField);
+            addComponent(startDateField);
+            addComponent(finishDateField);
+            addComponent(returnedDateField);
+        }
         addComponent(price);
         addComponent(contactNameField);
         addComponent(contactPhoneField);

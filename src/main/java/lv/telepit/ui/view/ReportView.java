@@ -176,8 +176,8 @@ public class ReportView extends AbstractView {
 
         if (records == null) {
             records = new ArrayList<>();
-            records.addAll(ui.getServiceGoodService().findReports(new HashMap<ServiceGoodCriteria, Object>()));
-            records.addAll(ui.getStockService().findReports(new HashMap<SoldItemCriteria, Object>()));
+            records.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+            records.addAll(ui.getStockService().findReports(buildSoldItemMap()));
         }
 
         Collections.sort(records, Collections.reverseOrder(new ReportDataComparator()));
@@ -192,7 +192,10 @@ public class ReportView extends AbstractView {
 
     @Override
     public void checkAuthority() {
-
+        if (!ui.getCurrentUser().isAdmin()) {
+            storeField.setVisible(false);
+            userField.setVisible(false);
+        }
     }
 
     @Override
@@ -287,7 +290,7 @@ public class ReportView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent clickEvent) {
             userField.setValue(null);
-            storeField.setValue(null);
+            storeField.setValue(ui.getCurrentUser().getStore());
             fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);

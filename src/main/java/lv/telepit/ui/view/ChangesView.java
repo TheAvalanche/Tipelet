@@ -172,7 +172,7 @@ public class ChangesView extends AbstractView {
     public void refreshView(List<RecordData> records) {
 
         if (records == null) {
-            records = ui.getCommonService().findRecords(new HashMap<ChangeRecordCriteria, Object>());
+            records = ui.getCommonService().findRecords(buildMap());
         }
 
         Collections.sort(records, Collections.reverseOrder(new RecordDataComparator()));
@@ -264,7 +264,7 @@ public class ChangesView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent clickEvent) {
             userField.setValue(null);
-            storeField.setValue(null);
+            storeField.setValue(ui.getCurrentUser().getStore());
             fromDateField.setValue(DateUtils.addWeeks(new Date(), -1));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);

@@ -33,7 +33,8 @@ public class User {
     private List<ServiceGood> serviceGoodList;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", initialValue = 10000, allocationSize = 1)
     public long getId() {
         return id;
     }

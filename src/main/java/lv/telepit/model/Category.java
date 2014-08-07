@@ -35,7 +35,8 @@ public class Category {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "category_seq")
+    @SequenceGenerator(name = "category_seq", sequenceName = "category_seq", initialValue = 30000, allocationSize = 1)
     public long getId() {
         return id;
     }

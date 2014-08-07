@@ -20,7 +20,8 @@ public class SoldItem {
     private StockGood parent;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "solditem_seq")
+    @SequenceGenerator(name = "solditem_seq", sequenceName = "solditem_seq", initialValue = 500000, allocationSize = 1)
     public long getId() {
         return id;
     }

@@ -35,7 +35,8 @@ public class ChangeRecord {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "change_seq")
+    @SequenceGenerator(name = "change_seq", sequenceName = "change_seq", initialValue = 2000000, allocationSize = 1)
     public long getId() {
         return id;
     }
