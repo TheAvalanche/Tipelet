@@ -123,7 +123,7 @@ public class StockView extends AbstractView {
         table.setImmediate(true);
         table.setWidth("1000px");
         table.setContainerDataSource(container);
-        table.setVisibleColumns("id", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
+        table.setVisibleColumns("customId", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
         table.setColumnHeaders(bundle.getString("stock.good.id"),
                 bundle.getString("stock.good.store"),
                 bundle.getString("stock.good.category"),

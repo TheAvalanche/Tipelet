@@ -35,7 +35,7 @@ public class ReportData {
             r.store = si.getStore().getName();
             r.date = si.getSoldDate();
             r.type = bundle.getString("stock.type");
-            r.id = String.valueOf(si.getParent().getId());
+            r.id = String.valueOf(si.getParent().getCustomId());
             r.name = si.getParent().getName();
             r.code = si.getCode();
             r.price = si.getPrice();
@@ -53,7 +53,7 @@ public class ReportData {
             r.store = sg.getStore().getName();
             r.date = sg.getReturnedDate();
             r.type = bundle.getString("service.type");
-            r.id = String.valueOf(sg.getId());
+            r.id = String.valueOf(sg.getCustomId());
             r.name = sg.getName();
             r.code = sg.getImei();
             r.price = sg.getPrice();

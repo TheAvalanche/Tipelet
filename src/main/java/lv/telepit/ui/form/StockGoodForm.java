@@ -24,6 +24,9 @@ public class StockGoodForm extends FormLayout {
 
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
+    @PropertyId("customId")
+    private TextField customIdField = FieldFactory.getTextField("stock.customId");
+
     @PropertyId("category")
     private ComboBox categoryField = FieldFactory.getCategoryComboBox("stock.category");
 
@@ -65,6 +68,7 @@ public class StockGoodForm extends FormLayout {
         FieldGroup binder = new FieldGroup(stockGoodItem);
         binder.bindMemberFields(this);
 
+        addComponent(customIdField);
         addComponent(categoryField);
         addComponent(nameField);
         addComponent(modelField);

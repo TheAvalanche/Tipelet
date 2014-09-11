@@ -20,6 +20,9 @@ import java.util.ResourceBundle;
 public class ServiceGoodForm extends FormLayout {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
+    @PropertyId("customId")
+    private TextField customIdField = FieldFactory.getTextField("service.customId");
+
     @PropertyId("category")
     private ComboBox categoryField = FieldFactory.getCategoryComboBox("service.category");
 

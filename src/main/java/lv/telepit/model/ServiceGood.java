@@ -18,6 +18,7 @@ import java.util.Date;
 public class ServiceGood {
     private long id;
     private long version;
+    private String customId = "";
     private Store store;
     private User user;
     private ServiceStatus status;
@@ -56,6 +57,17 @@ public class ServiceGood {
 
     public void setVersion(long version) {
         this.version = version;
+    }
+
+    public String getCustomId() {
+        return customId;
+    }
+
+    public void setCustomId(String customId) {
+        change.addChange("customId",
+                this.customId != null ? this.customId : "-",
+                customId != null ? customId : "-");
+        this.customId = customId;
     }
 
     @ManyToOne(targetEntity = Store.class)

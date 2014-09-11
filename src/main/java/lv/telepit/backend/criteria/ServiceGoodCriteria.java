@@ -12,7 +12,7 @@ public enum ServiceGoodCriteria implements Criteria {
         switch (this) {
 
             case ID:
-                query.append("lower(cast(sg.id as text)) like :id ");
+                query.append("lower(cast(sg.customId as text)) like :customId ");
                 break;
             case NAME:
                 query.append("lower(sg.name) like :name ");
@@ -53,7 +53,7 @@ public enum ServiceGoodCriteria implements Criteria {
         switch (this) {
 
             case ID:
-                q.setParameter("id", value + "%");
+                q.setParameter("customId", value + "%");
                 break;
             case NAME:
                 q.setParameter("name", "%" + value + "%");

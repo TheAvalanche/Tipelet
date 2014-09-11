@@ -30,7 +30,7 @@ public class RecordData {
             r.store = record.getUser().getStore().getName();
             r.date = record.getDate();
             r.type = record.getServiceGood() != null ? bundle.getString("service.type") : bundle.getString("stock.type");
-            r.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getId() : record.getStockGood().getId());
+            r.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getCustomId() : record.getStockGood().getCustomId());
             r.name = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getName() : record.getStockGood().getName());
             r.propertyName = bundle.getString(p.getName());
             r.oldValue = p.getOldValue();

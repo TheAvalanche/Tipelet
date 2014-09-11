@@ -102,7 +102,7 @@ public class PdfUtils {
         builder.append(" ");
         builder.append(change.getStockGood() != null ? change.getStockGood().getName() : change.getServiceGood().getName());
         builder.append(" (ID=");
-        builder.append(change.getStockGood() != null ? change.getStockGood().getId() : change.getServiceGood().getId());
+        builder.append(change.getStockGood() != null ? change.getStockGood().getCustomId() : change.getServiceGood().getCustomId());
         builder.append(")");
         return builder.toString();
     }
