@@ -91,6 +91,7 @@ public class ServiceGoodForm extends FormLayout {
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
 
+        addComponent(customIdField);
         addComponent(categoryField);
         addComponent(nameField);
         if (view.getUi().getCurrentUser().isAdmin()) {

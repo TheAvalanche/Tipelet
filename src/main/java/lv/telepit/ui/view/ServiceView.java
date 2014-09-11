@@ -358,7 +358,7 @@ public class ServiceView extends AbstractView {
     private Map<ServiceGoodCriteria, Object> buildMap() {
         Map<ServiceGoodCriteria, Object> map = new HashMap<>();
         if (!Strings.isNullOrEmpty(idField.getValue())) {
-            map.put(ServiceGoodCriteria.ID, idField.getValue().trim().toLowerCase());
+            map.put(ServiceGoodCriteria.CUSTOM_ID, idField.getValue().trim().toLowerCase());
         }
         if (!Strings.isNullOrEmpty(nameField.getValue())) {
             map.put(ServiceGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());

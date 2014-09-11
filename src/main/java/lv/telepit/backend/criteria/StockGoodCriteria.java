@@ -7,12 +7,15 @@ import javax.persistence.Query;
  */
 public enum StockGoodCriteria implements Criteria {
 
-    ID, NAME, CATEGORY, USER, STORE;
+    ID, CUSTOM_ID, NAME, CATEGORY, USER, STORE;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
 
             case ID:
+                query.append("lower(cast(sg.id as text)) like :id ");
+                break;
+            case CUSTOM_ID:
                 query.append("lower(cast(sg.customId as text)) like :customId ");
                 break;
             case NAME:
@@ -36,6 +39,9 @@ public enum StockGoodCriteria implements Criteria {
         switch (this) {
 
             case ID:
+                q.setParameter("id", value + "%");
+                break;
+            case CUSTOM_ID:
                 q.setParameter("customId", value + "%");
                 break;
             case NAME:
