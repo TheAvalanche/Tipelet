@@ -10,25 +10,25 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import lv.telepit.backend.StockService;
+import lv.telepit.backend.criteria.StockGoodCriteria;
+import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
-/**
- * Created by Alex on 07/04/2014.
- */
-public class StockGoodForm extends FormLayout {
+public class OrderStockGoodForm extends FormLayout {
 
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     @PropertyId("category")
     private ComboBox categoryField = FieldFactory.getCategoryComboBox("stock.category");
-
-    @PropertyId("store")
-    private ComboBox storeField = FieldFactory.getStoreComboBox("stock.store");
 
     @PropertyId("name")
     private TextField nameField = FieldFactory.getTextField("stock.name");
@@ -39,13 +39,14 @@ public class StockGoodForm extends FormLayout {
     @PropertyId("compatibleModels")
     private TextField compatibleModelsField = FieldFactory.getTextField("stock.compatibleModels");
 
-    @PropertyId("price")
-    private TextField priceField = FieldFactory.getNumberField("stock.price");
-
     @PropertyId("count")
     private TextField countField = FieldFactory.getNumberField("stock.count");
 
-    public StockGoodForm(BeanItem<StockGood> stockGoodItem, AbstractView view) {
+    @PropertyId("advance")
+    private TextField advanceField = FieldFactory.getNumberField("stock.advance");
+
+
+    public OrderStockGoodForm(BeanItem<StockGood> stockGoodItem, AbstractView view) {
 
         /*Initial settings.*/
         StockGood good = stockGoodItem.getBean();
@@ -54,23 +55,23 @@ public class StockGoodForm extends FormLayout {
             good.setStore(view.getUi().getCurrentUser().getStore());
             good.setPrice(0.00);
             good.setLink(view.getUi().getStockService().generateUniqueLink());
-        }
-
-        if (view.getUi().getCurrentUser().isAdmin()) {
-            storeField.setRequired(true);
-            addComponent(storeField);
+            good.setOrdered(true);
+            good.setAdvance(0.00);
         }
 
         /*View creation.*/
         FieldGroup binder = new FieldGroup(stockGoodItem);
         binder.bindMemberFields(this);
 
+        advanceField.setRequired(true);
+
         addComponent(categoryField);
         addComponent(nameField);
         addComponent(modelField);
         addComponent(compatibleModelsField);
         addComponent(countField);
-        addComponent(priceField);
+        addComponent(advanceField);
+
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, stockGoodItem.getBean(), view));
@@ -97,6 +98,22 @@ public class StockGoodForm extends FormLayout {
             StockService service = view.getUi().getStockService();
             if (entity.getId() == 0) {
                 service.createGood(entity);
+
+                Map<StockGoodCriteria, Object> criteria = new HashMap<>();
+                criteria.put(StockGoodCriteria.ID, entity.getId());
+                entity = service.findGoods(criteria).get(0);
+
+                SoldItem soldItem = new SoldItem();
+                soldItem.setPrice(entity.getAdvance());
+                soldItem.setCode(null);
+                soldItem.setInfo("Avanss");
+                soldItem.setSoldDate(new Date());
+                soldItem.setStore(entity.getStore());
+                soldItem.setUser(entity.getUser());
+                soldItem.setWithBill(false);
+
+                service.sell(entity, Collections.singletonList(soldItem));
+
             } else {
                 service.updateGood(entity);
             }

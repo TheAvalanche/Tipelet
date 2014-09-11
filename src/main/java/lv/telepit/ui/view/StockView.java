@@ -10,13 +10,23 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.Category;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.form.OrderStockGoodForm;
 import lv.telepit.ui.form.StockGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.context.StockContext;
@@ -37,6 +47,7 @@ import java.util.Map;
 public class StockView extends AbstractView {
 
     private Button addGood;
+    private Button orderGood;
     private Button updateGood;
     private Button deleteGood;
     private Button xlsButton;
@@ -151,6 +162,11 @@ public class StockView extends AbstractView {
         addGood.setWidth("150");
         addGood.addClickListener(new EditStockGoodListener());
 
+        orderGood = new Button(bundle.getString("default.button.order"));
+        orderGood.setIcon(new ThemeResource("img/add.png"));
+        orderGood.setWidth("150");
+        orderGood.addClickListener(new EditStockGoodListener());
+
         updateGood = new Button(bundle.getString("default.button.update"));
         updateGood.setIcon(new ThemeResource("img/update.png"));
         updateGood.setWidth("150");
@@ -180,7 +196,7 @@ public class StockView extends AbstractView {
             }
         });
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood/*, deleteGood*/, xlsButton, refreshButton);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood/*, deleteGood*/, orderGood, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1000px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
@@ -219,9 +235,9 @@ public class StockView extends AbstractView {
         if (!ui.getCurrentUser().isAdmin()) {
             storeField.setVisible(false);
             userField.setVisible(false);
-            updateGood.setVisible(false);
             deleteGood.setVisible(false);
-            addGood.setCaption(bundle.getString("default.button.order"));
+        } else {
+            orderGood.setVisible(false);
         }
     }
 
@@ -268,6 +284,8 @@ public class StockView extends AbstractView {
         public void buttonClick(Button.ClickEvent clickEvent) {
             if (clickEvent.getButton() == addGood) {
                 openStockGoodForm(new BeanItem<>(new StockGood()));
+            } else if (clickEvent.getButton() == orderGood){
+                openOrderStockGoodForm(new BeanItem<>(new StockGood()));
             } else if (clickEvent.getButton() == updateGood && table.getValue() != null){
                 openStockGoodForm(container.getItem(table.getValue()));
             } else if (clickEvent.getButton() == deleteGood && table.getValue() != null) {
@@ -303,7 +321,14 @@ public class StockView extends AbstractView {
         }
 
         private void openStockGoodForm(BeanItem<StockGood> serviceGood) {
+            openForm(new StockGoodForm(serviceGood, StockView.this));
+        }
 
+        private void openOrderStockGoodForm(BeanItem<StockGood> serviceGood) {
+            openForm(new OrderStockGoodForm(serviceGood, StockView.this));
+        }
+
+        private void openForm(Component form) {
             subWindow = new Window();
             subWindow.setModal(true);
             subWindow.setHeight("650px");
@@ -315,7 +340,7 @@ public class StockView extends AbstractView {
             layout.setMargin(true);
             layout.setSpacing(true);
 
-            layout.addComponent(new StockGoodForm(serviceGood, StockView.this));
+            layout.addComponent(form);
 
             subWindow.setContent(layout);
         }
