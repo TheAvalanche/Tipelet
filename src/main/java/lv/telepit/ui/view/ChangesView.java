@@ -29,9 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Calendar;
 
-/**
- * Created by Alex on 12/05/2014.
- */
+
 public class ChangesView extends AbstractView {
 
     private ComboBox userField;

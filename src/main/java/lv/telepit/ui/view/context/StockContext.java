@@ -9,9 +9,6 @@ import lv.telepit.ui.view.context.actions.*;
 
 import java.util.*;
 
-/**
- * Created by Alex on 12/05/2014.
- */
 public class StockContext implements Action.Handler {
 
     private StockView view;

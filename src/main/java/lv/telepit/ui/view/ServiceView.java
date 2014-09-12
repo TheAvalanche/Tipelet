@@ -30,9 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.*;
 
-/**
- * Created by Alex on 21/02/14.
- */
 public class ServiceView extends AbstractView {
 
     private Button addGood;

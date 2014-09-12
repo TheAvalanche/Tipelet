@@ -6,13 +6,7 @@ import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.ui.component.LoginWindow;
 
-/**
- * StartView.
- *
- * @author Alex Kartishev <aleksandrs.kartisevs@point.lv>
- *         Date: 13.2.7
- *         Time: 13:29
- */
+
 public class StartView extends VerticalLayout implements View {
 
     /**Application.*/

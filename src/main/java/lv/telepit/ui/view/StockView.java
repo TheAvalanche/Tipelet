@@ -41,9 +41,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Alex on 21/02/14.
- */
 public class StockView extends AbstractView {
 
     private Button addGood;

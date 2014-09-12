@@ -14,9 +14,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
 
-/**
- * Created by Alex on 11/03/14.
- */
+
 public class CategoryView extends AbstractView {
 
     private TextField nameField;

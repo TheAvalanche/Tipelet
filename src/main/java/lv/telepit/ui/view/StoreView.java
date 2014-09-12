@@ -16,9 +16,6 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
 
-/**
- * Created by Alex on 26/02/14.
- */
 public class StoreView extends AbstractView {
 
     private Button addStore;

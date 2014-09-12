@@ -20,9 +20,6 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
 
-/**
- * Created by Alex on 21/02/14.
- */
 @SuppressWarnings("unchecked")
 public class UserView extends AbstractView {
 

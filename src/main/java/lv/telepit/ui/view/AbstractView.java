@@ -12,9 +12,6 @@ import lv.telepit.utils.AuthUtil;
 
 import java.util.ResourceBundle;
 
-/**
- * Created by Alex on 24/02/14.
- */
 public abstract class AbstractView extends VerticalLayout implements View {
 
     protected TelepitUI ui;
