@@ -51,6 +51,7 @@ public class StockView extends AbstractView {
 
     private TextField idField;
     private TextField nameField;
+    private TextField modelField;
     private ComboBox userField;
     private ComboBox storeField;
     private ComboBox categoryField;
@@ -77,6 +78,7 @@ public class StockView extends AbstractView {
 
         idField = FieldFactory.getTextField("search.stock.id");
         nameField = FieldFactory.getTextField("search.stock.name");
+        modelField = FieldFactory.getTextField("search.stock.model");
         userField = FieldFactory.getUserComboBox("search.user");
         storeField = FieldFactory.getStoreComboBox("search.store");
         categoryField = FieldFactory.getCategoryComboBox("search.category");
@@ -176,10 +178,12 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditStockGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(idField, userField, storeField, categoryField, nameField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(idField, userField, storeField, categoryField);
         searchLayout1.setSpacing(true);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, modelField);
+        searchLayout2.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1,
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
                 new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
@@ -348,6 +352,7 @@ public class StockView extends AbstractView {
         public void buttonClick(Button.ClickEvent clickEvent) {
             idField.setValue(null);
             nameField.setValue(null);
+            modelField.setValue(null);
             userField.setValue(null);
             storeField.setValue(ui.getCurrentUser().getStore());
             categoryField.setValue(null);
@@ -369,6 +374,9 @@ public class StockView extends AbstractView {
         }
         if (!Strings.isNullOrEmpty(nameField.getValue())) {
             map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(modelField.getValue())) {
+            map.put(StockGoodCriteria.MODEL, modelField.getValue().trim().toLowerCase());
         }
         if (userField.getValue() != null) {
             map.put(StockGoodCriteria.USER, userField.getValue());
