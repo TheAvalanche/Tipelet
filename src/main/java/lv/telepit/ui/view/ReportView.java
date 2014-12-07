@@ -288,7 +288,7 @@ public class ReportView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent clickEvent) {
             userField.setValue(null);
-            storeField.setValue(ui.getCurrentUser().getStore());
+            storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
             fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);

@@ -356,7 +356,7 @@ public class StockView extends AbstractView {
             nameField.setValue(null);
             modelField.setValue(null);
             userField.setValue(null);
-            storeField.setValue(ui.getCurrentUser().getStore());
+            storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
             categoryField.setValue(null);
         }
     }
