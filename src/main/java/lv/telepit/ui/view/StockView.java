@@ -236,6 +236,8 @@ public class StockView extends AbstractView {
         if (!ui.getCurrentUser().isAdmin()) {
             storeField.setVisible(false);
             userField.setVisible(false);
+            addGood.setVisible(false);
+            updateGood.setVisible(false);
             deleteGood.setVisible(false);
         } else {
             orderGood.setVisible(false);
