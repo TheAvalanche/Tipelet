@@ -240,7 +240,7 @@ public class ChangesView extends AbstractView {
         public void buttonClick(Button.ClickEvent clickEvent) {
             userField.setValue(null);
             storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
-            fromDateField.setValue(DateUtils.addWeeks(new Date(), -1));
+            fromDateField.setValue(DateUtils.truncate(new Date(), Calendar.DATE));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);
         }

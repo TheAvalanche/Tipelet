@@ -308,7 +308,7 @@ public class ServiceView extends AbstractView {
             storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
             statusField.setValue(null);
             categoryField.setValue(null);
-            deliveredField.setValue(DateUtils.addMonths(new Date(), -1));
+            deliveredField.setValue(DateUtils.truncate(new Date(), Calendar.DATE));
             returnedField.setValue(null);
         }
     }
