@@ -2,7 +2,9 @@ package lv.telepit.ui.view;
 
 import com.itextpdf.text.DocumentException;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
@@ -13,9 +15,12 @@ import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.ServiceGood;
 import lv.telepit.model.dto.RecordData;
 import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.RecordDataComparator;
+import lv.telepit.ui.actions.changes.ShowPropertiesListener;
+import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.form.fields.SimpleTypeComboBox;
@@ -81,36 +86,8 @@ public class ChangesView extends AbstractView {
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
         container = new BeanItemContainer<>(RecordData.class);
-        table = new Table() {
-            @Override
-            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
-                Object v = property.getValue();
-                if (v instanceof Date) {
-                    Date dateValue = (Date) v;
-                    return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(dateValue);
-                } else if (v instanceof Double) {
-                    Double doubleValue = (Double) v;
-                    return String.format("%.2f", doubleValue);
-                }
-                return super.formatPropertyValue(rowId, colId, property);
-            }
-        };
-        table.setImmediate(true);
-        table.setWidth("1200px");
-        table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "user", "date", "type", "name", "id", "propertyName", "oldValue", "newValue");
-        table.setColumnHeaders(bundle.getString("record.data.store"),
-                bundle.getString("record.data.user"),
-                bundle.getString("record.data.date"),
-                bundle.getString("record.data.type"),
-                bundle.getString("record.data.name"),
-                bundle.getString("record.data.id"),
-                bundle.getString("record.data.propertyName"),
-                bundle.getString("record.data.oldValue"),
-                bundle.getString("record.data.newValue"));
-
-        table.setSelectable(true);
-        table.setImmediate(true);
+        table = new CommonTable(container, "record.data", "store", "user", "date", "type", "name", "id", "propertyNames");
+        table.addItemClickListener(new ShowPropertiesListener(this));
 
         final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
         searchLayout1.setSpacing(true);

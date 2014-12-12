@@ -1,5 +1,8 @@
 package lv.telepit.model.dto;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
 import lv.telepit.model.ChangeRecord;
 
 import java.util.ArrayList;
@@ -18,26 +21,29 @@ public class RecordData {
     private String type;
     private String id;
     private String name;
-    private String propertyName;
-    private String oldValue;
-    private String newValue;
+    private String propertyNames;
+    private List<ChangeRecord.PropertyChange> propertyChanges = new ArrayList<>();
 
-    public static List<RecordData> construct(ChangeRecord record) {
-        List<RecordData> list = new ArrayList<>(record.getChangeList().size());
-        for (ChangeRecord.PropertyChange p : record.getChangeList()) {
-            RecordData r = new RecordData();
-            r.user = record.getUser().getName() + " " + record.getUser().getSurname();
-            r.store = record.getUser().getStore().getName();
-            r.date = record.getDate();
-            r.type = record.getServiceGood() != null ? bundle.getString("service.type") : bundle.getString("stock.type");
-            r.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getCustomId() : record.getStockGood().getCustomId());
-            r.name = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getName() : record.getStockGood().getName());
-            r.propertyName = bundle.getString(p.getName());
-            r.oldValue = p.getOldValue();
-            r.newValue = p.getNewValue();
-            list.add(r);
-        }
-        return list;
+    public RecordData(ChangeRecord record) {
+        this.user = record.getUser().getName() + " " + record.getUser().getSurname();
+        this.store = record.getUser().getStore().getName();
+        this.date = record.getDate();
+        this.type = record.getServiceGood() != null ? bundle.getString("service.type") : bundle.getString("stock.type");
+        this.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getCustomId() : record.getStockGood().getCustomId());
+        this.name = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getName() : record.getStockGood().getName());
+        this.propertyChanges.addAll(Collections2.transform(record.getChangeList(), new Function<ChangeRecord.PropertyChange, ChangeRecord.PropertyChange>() {
+            @Override
+            public ChangeRecord.PropertyChange apply(ChangeRecord.PropertyChange propertyChange) {
+                propertyChange.setName(bundle.getString(propertyChange.getName()));
+                return propertyChange;
+            }
+        }));
+        this.propertyNames = Joiner.on(",").join(Collections2.transform(this.propertyChanges, new Function<ChangeRecord.PropertyChange, String>() {
+            @Override
+            public String apply(ChangeRecord.PropertyChange propertyChange) {
+                return propertyChange.getName();
+            }
+        }));
     }
 
     public String getUser() {
@@ -64,15 +70,11 @@ public class RecordData {
         return name;
     }
 
-    public String getPropertyName() {
-        return propertyName;
+    public String getPropertyNames() {
+        return propertyNames;
     }
 
-    public String getOldValue() {
-        return oldValue;
-    }
-
-    public String getNewValue() {
-        return newValue;
+    public List<ChangeRecord.PropertyChange> getPropertyChanges() {
+        return propertyChanges;
     }
 }

@@ -16,6 +16,7 @@ import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.Category;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
@@ -99,42 +100,12 @@ public class ServiceView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(ServiceGood.class);
-        table = new Table() {
-            @Override
-            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
-                Object v = property.getValue();
-                if (v instanceof Date) {
-                    Date dateValue = (Date) v;
-                    return new SimpleDateFormat("dd.MM.yyyy").format(dateValue);
-                } else if (v instanceof Double) {
-                    Double doubleValue = (Double) v;
-                    return String.format("%.2f", doubleValue);
-                }
-                return super.formatPropertyValue(rowId, colId, property);
-            }
-        };
-        table.setImmediate(true);
-        table.setWidth("1200px");
-        table.setContainerDataSource(container);
-        table.setVisibleColumns("customId", "store", "category", "name", "status", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
-        table.setColumnHeaders(bundle.getString("service.good.id"),
-                bundle.getString("service.good.store"),
-                bundle.getString("service.good.category"),
-                bundle.getString("service.good.name"),
-                bundle.getString("service.good.status"),
-                bundle.getString("service.good.accumNum"),
-                bundle.getString("service.good.problem"),
-                bundle.getString("service.good.price"),
-                bundle.getString("service.good.deliveredDate"),
-                bundle.getString("service.good.returnedDate"),
-                bundle.getString("service.good.contactName"),
-                bundle.getString("service.good.contactPhone"));
+        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
                 ServiceGood sg = container.getItem(itemId).getBean();
                 switch (sg.getStatus()) {
-
                     case WAITING:
                         return "waiting";
                     case IN_REPAIR:
@@ -149,8 +120,6 @@ public class ServiceView extends AbstractView {
                 return "";
             }
         });
-        table.setSelectable(true);
-        table.setImmediate(true);
         table.addItemClickListener(new EditServiceGoodListener());
         table.addValueChangeListener(new EditServiceGoodListener());
         table.addActionHandler(new ServiceContext(this));

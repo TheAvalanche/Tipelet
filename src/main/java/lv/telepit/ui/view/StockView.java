@@ -25,6 +25,7 @@ import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.Category;
 import lv.telepit.model.StockGood;
+import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.OrderStockGoodForm;
 import lv.telepit.ui.form.StockGoodForm;
@@ -105,34 +106,7 @@ public class StockView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(StockGood.class);
-        table = new Table() {
-            @Override
-            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
-                Object v = property.getValue();
-                if (v instanceof Date) {
-                    Date dateValue = (Date) v;
-                    return new SimpleDateFormat("dd.MM.yyyy").format(dateValue);
-                } else if (v instanceof Double) {
-                    Double doubleValue = (Double) v;
-                    return String.format("%.2f", doubleValue);
-                }
-                return super.formatPropertyValue(rowId, colId, property);
-            }
-        };
-        table.setImmediate(true);
-        table.setWidth("1000px");
-        table.setContainerDataSource(container);
-        table.setVisibleColumns("customId", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
-        table.setColumnHeaders(bundle.getString("stock.good.id"),
-                bundle.getString("stock.good.store"),
-                bundle.getString("stock.good.category"),
-                bundle.getString("stock.good.name"),
-                bundle.getString("stock.good.model"),
-                bundle.getString("stock.good.compatibleModels"),
-                bundle.getString("stock.good.price"),
-                bundle.getString("stock.good.count"),
-                bundle.getString("stock.good.total"),
-                bundle.getString("stock.good.lastSoldDate"));
+        table = new CommonTable(container, "stock.good", "customId", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
@@ -149,8 +123,6 @@ public class StockView extends AbstractView {
                 return "";
             }
         });
-        table.setSelectable(true);
-        table.setImmediate(true);
         table.addItemClickListener(new EditStockGoodListener());
         table.addValueChangeListener(new EditStockGoodListener());
         table.addActionHandler(new StockContext(this));

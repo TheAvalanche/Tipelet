@@ -15,6 +15,7 @@ import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.backend.criteria.SoldItemCriteria;
 import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.utils.ReportDataComparator;
+import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.form.fields.SimpleTypeComboBox;
@@ -82,36 +83,7 @@ public class ReportView extends AbstractView {
         refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
         container = new BeanItemContainer<>(ReportData.class);
-        table = new Table() {
-            @Override
-            protected String formatPropertyValue(Object rowId, Object colId, Property property) {
-                Object v = property.getValue();
-                if (v instanceof Date) {
-                    Date dateValue = (Date) v;
-                    return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(dateValue);
-                } else if (v instanceof Double) {
-                    Double doubleValue = (Double) v;
-                    return String.format("%.2f", doubleValue);
-                }
-                return super.formatPropertyValue(rowId, colId, property);
-            }
-        };
-        table.setImmediate(true);
-        table.setWidth("1200px");
-        table.setContainerDataSource(container);
-        table.setVisibleColumns("store", "user", "date", "type", "id", "name", "code", "price", "info");
-        table.setColumnHeaders(bundle.getString("report.data.store"),
-                bundle.getString("report.data.user"),
-                bundle.getString("report.data.date"),
-                bundle.getString("report.data.type"),
-                bundle.getString("report.data.id"),
-                bundle.getString("report.data.name"),
-                bundle.getString("report.data.code"),
-                bundle.getString("report.data.price"),
-                bundle.getString("report.data.info"));
-
-        table.setSelectable(true);
-        table.setImmediate(true);
+        table = new CommonTable(container, "report.data", "store", "user", "date", "type", "id", "name", "code", "price", "info");
 
         final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
         searchLayout1.setSpacing(true);

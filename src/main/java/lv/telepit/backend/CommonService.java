@@ -115,7 +115,7 @@ public class CommonService {
         List<ChangeRecord> records = commonDao.findRecords(query);
         List<RecordData> list = new ArrayList<>(records.size());
         for (ChangeRecord cr : records) {
-            list.addAll(RecordData.construct(cr));
+            list.add(new RecordData(cr));
         }
         return list;
     }
