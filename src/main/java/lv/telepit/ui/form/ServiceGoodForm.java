@@ -47,6 +47,9 @@ public class ServiceGoodForm extends FormLayout {
     @PropertyId("price")
     private TextField price = FieldFactory.getNumberField("service.price");
 
+    @PropertyId("warranty")
+    private CheckBox warranty = FieldFactory.getCheckBox("service.warranty");
+
     @PropertyId("deliveredDate")
     private DateField deliveredDateField = FieldFactory.getDateField("service.deliveredDate");
 
@@ -107,6 +110,7 @@ public class ServiceGoodForm extends FormLayout {
             addComponent(returnedDateField);
         }
         addComponent(price);
+        addComponent(warranty);
         addComponent(contactNameField);
         addComponent(contactPhoneField);
         addComponent(contactMailField);

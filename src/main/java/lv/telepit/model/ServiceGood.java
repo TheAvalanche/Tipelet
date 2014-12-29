@@ -36,6 +36,7 @@ public class ServiceGood {
     private String contactPhone;
     private String contactMail;
     private String additionalDescription;
+    private boolean warranty = false;
 
     private ChangeRecord change = new ChangeRecord("service.good");
 
@@ -263,6 +264,17 @@ public class ServiceGood {
                 this.additionalDescription != null ? this.additionalDescription : "-",
                 additionalDescription != null ? additionalDescription : "-");
         this.additionalDescription = additionalDescription;
+    }
+
+    public boolean isWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(boolean warranty) {
+        change.addChange("warranty",
+                String.valueOf(this.warranty),
+                String.valueOf(warranty));
+        this.warranty = warranty;
     }
 
     @Transient

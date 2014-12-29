@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
@@ -16,6 +17,7 @@ import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.Category;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.ui.component.BooleanToTickConverter;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
@@ -100,7 +102,7 @@ public class ServiceView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(ServiceGood.class);
-        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "warranty", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
@@ -120,6 +122,7 @@ public class ServiceView extends AbstractView {
                 return "";
             }
         });
+        table.setConverter("warranty", new BooleanToTickConverter());
         table.addItemClickListener(new EditServiceGoodListener());
         table.addValueChangeListener(new EditServiceGoodListener());
         table.addActionHandler(new ServiceContext(this));
