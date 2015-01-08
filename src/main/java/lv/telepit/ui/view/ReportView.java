@@ -261,7 +261,7 @@ public class ReportView extends AbstractView {
         public void buttonClick(Button.ClickEvent clickEvent) {
             userField.setValue(null);
             storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
-            fromDateField.setValue(DateUtils.truncate(new Date(), Calendar.DATE));
+            fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);
         }
