@@ -46,8 +46,9 @@ public class StockService {
     }
 
     public void deleteGood(StockGood good) {
+        good.setDeleted(true);
         try {
-            stockDao.deleteGood(good);
+            stockDao.updateGood(good);
         } catch (OptimisticLockException e) {
             catchOptimisticLockException();
         }

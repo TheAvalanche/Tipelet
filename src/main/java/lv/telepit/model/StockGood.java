@@ -35,6 +35,7 @@ public class StockGood {
     private boolean attention = false;
     private String link;
     private List<SoldItem> soldItemList = new ArrayList<>();
+    private boolean deleted = false;
 
     private ChangeRecord change = new ChangeRecord("stock.good");
 
@@ -231,6 +232,17 @@ public class StockGood {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        change.addChange("deleted",
+                String.valueOf(this.deleted),
+                String.valueOf(deleted));
+        this.deleted = deleted;
     }
 
     @Transient

@@ -169,7 +169,7 @@ public class StockView extends AbstractView {
             }
         });
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood/*, deleteGood*/, orderGood, xlsButton, refreshButton);
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, orderGood, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1000px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);

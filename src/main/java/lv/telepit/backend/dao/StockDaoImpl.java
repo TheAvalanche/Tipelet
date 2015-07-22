@@ -92,16 +92,6 @@ public class StockDaoImpl implements StockDao {
     }
 
     @Override
-    public void deleteGood(StockGood good) {
-        EntityManager em = emf.createEntityManager();
-        good = em.find(StockGood.class, good.getId());
-        em.getTransaction().begin();
-        em.remove(good);
-        em.getTransaction().commit();
-        em.close();
-    }
-
-    @Override
     public List<StockGood> findGoods(Map<StockGoodCriteria, Object> criteriaMap) {
         EntityManager em = emf.createEntityManager();
         StringBuilder queryBuilder = new StringBuilder("select sg from StockGood sg where 1=1");
@@ -111,7 +101,7 @@ public class StockDaoImpl implements StockDao {
                 entry.getKey().setQuery(queryBuilder);
             }
         }
-        queryBuilder.append(" order by sg.id desc");
+        queryBuilder.append(" and sg.deleted <> true order by sg.id desc");
         final Query q = em.createQuery(queryBuilder.toString());
         if (criteriaMap != null) {
             for (Map.Entry<StockGoodCriteria, Object> entry : criteriaMap.entrySet()) {
