@@ -31,6 +31,10 @@ public class StockDaoImpl implements StockDao {
     @Override
     public void createGood(StockGood good) {
         EntityManager em = emf.createEntityManager();
+
+        long incrementId = generateIncrementId(em);
+        good.setIncrementId(incrementId);
+
         em.getTransaction().begin();
         em.persist(good);
 
@@ -44,6 +48,11 @@ public class StockDaoImpl implements StockDao {
 
         em.getTransaction().commit();
         em.close();
+    }
+
+    private long generateIncrementId(EntityManager em) {
+        Query query = em.createNativeQuery("SELECT nextval('stockgood_increment_id_seq')");
+        return (long) query.getResultList().get(0);
     }
 
     @Override
