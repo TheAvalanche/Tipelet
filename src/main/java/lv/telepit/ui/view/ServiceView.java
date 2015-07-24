@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
@@ -122,6 +121,7 @@ public class ServiceView extends AbstractView {
                 return "";
             }
         });
+        ((CommonTable) table).setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
         table.setConverter("warranty", new BooleanToTickConverter());
         table.addItemClickListener(new EditServiceGoodListener());
         table.addValueChangeListener(new EditServiceGoodListener());

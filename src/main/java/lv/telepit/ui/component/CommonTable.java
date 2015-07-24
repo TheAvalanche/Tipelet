@@ -1,13 +1,10 @@
 package lv.telepit.ui.component;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.vaadin.data.Container;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
-import lv.telepit.ui.actions.changes.ShowPropertiesListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -46,5 +43,13 @@ public class CommonTable extends Table {
             return String.format("%.2f", doubleValue);
         }
         return super.formatPropertyValue(rowId, colId, property);
+    }
+
+    public void setColumnWidths(float... expandRatios) {
+        int i = 0;
+        for (Object o : this.getVisibleColumns()) {
+            this.setColumnExpandRatio(o, expandRatios[i]);
+            i++;
+        }
     }
 }
