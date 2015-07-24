@@ -19,7 +19,6 @@ public class StockGood {
 
     private long id;
     private long version;
-    private String customId = "";
     private long incrementId;
     private boolean bestseller = false;
     private boolean ordered = false;
@@ -49,17 +48,6 @@ public class StockGood {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getCustomId() {
-        return customId;
-    }
-
-    public void setCustomId(String customId) {
-        change.addChange("customId",
-                this.customId != null ? this.customId : "-",
-                customId != null ? customId : "-");
-        this.customId = customId;
     }
 
     public long getIncrementId() {

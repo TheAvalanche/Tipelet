@@ -106,7 +106,7 @@ public class StockView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(StockGood.class);
-        table = new CommonTable(container, "stock.good", "customId", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
+        table = new CommonTable(container, "stock.good", "incrementId", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
@@ -344,7 +344,7 @@ public class StockView extends AbstractView {
     private Map<StockGoodCriteria, Object> buildMap() {
         Map<StockGoodCriteria, Object> map = new HashMap<>();
         if (!Strings.isNullOrEmpty(idField.getValue())) {
-            map.put(StockGoodCriteria.CUSTOM_ID, idField.getValue().trim().toLowerCase());
+            map.put(StockGoodCriteria.INCREMENT_ID, idField.getValue().trim().toLowerCase());
         }
         if (!Strings.isNullOrEmpty(nameField.getValue())) {
             map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());

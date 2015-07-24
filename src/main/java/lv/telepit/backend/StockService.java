@@ -74,12 +74,12 @@ public class StockService {
         }
         dest.setCount(dest.getCount() + count);
         dest.getChange().addChange("move",
-                "No: " + source.getStore() + " (" + source.getCustomId() + ")",
+                "No: " + source.getStore() + " (" + source.getIncrementId() + ")",
                 "Daudzums: " + count);
         stockDao.updateGood(dest);
         source.setCount(source.getCount() - count);
         source.getChange().addChange("move",
-                "Uz: " + dest.getStore() + " (" + dest.getCustomId() + ")",
+                "Uz: " + dest.getStore() + " (" + dest.getIncrementId() + ")",
                 "Daudzums: " + count);
         stockDao.updateGood(source);
     }

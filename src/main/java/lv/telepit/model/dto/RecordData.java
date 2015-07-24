@@ -29,7 +29,7 @@ public class RecordData {
         this.store = record.getUser().getStore().getName();
         this.date = record.getDate();
         this.type = record.getServiceGood() != null ? bundle.getString("service.type") : bundle.getString("stock.type");
-        this.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getCustomId() : record.getStockGood().getCustomId());
+        this.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getCustomId() : record.getStockGood().getIncrementId());
         this.name = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getName() : record.getStockGood().getName());
         this.propertyChanges.addAll(Collections2.transform(record.getChangeList(), new Function<ChangeRecord.PropertyChange, ChangeRecord.PropertyChange>() {
             @Override

@@ -35,7 +35,7 @@ public class ReportData {
             r.store = si.getStore().getName();
             r.date = si.getSoldDate();
             r.type = bundle.getString("stock.type");
-            r.id = String.valueOf(si.getParent().getCustomId());
+            r.id = String.valueOf(si.getParent().getIncrementId());
             r.name = si.getParent().getName();
             r.code = si.getCode();
             r.price = si.getPrice();

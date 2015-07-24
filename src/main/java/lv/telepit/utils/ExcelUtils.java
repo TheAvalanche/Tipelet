@@ -98,7 +98,7 @@ public class ExcelUtils {
         builder.append(" ");
         builder.append(change.getStockGood() != null ? change.getStockGood().getName() : change.getServiceGood().getName());
         builder.append(" (ID=");
-        builder.append(change.getStockGood() != null ? change.getStockGood().getCustomId() : change.getServiceGood().getCustomId());
+        builder.append(change.getStockGood() != null ? change.getStockGood().getIncrementId() : change.getServiceGood().getCustomId());
         builder.append(")");
         return builder.toString();
     }
@@ -293,7 +293,7 @@ public class ExcelUtils {
         y++;
 
         for (StockGood sg : stockGoods) {
-            sheet.addCell(new Label(0, y, getValue(sg.getCustomId()), normalCellWithBorder));
+            sheet.addCell(new Label(0, y, getValue(sg.getIncrementId()), normalCellWithBorder));
             sheet.addCell(new Label(1, y, getValue(sg.getStore().getName()), normalCellWithBorder));
             sheet.addCell(new Label(2, y, getValue(sg.getCategory()), normalCellWithBorder));
             sheet.addCell(new Label(3, y, getValue(sg.getName()), normalCellWithBorder));
