@@ -52,7 +52,7 @@ public class ServiceView extends AbstractView {
     private Button searchButton;
     private Button refreshButton;
     private Button resetButton;
-    private Table table;
+    private CommonTable table;
     private BeanItemContainer<ServiceGood> container;
     private Label label;
     private Window subWindow;
@@ -102,6 +102,7 @@ public class ServiceView extends AbstractView {
 
         container = new BeanItemContainer<>(ServiceGood.class);
         table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "warranty", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table.setAlwaysRecalculateColumnWidths(true);
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
@@ -121,7 +122,7 @@ public class ServiceView extends AbstractView {
                 return "";
             }
         });
-        ((CommonTable) table).setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
+
         table.setConverter("warranty", new BooleanToTickConverter());
         table.addItemClickListener(new EditServiceGoodListener());
         table.addValueChangeListener(new EditServiceGoodListener());
@@ -192,8 +193,8 @@ public class ServiceView extends AbstractView {
         container.removeAllItems();
         container.addAll(serviceGoods);
         container.sort(new Object[]{"id"}, new boolean[]{false});
+        table.setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
         table.refreshRowCache();
-
     }
 
     @Override

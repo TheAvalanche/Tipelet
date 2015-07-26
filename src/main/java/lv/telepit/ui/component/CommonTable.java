@@ -52,4 +52,8 @@ public class CommonTable extends Table {
             i++;
         }
     }
+
+    public void setAlwaysRecalculateColumnWidths(boolean value) {
+        this.alwaysRecalculateColumnWidths = value;
+    }
 }
