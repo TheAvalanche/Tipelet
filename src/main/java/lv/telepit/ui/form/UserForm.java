@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
+import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -41,6 +42,9 @@ public class UserForm extends FormLayout {
     @PropertyId("admin")
     private CheckBox adminField = FieldFactory.getCheckBox("user.admin");
 
+    @PropertyId("accessToAddInStock")
+    private CheckBox accessToAddInStock = FieldFactory.getCheckBox("user.accessToAddInStock");
+
 
     public UserForm(BeanItem<User> userItem, AbstractView view) {
 
@@ -54,6 +58,10 @@ public class UserForm extends FormLayout {
         addComponent(phoneField);
         addComponent(adminField);
         addComponent(storeField);
+        addComponent(new Hr());
+        addComponent(new Label(bundle.getString("user.form.access.label")));
+        addComponent(accessToAddInStock);
+        addComponent(new Hr());
 
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));

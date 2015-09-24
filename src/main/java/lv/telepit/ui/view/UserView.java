@@ -197,7 +197,7 @@ public class UserView extends AbstractView {
 
             subWindow = new Window();
             subWindow.setModal(true);
-            subWindow.setHeight("400px");
+            subWindow.setHeight("500px");
             subWindow.setWidth("450px");
             subWindow.setClosable(true);
             ui.addWindow(subWindow);

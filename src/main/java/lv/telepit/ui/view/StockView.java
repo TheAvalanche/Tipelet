@@ -25,6 +25,7 @@ import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.Category;
 import lv.telepit.model.StockGood;
+import lv.telepit.model.User;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.OrderStockGoodForm;
@@ -171,7 +172,7 @@ public class StockView extends AbstractView {
 
         final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, orderGood, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
-        buttonLayout.setWidth("1000px");
+        buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
@@ -205,15 +206,13 @@ public class StockView extends AbstractView {
 
     @Override
     public void checkAuthority() {
-        if (!ui.getCurrentUser().isAdmin()) {
-            storeField.setVisible(false);
-            userField.setVisible(false);
-            addGood.setVisible(false);
-            updateGood.setVisible(false);
-            deleteGood.setVisible(false);
-        } else {
-            orderGood.setVisible(false);
-        }
+        User currentUser = ui.getCurrentUser();
+        storeField.setVisible(currentUser.isAdmin());
+        userField.setVisible(currentUser.isAdmin());
+        addGood.setVisible(currentUser.isAdmin() || currentUser.isAccessToAddInStock());
+        updateGood.setVisible(currentUser.isAdmin() || currentUser.isAccessToAddInStock());
+        deleteGood.setVisible(currentUser.isAdmin());
+        orderGood.setVisible(!currentUser.isAdmin() && !currentUser.isAccessToAddInStock());
     }
 
     @Override

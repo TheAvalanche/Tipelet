@@ -30,6 +30,7 @@ public class User {
     private Store store;
     private boolean deleted = false;
     private boolean admin = false;
+    private boolean accessToAddInStock = false;
     private List<ServiceGood> serviceGoodList;
 
     @Id
@@ -115,6 +116,14 @@ public class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public boolean isAccessToAddInStock() {
+        return accessToAddInStock;
+    }
+
+    public void setAccessToAddInStock(boolean accessToAddInStock) {
+        this.accessToAddInStock = accessToAddInStock;
     }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
