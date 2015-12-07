@@ -51,6 +51,7 @@ public class TelepitUI extends UI {
         CategoryView categoryView = new CategoryView(navigator, this, "category");
         ReportView reportView = new ReportView(navigator, this, "report");
         ChangesView changesView = new ChangesView(navigator, this, "changes");
+        BusinessReceiptView businessReceiptView = new BusinessReceiptView(navigator, this, "businessReceipt");
 
         navigator.addView("", startView);
         navigator.addView("stock", stockView);
@@ -60,6 +61,7 @@ public class TelepitUI extends UI {
         navigator.addView("category", categoryView);
         navigator.addView("report", reportView);
         navigator.addView("changes", changesView);
+        navigator.addView("businessReceipt", businessReceiptView);
 
 
     }
