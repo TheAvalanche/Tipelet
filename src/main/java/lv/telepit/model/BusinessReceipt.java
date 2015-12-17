@@ -1,6 +1,7 @@
 package lv.telepit.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +23,11 @@ public class BusinessReceipt {
     private String receiverAddress;
     private String receiverBankName;
     private Date payTillDate;
-    private List<ReceiptItem> receiptItems;
+    private List<ReceiptItem> receiptItems = new ArrayList<>();
 
+    @Id
+    @GeneratedValue(generator = "businessreceipt_seq")
+    @SequenceGenerator(name = "businessreceipt_seq", sequenceName = "businessreceipt_seq", initialValue = 1, allocationSize = 1)
     public long getId() {
         return id;
     }
@@ -32,6 +36,7 @@ public class BusinessReceipt {
         this.id = id;
     }
 
+    @ManyToOne(targetEntity = User.class)
     public User getUser() {
         return user;
     }
@@ -40,6 +45,7 @@ public class BusinessReceipt {
         this.user = user;
     }
 
+    @ManyToOne(targetEntity = Store.class)
     public Store getStore() {
         return store;
     }
@@ -48,6 +54,7 @@ public class BusinessReceipt {
         this.store = store;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getDate() {
         return date;
     }
@@ -136,6 +143,7 @@ public class BusinessReceipt {
         this.receiverBankName = receiverBankName;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getPayTillDate() {
         return payTillDate;
     }
@@ -144,6 +152,7 @@ public class BusinessReceipt {
         this.payTillDate = payTillDate;
     }
 
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     public List<ReceiptItem> getReceiptItems() {
         return receiptItems;
     }

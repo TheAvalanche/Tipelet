@@ -8,6 +8,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
+import lv.telepit.backend.BusinessReceiptService;
 import lv.telepit.model.BusinessReceipt;
 import lv.telepit.model.ReceiptItem;
 import lv.telepit.ui.actions.SaveOnClick;
@@ -18,7 +19,7 @@ import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -64,11 +65,11 @@ public class BusinessReceiptForm extends FormLayout {
 
     public BusinessReceiptForm(BeanItem<BusinessReceipt> businessReceiptItem, AbstractView view) {
 
-        /*Initial settings.*/
         BusinessReceipt good = businessReceiptItem.getBean();
         if (good.getId() == 0) {
             good.setUser(view.getUi().getCurrentUser());
             good.setStore(view.getUi().getCurrentUser().getStore());
+            good.setDate(new Date());
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {
@@ -76,7 +77,6 @@ public class BusinessReceiptForm extends FormLayout {
             addComponent(storeField);
         }
 
-        /*View creation.*/
         FieldGroup binder = new FieldGroup(businessReceiptItem);
         binder.bindMemberFields(this);
 
@@ -86,6 +86,7 @@ public class BusinessReceiptForm extends FormLayout {
         addComponent(new Hr());
         addComponent(new HorizontalLayout(receiverNameField, receiverRegNumField));
         addComponent(new HorizontalLayout(receiverAddressField, receiverBankNameField));
+        addComponent(new HorizontalLayout(payTillDateField));
         addComponent(new Hr());
 
         final VerticalLayout subLayout = new VerticalLayout();
@@ -94,15 +95,30 @@ public class BusinessReceiptForm extends FormLayout {
 
         final Label total = new Label("", ContentMode.HTML);
 
-        final List<ReceiptItem> receiptItems = new ArrayList<>();
+        final List<ReceiptItem> receiptItems = good.getReceiptItems();
         final PriceListener priceListener = new PriceListener(total, receiptItems);
-        addReceiptItem(receiptItems, subLayout, priceListener);
+
+        if (good.getReceiptItems().isEmpty()) {
+            ReceiptItem item = new ReceiptItem();
+            item.setPrice(0.0);
+            item.setCount(1);
+            receiptItems.add(item);
+            addReceiptItem(receiptItems, item, subLayout, priceListener);
+        } else {
+            for (ReceiptItem receiptItem : good.getReceiptItems()) {
+                addReceiptItem(good.getReceiptItems(), receiptItem, subLayout, priceListener);
+            }
+        }
 
         Button addButton = new Button(bundle.getString("default.button.add"));
         addButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                addReceiptItem(receiptItems, subLayout, priceListener);
+                ReceiptItem item = new ReceiptItem();
+                item.setPrice(0.0);
+                item.setCount(1);
+                receiptItems.add(item);
+                addReceiptItem(receiptItems, item, subLayout, priceListener);
             }
         });
 
@@ -124,12 +140,18 @@ public class BusinessReceiptForm extends FormLayout {
 
     }
 
-    private void addReceiptItem(final List<ReceiptItem> receiptItems, final Layout layout, final PriceListener priceListener) {
-        final ReceiptItem item = new ReceiptItem();
-        item.setPrice(0.0);
-        item.setCount(1);
-        receiptItems.add(item);
+    private void addReceiptItem(final List<ReceiptItem> receiptItems, final ReceiptItem item, final Layout layout, final PriceListener priceListener) {
+
+        final TextField totalPriceField = new TextField("Summa");
+        totalPriceField.setImmediate(true);
+        totalPriceField.setRequired(true);
+        totalPriceField.setReadOnly(true);
+        totalPriceField.setWidth(100f, Sizeable.Unit.PIXELS);
+
+        final LocalPriceListener localPriceListener = new LocalPriceListener(totalPriceField, item);
+
         priceListener.update();
+        localPriceListener.update();
 
         BeanItem<ReceiptItem> beanItem = new BeanItem<>(item);
 
@@ -154,6 +176,7 @@ public class BusinessReceiptForm extends FormLayout {
                     priceField.setValue(String.valueOf(0.0));
                 }
                 priceListener.update();
+                localPriceListener.update();
             }
         });
 
@@ -173,6 +196,7 @@ public class BusinessReceiptForm extends FormLayout {
                     countField.setValue(String.valueOf(1));
                 }
                 priceListener.update();
+                localPriceListener.update();
             }
         });
 
@@ -182,7 +206,7 @@ public class BusinessReceiptForm extends FormLayout {
             deleteButton.setEnabled(false);
         }
 
-        final HorizontalLayout subLayout = new HorizontalLayout(nameField, priceField, countField, deleteButton);
+        final HorizontalLayout subLayout = new HorizontalLayout(nameField, priceField, countField, totalPriceField, deleteButton);
         subLayout.setWidth("100%");
         subLayout.setSpacing(true);
         subLayout.setComponentAlignment(priceField, Alignment.BOTTOM_RIGHT);
@@ -210,12 +234,12 @@ public class BusinessReceiptForm extends FormLayout {
 
         @Override
         public void businessMethod() {
-/*            StockService service = view.getUi().getStockService();
+            BusinessReceiptService service = view.getUi().getBusinessReceiptService();
             if (entity.getId() == 0) {
-                service.createGood(entity);
+                service.createBusinessReceipt(entity);
             } else {
-                service.updateGood(entity);
-            }*/
+                service.updateBusinessReceipt(entity);
+            }
         }
     }
 
@@ -234,6 +258,22 @@ public class BusinessReceiptForm extends FormLayout {
                 total = total.add(receiptItem.getTotalPrice());
             }
             label.setValue("Kopā: " + total + "€");
+        }
+    }
+
+    private class LocalPriceListener {
+        TextField field;
+        ReceiptItem item;
+
+        private LocalPriceListener(TextField field, ReceiptItem item) {
+            this.field = field;
+            this.item = item;
+        }
+
+        private void update() {
+            field.setReadOnly(false);
+            field.setValue(item.getTotalPrice().toString());
+            field.setReadOnly(true);
         }
     }
 }

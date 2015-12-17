@@ -6,6 +6,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
+import lv.telepit.backend.BusinessReceiptService;
 import lv.telepit.backend.CommonService;
 import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.backend.StockService;
@@ -23,6 +24,7 @@ public class TelepitUI extends UI {
     private CommonService commonService;
     private ServiceGoodService serviceGoodService;
     private StockService stockService;
+    private BusinessReceiptService businessReceiptService;
 
     private User currentUser;
 
@@ -40,6 +42,7 @@ public class TelepitUI extends UI {
         commonService = new CommonService();
         serviceGoodService = new ServiceGoodService();
         stockService = new StockService();
+        businessReceiptService = new BusinessReceiptService();
 
         Navigator navigator = new Navigator(this, this);
 
@@ -76,6 +79,10 @@ public class TelepitUI extends UI {
 
     public StockService getStockService() {
         return stockService;
+    }
+
+    public BusinessReceiptService getBusinessReceiptService() {
+        return businessReceiptService;
     }
 
     public User getCurrentUser() {

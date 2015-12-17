@@ -1,6 +1,6 @@
 package lv.telepit.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,6 +12,9 @@ public class ReceiptItem {
     private Double price;
     private BusinessReceipt parent;
 
+    @Id
+    @GeneratedValue(generator = "receiptitem_seq")
+    @SequenceGenerator(name = "receiptitem_seq", sequenceName = "receiptitem_seq", initialValue = 1, allocationSize = 1)
     public long getId() {
         return id;
     }
@@ -44,6 +47,7 @@ public class ReceiptItem {
         this.price = price;
     }
 
+    @ManyToOne(targetEntity = BusinessReceipt.class)
     public BusinessReceipt getParent() {
         return parent;
     }
@@ -52,6 +56,7 @@ public class ReceiptItem {
         this.parent = parent;
     }
 
+    @Transient
     public BigDecimal getTotalPrice() {
         return new BigDecimal(price).multiply(new BigDecimal(count));
     }

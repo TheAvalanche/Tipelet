@@ -21,6 +21,7 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BusinessReceiptView extends AbstractView {
@@ -134,12 +135,26 @@ public class BusinessReceiptView extends AbstractView {
 
     @Override
     public void refreshView() {
+        refreshView(null);
+    }
 
+    public void refreshView(List<BusinessReceipt> businessReceipts) {
+
+        ui.removeWindow(subWindow);
+        updateBusinessReceipt.setEnabled(false);
+
+        if (businessReceipts == null) {
+            businessReceipts = ui.getBusinessReceiptService().findBusinessReceipt(buildMap());
+        }
+        container.removeAllItems();
+        container.addAll(businessReceipts);
+        container.sort(new Object[]{"id"}, new boolean[]{false});
+        table.refreshRowCache();
     }
 
     @Override
     public void reset() {
-
+        resetListener.buttonClick(null);
     }
 
     @Override
@@ -212,8 +227,8 @@ public class BusinessReceiptView extends AbstractView {
     private class SearchListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            //List<ServiceGood> list = ui.getServiceGoodService().findGoods(buildMap());
-            //refreshView(list);
+            List<BusinessReceipt> list = ui.getBusinessReceiptService().findBusinessReceipt(buildMap());
+            refreshView(list);
         }
     }
 
