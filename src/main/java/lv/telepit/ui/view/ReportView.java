@@ -205,10 +205,7 @@ public class ReportView extends AbstractView {
             @Override
             public InputStream getStream() {
                 try {
-                    ExcelUtils excelUtils = new ExcelUtils();
-                    excelUtils.exportReports(getReportData());
-                    excelUtils.close();
-                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                    return new ByteArrayInputStream(ExcelUtils.exportFinancialReport(getReportData()).toByteArray());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -17,8 +17,10 @@ import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.dto.RecordData;
+import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.RecordDataComparator;
+import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.actions.changes.ShowPropertiesListener;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
@@ -147,10 +149,8 @@ public class ChangesView extends AbstractView {
     public void refreshView(List<RecordData> records) {
 
         if (records == null) {
-            records = ui.getCommonService().findRecords(buildMap());
+            records = getRecordData();
         }
-
-        Collections.sort(records, Collections.reverseOrder(new RecordDataComparator()));
 
         container.removeAllItems();
         container.addAll(records);
@@ -196,13 +196,7 @@ public class ChangesView extends AbstractView {
             @Override
             public InputStream getStream() {
                 try {
-                    ExcelUtils excelUtils = new ExcelUtils();
-                    List<ChangeRecord> changeRecords = new ArrayList<>();
-                    changeRecords.addAll(ui.getCommonService().findChangeRecords(buildMap()));
-                    Collections.sort(changeRecords, Collections.reverseOrder(new ChangesComparator()));
-                    excelUtils.exportChanges(changeRecords);
-                    excelUtils.close();
-                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                    return new ByteArrayInputStream(ExcelUtils.exportChangesReport(getRecordData()).toByteArray());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -220,6 +214,13 @@ public class ChangesView extends AbstractView {
         return builder.toString();
     }
 
+    private List<RecordData> getRecordData() {
+        List<RecordData> records = ui.getCommonService().findRecords(buildMap());
+
+        Collections.sort(records, Collections.reverseOrder(new RecordDataComparator()));
+        return records;
+    }
+
     private class RefreshListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
@@ -230,8 +231,7 @@ public class ChangesView extends AbstractView {
     private class SearchListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            List<RecordData> list = ui.getCommonService().findRecords(buildMap());
-            refreshView(list);
+            refreshView(getRecordData());
         }
     }
 

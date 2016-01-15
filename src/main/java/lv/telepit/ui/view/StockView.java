@@ -225,10 +225,9 @@ public class StockView extends AbstractView {
             @Override
             public InputStream getStream() {
                 try {
-                    ExcelUtils excelUtils = new ExcelUtils();
-                    excelUtils.stockGoodsToExcel(ui.getStockService().findGoods(buildMap()));
-                    excelUtils.close();
-                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                    return new ByteArrayInputStream(ExcelUtils.exportStockGoods(
+                            ui.getStockService().findGoods(buildMap()))
+                            .toByteArray());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -240,7 +239,7 @@ public class StockView extends AbstractView {
 
     private String createReportName(String extension) {
         StringBuilder builder = new StringBuilder();
-        builder.append("service");
+        builder.append("stock");
         builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
         builder.append("." + extension);
         return builder.toString();

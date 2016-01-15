@@ -28,6 +28,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.*;
@@ -216,10 +217,9 @@ public class ServiceView extends AbstractView {
             @Override
             public InputStream getStream() {
                 try {
-                    ExcelUtils excelUtils = new ExcelUtils();
-                    excelUtils.serviceGoodsToExcel(ui.getServiceGoodService().findGoods(buildMap()));
-                    excelUtils.close();
-                    return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+                    return new ByteArrayInputStream(ExcelUtils.exportServiceGoods(
+                            ui.getServiceGoodService().findGoods(buildMap()))
+                            .toByteArray());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
