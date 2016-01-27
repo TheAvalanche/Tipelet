@@ -1,6 +1,5 @@
 package lv.telepit.utils;
 
-import lv.telepit.model.BusinessReceipt;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.StockGood;
 import lv.telepit.model.dto.RecordData;
@@ -12,17 +11,6 @@ import java.io.*;
 import java.util.List;
 
 public class ExcelUtils {
-
-    public static ByteArrayOutputStream exportBusinessReceipt(BusinessReceipt businessReceipt) throws IOException {
-        try(InputStream is = ExcelUtils.class.getResourceAsStream("/business_receipt_temp.xls")) {
-            try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-                Context context = new Context();
-                context.putVar("br", businessReceipt);
-                JxlsHelper.getInstance().processTemplate(is, os, context);
-                return os;
-            }
-        }
-    }
 
     public static ByteArrayOutputStream exportServiceGoods(List<ServiceGood> serviceGoods) throws IOException {
         try(InputStream is = ExcelUtils.class.getResourceAsStream("/service_report_temp.xls")) {

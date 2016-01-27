@@ -165,14 +165,18 @@ public class ServiceView extends AbstractView {
             }
         });
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood/*, deleteGood*/, xlsButton, refreshButton);
+        final HorizontalLayout headerLayout = new HorizontalLayout(label, expandButton);
+        headerLayout.setSpacing(true);
+        headerLayout.setWidth("1200px");
+        headerLayout.setComponentAlignment(expandButton, Alignment.BOTTOM_RIGHT);
+
+        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
-        content.addComponent(label);
-        content.addComponent(expandButton);
+        content.addComponent(headerLayout);
         content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);

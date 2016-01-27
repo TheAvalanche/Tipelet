@@ -37,6 +37,7 @@ public class ServiceGood {
     private String contactMail;
     private String additionalDescription;
     private boolean warranty = false;
+    private boolean deleted = false;
 
     private ChangeRecord change = new ChangeRecord("service.good");
 
@@ -275,6 +276,17 @@ public class ServiceGood {
                 String.valueOf(this.warranty),
                 String.valueOf(warranty));
         this.warranty = warranty;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        change.addChange("deleted",
+                String.valueOf(this.deleted),
+                String.valueOf(deleted));
+        this.deleted = deleted;
     }
 
     @Transient

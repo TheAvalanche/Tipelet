@@ -15,8 +15,6 @@ public interface ServiceDao {
 
     void updateGood(ServiceGood good);
 
-    void deleteGood(ServiceGood good);
-
     List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> criteriaMap);
 
     List<ChangeRecord> findChanges(ServiceGood serviceGood);

@@ -7,7 +7,7 @@ import javax.persistence.Query;
  */
 public enum StockGoodCriteria implements Criteria {
 
-    ID, INCREMENT_ID, NAME, MODEL, CATEGORY, USER, STORE;
+    ID, INCREMENT_ID, NAME, MODEL, CATEGORY, USER, STORE, PRICE;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
@@ -32,6 +32,9 @@ public enum StockGoodCriteria implements Criteria {
                 break;
             case STORE:
                 query.append("sg.store = :store ");
+                break;
+            case PRICE:
+                query.append("lower(cast(sg.price as text)) like :price  ");
                 break;
 
         }
@@ -61,6 +64,9 @@ public enum StockGoodCriteria implements Criteria {
                 break;
             case STORE:
                 q.setParameter("store", value);
+                break;
+            case PRICE:
+                q.setParameter("price", value + "%");
                 break;
         }
     }

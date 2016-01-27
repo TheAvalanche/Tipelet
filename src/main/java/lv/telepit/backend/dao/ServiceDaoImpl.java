@@ -64,16 +64,6 @@ public class ServiceDaoImpl implements ServiceDao {
     }
 
     @Override
-    public void deleteGood(ServiceGood good) {
-        EntityManager em = emf.createEntityManager();
-        good = em.find(ServiceGood.class, good.getId());
-        em.getTransaction().begin();
-        em.remove(good);
-        em.getTransaction().commit();
-        em.close();
-    }
-
-    @Override
     public List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> criteriaMap) {
         EntityManager em = emf.createEntityManager();
         StringBuilder queryBuilder = new StringBuilder("select sg from ServiceGood sg where 1=1");
@@ -83,7 +73,7 @@ public class ServiceDaoImpl implements ServiceDao {
                 entry.getKey().setQuery(queryBuilder);
             }
         }
-        queryBuilder.append(" order by sg.id desc");
+        queryBuilder.append(" and sg.deleted <> true order by sg.id desc");
         final Query q = em.createQuery(queryBuilder.toString());
         if (criteriaMap != null) {
             for (Map.Entry<ServiceGoodCriteria, Object> entry : criteriaMap.entrySet()) {

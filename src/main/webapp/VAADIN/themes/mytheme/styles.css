@@ -7063,3 +7063,8 @@ body .mytheme.v-app .v-app-loading {
 .mytheme .v-menubar-menuitem-align-right {
 	float: right;
 }
+
+.mytheme .compact-header {
+	margin-bottom: 0;
+	margin-top: 0;
+}

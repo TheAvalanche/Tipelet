@@ -52,6 +52,7 @@ public class StockView extends AbstractView {
     private Button xlsButton;
 
     private TextField idField;
+    private TextField priceField;
     private TextField nameField;
     private TextField modelField;
     private ComboBox userField;
@@ -77,8 +78,10 @@ public class StockView extends AbstractView {
     public void buildContent() {
         label = new Label(bundle.getString("stock.view.label"));
         label.setContentMode(ContentMode.HTML);
+        label.setStyleName("compact-header");
 
         idField = FieldFactory.getTextField("search.stock.id");
+        priceField = FieldFactory.getTextField("search.stock.price");
         nameField = FieldFactory.getTextField("search.stock.name");
         modelField = FieldFactory.getTextField("search.stock.model");
         userField = FieldFactory.getUserComboBox("search.user");
@@ -153,7 +156,7 @@ public class StockView extends AbstractView {
 
         final HorizontalLayout searchLayout1 = new HorizontalLayout(idField, userField, storeField, categoryField);
         searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, modelField);
+        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, modelField, priceField);
         searchLayout2.setSpacing(true);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
@@ -170,14 +173,18 @@ public class StockView extends AbstractView {
             }
         });
 
+        final HorizontalLayout headerLayout = new HorizontalLayout(label, expandButton);
+        headerLayout.setSpacing(true);
+        headerLayout.setWidth("1200px");
+        headerLayout.setComponentAlignment(expandButton, Alignment.BOTTOM_RIGHT);
+
         final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, orderGood, xlsButton, refreshButton);
         buttonLayout.setSpacing(true);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
-        content.addComponent(label);
-        content.addComponent(expandButton);
+        content.addComponent(headerLayout);
         content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);
@@ -323,6 +330,7 @@ public class StockView extends AbstractView {
         @Override
         public void buttonClick(Button.ClickEvent clickEvent) {
             idField.setValue(null);
+            priceField.setValue(null);
             nameField.setValue(null);
             modelField.setValue(null);
             userField.setValue(null);
@@ -343,6 +351,9 @@ public class StockView extends AbstractView {
         Map<StockGoodCriteria, Object> map = new HashMap<>();
         if (!Strings.isNullOrEmpty(idField.getValue())) {
             map.put(StockGoodCriteria.INCREMENT_ID, idField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(priceField.getValue())) {
+            map.put(StockGoodCriteria.PRICE, priceField.getValue().trim().toLowerCase());
         }
         if (!Strings.isNullOrEmpty(nameField.getValue())) {
             map.put(StockGoodCriteria.NAME, nameField.getValue().trim().toLowerCase());

@@ -42,8 +42,9 @@ public class ServiceGoodService {
     }
 
     public void deleteGood(ServiceGood good) {
+        good.setDeleted(true);
         try {
-            serviceDao.deleteGood(good);
+            serviceDao.updateGood(good);
         } catch (OptimisticLockException e) {
             catchOptimisticLockException();
         }
