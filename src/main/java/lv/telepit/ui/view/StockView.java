@@ -111,21 +111,18 @@ public class StockView extends AbstractView {
 
         container = new BeanItemContainer<>(StockGood.class);
         table = new CommonTable(container, "stock.good", "incrementId", "store", "category", "name", "model", "compatibleModels", "price", "count", "total", "lastSoldDate");
-        table.setCellStyleGenerator(new Table.CellStyleGenerator() {
-            @Override
-            public String getStyle(Table source, Object itemId, Object propertyId) {
-                StockGood sg = container.getItem(itemId).getBean();
-                if (sg.isOrdered()) {
-                    return "ordered";
-                } else if (sg.isAttention()) {
-                    return "attention";
-                } else if (sg.getCount() == 0) {
-                    return "sold";
-                } else if (sg.isBestseller()) {
-                    return "bestseller";
-                }
-                return "";
+        table.setCellStyleGenerator((Table.CellStyleGenerator) (source, itemId, propertyId) -> {
+            StockGood sg = container.getItem(itemId).getBean();
+            if (sg.isOrdered()) {
+                return "ordered";
+            } else if (sg.isAttention()) {
+                return "attention";
+            } else if (sg.getCount() == 0) {
+                return "sold";
+            } else if (sg.isBestseller()) {
+                return "bestseller";
             }
+            return "";
         });
         table.addItemClickListener(new EditStockGoodListener());
         table.addValueChangeListener(new EditStockGoodListener());
@@ -166,12 +163,7 @@ public class StockView extends AbstractView {
 
         expandButton = new Button(bundle.getString("show.hide.search"));
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
-        expandButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                searchLayout.setVisible(!searchLayout.isVisible());
-            }
-        });
+        expandButton.addClickListener((Button.ClickListener) event -> searchLayout.setVisible(!searchLayout.isVisible()));
 
         final HorizontalLayout headerLayout = new HorizontalLayout(label, expandButton);
         headerLayout.setSpacing(true);
@@ -228,18 +220,16 @@ public class StockView extends AbstractView {
     }
 
     private StreamResource getExcelStream() {
-        StreamResource.StreamSource source = new StreamResource.StreamSource() {
-            @Override
-            public InputStream getStream() {
-                try {
-                    return new ByteArrayInputStream(ExcelUtils.exportStockGoods(
-                            ui.getStockService().findGoods(buildMap()))
-                            .toByteArray());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
+        StreamResource.StreamSource source = (StreamResource.StreamSource) () -> {
+            try {
+                ExcelUtils excelUtils = new ExcelUtils();
+                excelUtils.stockGoodsToExcel(ui.getStockService().findGoods(buildMap()));
+                excelUtils.close();
+                return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return null;
         };
         return new StreamResource(source, createReportName("xls"));
     }
@@ -273,13 +263,10 @@ public class StockView extends AbstractView {
                 ConfirmDialog.show(ui,
                         bundle.getString("stock.view.delete.header"),
                         bundle.getString("stock.view.delete.message"),
-                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
-                            @Override
-                            public void onClose(ConfirmDialog dialog) {
-                                if (dialog.isConfirmed()) {
-                                    ui.getStockService().deleteGood(goodToDelete);
-                                    refreshView();
-                                }
+                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
+                            if (dialog.isConfirmed()) {
+                                ui.getStockService().deleteGood(goodToDelete);
+                                refreshView();
                             }
                         }
                 );

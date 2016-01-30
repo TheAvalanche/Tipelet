@@ -25,13 +25,10 @@ public class ServiceStatusOnDetailsAction extends AbstractAction {
         ConfirmDialog.show(view.getUi(),
                 bundle.getString("service.view.changeStatus.header"),
                 String.format(bundle.getString("service.view.changeStatus.message"), good.getStatus().toString(), ServiceStatus.ON_DETAILS.toString()),
-                bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
-                    @Override
-                    public void onClose(ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            view.getUi().getServiceGoodService().changeStatus(good, ServiceStatus.ON_DETAILS);
-                            view.refreshView();
-                        }
+                bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
+                    if (dialog.isConfirmed()) {
+                        view.getUi().getServiceGoodService().changeStatus(good, ServiceStatus.ON_DETAILS);
+                        view.refreshView();
                     }
                 }
         );

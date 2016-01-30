@@ -43,26 +43,23 @@ public class StockMoveAction extends AbstractAction {
         layout.addComponent(stores);
 
         final Button move = new Button("Pārcelt");
-        move.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (slider.getValue().equals(0.0)) {
-                    Notification.show("Nav ko pārcelt");
-                    return;
-                }
-                if (stores.getValue() == null) {
-                    Notification.show("Veikals nav izvelēts");
-                    return;
-                }
-                if (stores.getValue().equals(good.getStore())) {
-                    Notification.show("Izvelies citu veikalu");
-                    return;
-                }
-                view.getUi().getStockService().moveToStore(good, slider.getValue().intValue(), (Store) stores.getValue());
-                subWindow.close();
-                view.refreshView();
-                Notification.show(bundle.getString("save.success"));
+        move.addClickListener((Button.ClickListener) event -> {
+            if (slider.getValue().equals(0.0)) {
+                Notification.show("Nav ko pārcelt");
+                return;
             }
+            if (stores.getValue() == null) {
+                Notification.show("Veikals nav izvelēts");
+                return;
+            }
+            if (stores.getValue().equals(good.getStore())) {
+                Notification.show("Izvelies citu veikalu");
+                return;
+            }
+            view.getUi().getStockService().moveToStore(good, slider.getValue().intValue(), (Store) stores.getValue());
+            subWindow.close();
+            view.refreshView();
+            Notification.show(bundle.getString("save.success"));
         });
         layout.addComponent(move);
 

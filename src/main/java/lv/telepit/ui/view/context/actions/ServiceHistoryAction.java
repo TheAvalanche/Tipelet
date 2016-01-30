@@ -89,20 +89,17 @@ public class ServiceHistoryAction extends AbstractAction {
     }
 
     private StreamResource getPDFStream(final List<ChangeRecord> records) {
-        StreamResource.StreamSource source = new StreamResource.StreamSource() {
-
-            public InputStream getStream() {
-                try {
-                    PdfUtils pdfCreator = new PdfUtils();
-                    pdfCreator.open();
-                    pdfCreator.exportChanges(records);
-                    pdfCreator.close();
-                    return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                }
-                return null;
+        StreamResource.StreamSource source = (StreamResource.StreamSource) () -> {
+            try {
+                PdfUtils pdfCreator = new PdfUtils();
+                pdfCreator.open();
+                pdfCreator.exportChanges(records);
+                pdfCreator.close();
+                return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
+            } catch (DocumentException e) {
+                e.printStackTrace();
             }
+            return null;
         };
         return new StreamResource (source, createReportName("pdf"));
     }

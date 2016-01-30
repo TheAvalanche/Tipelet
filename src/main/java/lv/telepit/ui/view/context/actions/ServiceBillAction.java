@@ -65,20 +65,17 @@ public class ServiceBillAction extends AbstractAction {
     }
 
     private StreamResource getPDFStream(final ServiceGood good) {
-        StreamResource.StreamSource source = new StreamResource.StreamSource() {
-
-            public InputStream getStream() {
-                try {
-                    PdfUtils pdfCreator = new PdfUtils();
-                    pdfCreator.open();
-                    pdfCreator.createBill(good);
-                    pdfCreator.close();
-                    return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
+        StreamResource.StreamSource source = (StreamResource.StreamSource) () -> {
+            try {
+                PdfUtils pdfCreator = new PdfUtils();
+                pdfCreator.open();
+                pdfCreator.createBill(good);
+                pdfCreator.close();
+                return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return null;
         };
         return new StreamResource (source, createBillName("pdf"));
     }

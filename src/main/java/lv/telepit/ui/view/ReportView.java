@@ -96,12 +96,7 @@ public class ReportView extends AbstractView {
 
         expandButton = new Button(bundle.getString("show.hide.search"));
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
-        expandButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                searchLayout.setVisible(!searchLayout.isVisible());
-            }
-        });
+        expandButton.addClickListener((Button.ClickListener) event -> searchLayout.setVisible(!searchLayout.isVisible()));
 
         pdfButton = new Button(bundle.getString("pdf.export"));
         pdfButton.setIcon(new ThemeResource("img/pdf.png"));
@@ -182,35 +177,32 @@ public class ReportView extends AbstractView {
     }
 
     private StreamResource getPDFStream() {
-        StreamResource.StreamSource source = new StreamResource.StreamSource() {
-
-            public InputStream getStream() {
-                try {
-                    PdfUtils pdfCreator = new PdfUtils();
-                    pdfCreator.open();
-                    pdfCreator.exportReports(getReportData());
-                    pdfCreator.close();
-                    return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                }
-                return null;
+        StreamResource.StreamSource source = (StreamResource.StreamSource) () -> {
+            try {
+                PdfUtils pdfCreator = new PdfUtils();
+                pdfCreator.open();
+                pdfCreator.exportReports(getReportData());
+                pdfCreator.close();
+                return new ByteArrayInputStream(pdfCreator.getOutputStream().toByteArray());
+            } catch (DocumentException e) {
+                e.printStackTrace();
             }
+            return null;
         };
         return new StreamResource (source, createReportName("pdf"));
     }
 
     private StreamResource getExcelStream() {
-        StreamResource.StreamSource source = new StreamResource.StreamSource() {
-            @Override
-            public InputStream getStream() {
-                try {
-                    return new ByteArrayInputStream(ExcelUtils.exportFinancialReport(getReportData()).toByteArray());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
+        StreamResource.StreamSource source = (StreamResource.StreamSource) () -> {
+            try {
+                ExcelUtils excelUtils = new ExcelUtils();
+                excelUtils.exportReports(getReportData());
+                excelUtils.close();
+                return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return null;
         };
         return new StreamResource(source, createReportName("xls"));
     }

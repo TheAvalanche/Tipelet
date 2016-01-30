@@ -104,24 +104,21 @@ public class ServiceView extends AbstractView {
         container = new BeanItemContainer<>(ServiceGood.class);
         table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "warranty", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setAlwaysRecalculateColumnWidths(true);
-        table.setCellStyleGenerator(new Table.CellStyleGenerator() {
-            @Override
-            public String getStyle(Table source, Object itemId, Object propertyId) {
-                ServiceGood sg = container.getItem(itemId).getBean();
-                switch (sg.getStatus()) {
-                    case WAITING:
-                        return "waiting";
-                    case IN_REPAIR:
-                        return "in-repair";
-                    case REPAIRED:
-                    case BROKEN:
-                        return "finished";
-                    case RETURNED:
-                    case ON_DETAILS:
-                        return "returned";
-                }
-                return "";
+        table.setCellStyleGenerator((Table.CellStyleGenerator) (source, itemId, propertyId) -> {
+            ServiceGood sg = container.getItem(itemId).getBean();
+            switch (sg.getStatus()) {
+                case WAITING:
+                    return "waiting";
+                case IN_REPAIR:
+                    return "in-repair";
+                case REPAIRED:
+                case BROKEN:
+                    return "finished";
+                case RETURNED:
+                case ON_DETAILS:
+                    return "returned";
             }
+            return "";
         });
 
         table.setConverter("warranty", new BooleanToTickConverter());
@@ -158,12 +155,7 @@ public class ServiceView extends AbstractView {
 
         expandButton = new Button(bundle.getString("show.hide.search"));
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
-        expandButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                searchLayout.setVisible(!searchLayout.isVisible());
-            }
-        });
+        expandButton.addClickListener((Button.ClickListener) event -> searchLayout.setVisible(!searchLayout.isVisible()));
 
         final HorizontalLayout headerLayout = new HorizontalLayout(label, expandButton);
         headerLayout.setSpacing(true);
@@ -217,18 +209,16 @@ public class ServiceView extends AbstractView {
     }
 
     private StreamResource getExcelStream() {
-        StreamResource.StreamSource source = new StreamResource.StreamSource() {
-            @Override
-            public InputStream getStream() {
-                try {
-                    return new ByteArrayInputStream(ExcelUtils.exportServiceGoods(
-                            ui.getServiceGoodService().findGoods(buildMap()))
-                            .toByteArray());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
+        StreamResource.StreamSource source = (StreamResource.StreamSource) () -> {
+            try {
+                ExcelUtils excelUtils = new ExcelUtils();
+                excelUtils.serviceGoodsToExcel(ui.getServiceGoodService().findGoods(buildMap()));
+                excelUtils.close();
+                return new ByteArrayInputStream(excelUtils.getOutputStream().toByteArray());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return null;
         };
         return new StreamResource(source, createReportName("xls"));
     }
@@ -253,15 +243,12 @@ public class ServiceView extends AbstractView {
                 ConfirmDialog.show(ui,
                         bundle.getString("service.view.delete.header"),
                         bundle.getString("service.view.delete.message"),
-                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
-                    @Override
-                    public void onClose(ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            ui.getServiceGoodService().deleteGood(goodToDelete);
-                            refreshView();
-                        }
-                    }
-                });
+                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
+                            if (dialog.isConfirmed()) {
+                                ui.getServiceGoodService().deleteGood(goodToDelete);
+                                refreshView();
+                            }
+                        });
             }
         }
 

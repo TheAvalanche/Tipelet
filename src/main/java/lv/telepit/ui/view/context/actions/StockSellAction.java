@@ -59,30 +59,24 @@ public class StockSellAction extends AbstractAction {
         addSoldItem(soldItems, subLayout, priceListener);
 
         Button addButton = new Button(bundle.getString("default.button.add"));
-        addButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (soldItems.size() < good.getCount()) {
-                    addSoldItem(soldItems, subLayout, priceListener);
-                } else {
-                    Notification.show(bundle.getString("add.fail"));
-                }
+        addButton.addClickListener((Button.ClickListener) event -> {
+            if (soldItems.size() < good.getCount()) {
+                addSoldItem(soldItems, subLayout, priceListener);
+            } else {
+                Notification.show(bundle.getString("add.fail"));
             }
         });
 
         Button sellButton = new Button(bundle.getString("sell.item"));
-        sellButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                try {
-                    validate(soldItems, good);
-                    view.getUi().getStockService().sell(good, soldItems);
-                    Notification.show(bundle.getString("save.success"));
-                    subWindow.close();
-                    view.refreshView();
-                } catch (IllegalStateException e) {
-                    Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
-                }
+        sellButton.addClickListener((Button.ClickListener) event -> {
+            try {
+                validate(soldItems, good);
+                view.getUi().getStockService().sell(good, soldItems);
+                Notification.show(bundle.getString("save.success"));
+                subWindow.close();
+                view.refreshView();
+            } catch (IllegalStateException e) {
+                Notification.show(e.getMessage(), Notification.Type.ERROR_MESSAGE);
             }
         });
 
@@ -130,18 +124,15 @@ public class StockSellAction extends AbstractAction {
         priceField.setRequired(true);
         priceField.setWidth(100f, Sizeable.Unit.PIXELS);
         priceField.setConverter(new StringToDoubleConverter());
-        priceField.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                try {
-                    priceField.validate();
-                } catch (Validator.InvalidValueException e) {
-                    Notification.show("Nepareiza cena!", Notification.Type.ERROR_MESSAGE);
-                    item.setPrice(good.getPrice());
-                    priceField.setValue(String.valueOf(good.getPrice()));
-                }
-                priceListener.update();
+        priceField.addValueChangeListener((Property.ValueChangeListener) event -> {
+            try {
+                priceField.validate();
+            } catch (Validator.InvalidValueException e) {
+                Notification.show("Nepareiza cena!", Notification.Type.ERROR_MESSAGE);
+                item.setPrice(good.getPrice());
+                priceField.setValue(String.valueOf(good.getPrice()));
             }
+            priceListener.update();
         });
 
         TextField infoField = new TextField("Info", beanItem.getItemProperty("info"));
@@ -163,13 +154,10 @@ public class StockSellAction extends AbstractAction {
         subLayout.setComponentAlignment(billField, Alignment.BOTTOM_LEFT);
         subLayout.setComponentAlignment(deleteButton, Alignment.BOTTOM_RIGHT);
 
-        deleteButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                soldItems.remove(item);
-                layout.removeComponent(subLayout);
-                priceListener.update();
-            }
+        deleteButton.addClickListener((Button.ClickListener) event -> {
+            soldItems.remove(item);
+            layout.removeComponent(subLayout);
+            priceListener.update();
         });
 
         layout.addComponent(subLayout);

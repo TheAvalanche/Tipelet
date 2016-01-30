@@ -45,74 +45,59 @@ public class CategoryView extends AbstractView {
         addRoot = new Button(bundle.getString("category.add"));
         addRoot.setEnabled(false);
         addRoot.setImmediate(true);
-        addRoot.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (Strings.isNullOrEmpty(nameField.getValue())) {
-                    return;
-                }
-                Category c = Category.createCategories();
-                c.setName(nameField.getValue());
-                ui.getCommonService().addOrUpdateCategory(c);
-                refreshView();
+        addRoot.addClickListener((Button.ClickListener) event -> {
+            if (Strings.isNullOrEmpty(nameField.getValue())) {
+                return;
             }
+            Category c = Category.createCategories();
+            c.setName(nameField.getValue());
+            ui.getCommonService().addOrUpdateCategory(c);
+            refreshView();
         });
 
         addChildren = new Button(bundle.getString("subcategory.add"));
         addChildren.setEnabled(false);
         addChildren.setImmediate(true);
-        addChildren.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (Strings.isNullOrEmpty(nameField.getValue()) || tree.getValue() == null) {
-                    return;
-                }
-                Category c = ((Category) tree.getValue()).addCategory(nameField.getValue());
-                ui.getCommonService().addOrUpdateCategory(c);
-                refreshView();
+        addChildren.addClickListener((Button.ClickListener) event -> {
+            if (Strings.isNullOrEmpty(nameField.getValue()) || tree.getValue() == null) {
+                return;
             }
+            Category c = ((Category) tree.getValue()).addCategory(nameField.getValue());
+            ui.getCommonService().addOrUpdateCategory(c);
+            refreshView();
         });
 
         changeChildren = new Button(bundle.getString("category.change.name"));
         changeChildren.setEnabled(false);
         changeChildren.setImmediate(true);
-        changeChildren.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (Strings.isNullOrEmpty(nameField.getValue()) || tree.getValue() == null) {
-                    return;
-                }
-                Category c = (Category) tree.getValue();
-                c.setName(nameField.getValue());
-                ui.getCommonService().addOrUpdateCategory(c);
-                refreshView();
+        changeChildren.addClickListener((Button.ClickListener) event -> {
+            if (Strings.isNullOrEmpty(nameField.getValue()) || tree.getValue() == null) {
+                return;
             }
+            Category c = (Category) tree.getValue();
+            c.setName(nameField.getValue());
+            ui.getCommonService().addOrUpdateCategory(c);
+            refreshView();
         });
 
         removeChildren = new Button(bundle.getString("category.delete"));
         removeChildren.setEnabled(false);
         removeChildren.setImmediate(true);
-        removeChildren.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (tree.getValue() == null) {
-                    return;
-                }
-                ConfirmDialog.show(ui,
-                        bundle.getString("category.view.delete.header"),
-                        bundle.getString("category.view.delete.message"),
-                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
-                            @Override
-                            public void onClose(ConfirmDialog dialog) {
-                                if (dialog.isConfirmed()) {
-                                    Category c = (Category) tree.getValue();
-                                    ui.getCommonService().removeCategory(c);
-                                    refreshView();
-                                }
-                            }
-                        }
-                );
+        removeChildren.addClickListener((Button.ClickListener) event -> {
+            if (tree.getValue() == null) {
+                return;
             }
+            ConfirmDialog.show(ui,
+                    bundle.getString("category.view.delete.header"),
+                    bundle.getString("category.view.delete.message"),
+                    bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
+                        if (dialog.isConfirmed()) {
+                            Category c = (Category) tree.getValue();
+                            ui.getCommonService().removeCategory(c);
+                            refreshView();
+                        }
+                    }
+            );
         });
 
         tree.addValueChangeListener(new EditCategoryListener());

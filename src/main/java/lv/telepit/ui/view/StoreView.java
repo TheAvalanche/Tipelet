@@ -112,19 +112,16 @@ public class StoreView extends AbstractView {
                 ConfirmDialog.show(ui,
                         bundle.getString("store.view.delete.header"),
                         bundle.getString("store.view.delete.message"),
-                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), new ConfirmDialog.Listener() {
-                    @Override
-                    public void onClose(ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            try {
-                                ui.getCommonService().deleteStore(storeToDelete);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
+                            if (dialog.isConfirmed()) {
+                                try {
+                                    ui.getCommonService().deleteStore(storeToDelete);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                refreshView();
                             }
-                            refreshView();
-                        }
-                    }
-                });
+                        });
             }
         }
 

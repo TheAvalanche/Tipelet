@@ -9,10 +9,13 @@ import com.vaadin.ui.UI;
 import lv.telepit.backend.CommonService;
 import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.backend.StockService;
+import lv.telepit.model.ServiceGood;
+import lv.telepit.model.ServiceStatus;
 import lv.telepit.model.User;
 import lv.telepit.ui.view.*;
 
 import javax.servlet.annotation.WebServlet;
+import java.util.Date;
 import java.util.Locale;
 
 @Theme("mytheme")
@@ -33,6 +36,7 @@ public class TelepitUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+
 
         setLocale(new Locale("lv"));
         Locale.setDefault(new Locale("lv"));
@@ -60,8 +64,6 @@ public class TelepitUI extends UI {
         navigator.addView("category", categoryView);
         navigator.addView("report", reportView);
         navigator.addView("changes", changesView);
-
-
     }
 
     public CommonService getCommonService() {
