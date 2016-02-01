@@ -3,15 +3,7 @@ package lv.telepit.ui.view.context;
 import com.vaadin.event.Action;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.ui.view.ServiceView;
-import lv.telepit.ui.view.context.actions.AbstractAction;
-import lv.telepit.ui.view.context.actions.ServiceBillAction;
-import lv.telepit.ui.view.context.actions.ServiceHistoryAction;
-import lv.telepit.ui.view.context.actions.ServiceStatusBrokenAction;
-import lv.telepit.ui.view.context.actions.ServiceStatusInRepairAction;
-import lv.telepit.ui.view.context.actions.ServiceStatusInWaitingAction;
-import lv.telepit.ui.view.context.actions.ServiceStatusOnDetailsAction;
-import lv.telepit.ui.view.context.actions.ServiceStatusRepairedAction;
-import lv.telepit.ui.view.context.actions.ServiceStatusReturnedAction;
+import lv.telepit.ui.view.context.actions.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -36,7 +28,8 @@ public class ServiceContext implements Action.Handler {
         visibleActions.add(new ServiceStatusInRepairAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusRepairedAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusBrokenAction(((ServiceGood) target), view));
-        visibleActions.add(new ServiceStatusReturnedAction(((ServiceGood) target), view));
+        visibleActions.add(new ServiceStatusReturnedWithBillAction(((ServiceGood) target), view));
+        visibleActions.add(new ServiceStatusReturnedWithoutBillAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusOnDetailsAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceBillAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceHistoryAction(((ServiceGood) target), view));

@@ -26,6 +26,7 @@ public abstract class AbstractView extends VerticalLayout implements View {
     protected AbstractView(Navigator navigator, TelepitUI ui, String name) {
         this.ui = ui;
         this.name = name;
+        this.setSizeFull();
 
         Label logo = new Label("<div class='logo'></div>");
         logo.setContentMode(ContentMode.HTML);
@@ -39,10 +40,12 @@ public abstract class AbstractView extends VerticalLayout implements View {
         content = new VerticalLayout();
         content.setSpacing(true);
         content.setMargin(true);
+        content.setSizeFull();
 
         buildContent();
 
         addComponent(content);
+        setExpandRatio(content, 1.0f);
     }
 
     @Override

@@ -5,13 +5,13 @@ import lv.telepit.model.ServiceStatus;
 import lv.telepit.ui.view.AbstractView;
 import org.vaadin.dialogs.ConfirmDialog;
 
-public class ServiceStatusReturnedAction extends AbstractAction {
+public class ServiceStatusReturnedWithBillAction extends AbstractAction {
 
     private final ServiceGood good;
 
-    public ServiceStatusReturnedAction(ServiceGood good, AbstractView view) {
+    public ServiceStatusReturnedWithBillAction(ServiceGood good, AbstractView view) {
         super(view);
-        this.setCaption(bundle.getString("service.status.returned"));
+        this.setCaption(bundle.getString("service.status.returned.with.bill"));
         this.good = good;
     }
 
@@ -27,6 +27,7 @@ public class ServiceStatusReturnedAction extends AbstractAction {
                 String.format(bundle.getString("service.view.changeStatus.message"), good.getStatus().toString(), ServiceStatus.RETURNED.toString()),
                 bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
                     if (dialog.isConfirmed()) {
+                        good.setWithBill(Boolean.TRUE);
                         view.getUi().getServiceGoodService().changeStatus(good, ServiceStatus.RETURNED);
                         view.refreshView();
                     }

@@ -1,18 +1,13 @@
 package lv.telepit.model.dto;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Collections2;
 import lv.telepit.model.ChangeRecord;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
-/**
- * Created by Alex on 14/05/2014.
- */
 public class RecordData {
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     private String user;
@@ -31,19 +26,13 @@ public class RecordData {
         this.type = record.getServiceGood() != null ? bundle.getString("service.type") : bundle.getString("stock.type");
         this.id = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getCustomId() : record.getStockGood().getIncrementId());
         this.name = String.valueOf(record.getServiceGood() != null ? record.getServiceGood().getName() : record.getStockGood().getName());
-        this.propertyChanges.addAll(Collections2.transform(record.getChangeList(), new Function<ChangeRecord.PropertyChange, ChangeRecord.PropertyChange>() {
-            @Override
-            public ChangeRecord.PropertyChange apply(ChangeRecord.PropertyChange propertyChange) {
-                propertyChange.setName(bundle.getString(propertyChange.getName()));
-                return propertyChange;
-            }
-        }));
-        this.propertyNames = Joiner.on(",").join(Collections2.transform(this.propertyChanges, new Function<ChangeRecord.PropertyChange, String>() {
-            @Override
-            public String apply(ChangeRecord.PropertyChange propertyChange) {
-                return propertyChange.getName();
-            }
-        }));
+        this.propertyChanges.addAll(record.getChangeList().stream().map(this::transformName).collect(Collectors.toList()));
+        this.propertyNames = propertyChanges.stream().map(ChangeRecord.PropertyChange::getName).collect(Collectors.joining(","));
+    }
+
+    private ChangeRecord.PropertyChange transformName(ChangeRecord.PropertyChange pc) {
+        pc.setName(bundle.getString(pc.getName()));
+        return pc;
     }
 
     public String getUser() {

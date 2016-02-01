@@ -38,6 +38,7 @@ public class ServiceGood {
     private String additionalDescription;
     private boolean warranty = false;
     private boolean deleted = false;
+    private boolean withBill = true;
 
     private ChangeRecord change = new ChangeRecord("service.good");
 
@@ -287,6 +288,17 @@ public class ServiceGood {
                 String.valueOf(this.deleted),
                 String.valueOf(deleted));
         this.deleted = deleted;
+    }
+
+    public boolean isWithBill() {
+        return withBill;
+    }
+
+    public void setWithBill(boolean withBill) {
+        change.addChange("withBill",
+                String.valueOf(this.withBill),
+                String.valueOf(withBill));
+        this.withBill = withBill;
     }
 
     @Transient

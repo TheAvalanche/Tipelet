@@ -30,6 +30,7 @@ public class CommonTable extends Table {
 
         this.setSelectable(true);
         this.setImmediate(true);
+        this.setSizeFull();
     }
 
     @Override

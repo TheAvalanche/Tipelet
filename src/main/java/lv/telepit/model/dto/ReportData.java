@@ -57,7 +57,7 @@ public class ReportData {
             r.name = sg.getName();
             r.code = sg.getImei();
             r.price = sg.getPrice();
-            r.info = "";
+            r.info = sg.isWithBill() ? " (Ar čeku)" : " (Bez čeka)";
             list.add(r);
         }
         return list;
