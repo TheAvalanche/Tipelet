@@ -6,12 +6,6 @@ import com.sun.corba.se.spi.ior.ObjectAdapterId;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * User
- *
- * @author Alex Kartishev (alexkartishev@gmail.com))
- *         Date: 14.14.2.
- */
 @Entity
 @Table(name = "telepit_user")
 @NamedQueries({
@@ -31,6 +25,7 @@ public class User {
     private boolean deleted = false;
     private boolean admin = false;
     private boolean accessToAddInStock = false;
+    private boolean accessToBillOnly = false;
     private List<ServiceGood> serviceGoodList;
 
     @Id
@@ -124,6 +119,14 @@ public class User {
 
     public void setAccessToAddInStock(boolean accessToAddInStock) {
         this.accessToAddInStock = accessToAddInStock;
+    }
+
+    public boolean isAccessToBillOnly() {
+        return accessToBillOnly;
+    }
+
+    public void setAccessToBillOnly(boolean accessToBillOnly) {
+        this.accessToBillOnly = accessToBillOnly;
     }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

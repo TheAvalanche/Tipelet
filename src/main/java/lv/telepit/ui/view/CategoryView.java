@@ -119,6 +119,7 @@ public class CategoryView extends AbstractView {
         content.addComponent(label);
         content.addComponent(new Hr());
         content.addComponent(treeAndButtons);
+        content.setExpandRatio(treeAndButtons, 1.0f);
 
     }
 

@@ -133,6 +133,7 @@ public class ChangesView extends AbstractView {
         content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);
+        content.setExpandRatio(table, 1.0f);
 
     }
 

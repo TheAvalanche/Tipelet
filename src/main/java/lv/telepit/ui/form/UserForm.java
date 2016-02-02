@@ -45,6 +45,9 @@ public class UserForm extends FormLayout {
     @PropertyId("accessToAddInStock")
     private CheckBox accessToAddInStock = FieldFactory.getCheckBox("user.accessToAddInStock");
 
+    @PropertyId("accessToBillOnly")
+    private CheckBox accessToBillOnly = FieldFactory.getCheckBox("user.accessToBillOnly");
+
 
     public UserForm(BeanItem<User> userItem, AbstractView view) {
 
@@ -61,6 +64,7 @@ public class UserForm extends FormLayout {
         addComponent(new Hr());
         addComponent(new Label(bundle.getString("user.form.access.label")));
         addComponent(accessToAddInStock);
+        addComponent(accessToBillOnly);
         addComponent(new Hr());
 
 

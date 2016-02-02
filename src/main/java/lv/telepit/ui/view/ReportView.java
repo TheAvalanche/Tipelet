@@ -128,6 +128,7 @@ public class ReportView extends AbstractView {
         content.addComponent(searchLayout);
         content.addComponent(buttonLayout);
         content.addComponent(table);
+        content.setExpandRatio(table, 1.0f);
         content.addComponent(sumLabel);
         content.setComponentAlignment(sumLabel, Alignment.BOTTOM_RIGHT);
     }

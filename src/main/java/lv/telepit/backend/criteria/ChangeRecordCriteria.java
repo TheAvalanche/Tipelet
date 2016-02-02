@@ -2,9 +2,6 @@ package lv.telepit.backend.criteria;
 
 import javax.persistence.Query;
 
-/**
- * Created by Alex on 12/05/2014.
- */
 public enum ChangeRecordCriteria implements Criteria {
 
     USER, DATE_FROM, DATE_TO, STORE, TYPE_STOCK, TYPE_SERVICE;

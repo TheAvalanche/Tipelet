@@ -118,6 +118,7 @@ public class UserView extends AbstractView {
         content.addComponent(new Hr());
         content.addComponent(searchButtonLayout);
         content.addComponent(tableButtonsLayout);
+        content.setExpandRatio(tableButtonsLayout, 1.0f);
     }
 
     public void refreshView() {

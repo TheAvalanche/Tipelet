@@ -2,9 +2,6 @@ package lv.telepit.backend.criteria;
 
 import javax.persistence.Query;
 
-/**
- * Created by Alex on 08/04/2014.
- */
 public enum StockGoodCriteria implements Criteria {
 
     ID, INCREMENT_ID, NAME, MODEL, CATEGORY, USER, STORE, PRICE;

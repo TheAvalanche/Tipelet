@@ -2,12 +2,9 @@ package lv.telepit.backend.criteria;
 
 import javax.persistence.Query;
 
-/**
- * Created by Alex on 21/05/2014.
- */
 public enum SoldItemCriteria implements Criteria {
 
-    DATE_FROM, DATE_TO, USER, STORE;
+    DATE_FROM, DATE_TO, USER, STORE, WITH_BILL;
 
     @Override
     public void setQuery(StringBuilder query) {
@@ -24,6 +21,9 @@ public enum SoldItemCriteria implements Criteria {
                 break;
             case STORE:
                 query.append("si.store = :store ");
+                break;
+            case WITH_BILL:
+                query.append("si.withBill = :withBill ");
                 break;
         }
 
@@ -44,6 +44,9 @@ public enum SoldItemCriteria implements Criteria {
                 break;
             case STORE:
                 q.setParameter("store", value);
+                break;
+            case WITH_BILL:
+                q.setParameter("withBill", value);
                 break;
         }
 
