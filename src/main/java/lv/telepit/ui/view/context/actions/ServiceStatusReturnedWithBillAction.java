@@ -11,7 +11,11 @@ public class ServiceStatusReturnedWithBillAction extends AbstractAction {
 
     public ServiceStatusReturnedWithBillAction(ServiceGood good, AbstractView view) {
         super(view);
-        this.setCaption(bundle.getString("service.status.returned.with.bill"));
+        if (view.getUi().getCurrentUser().isAccessToBillOnly()) {
+            this.setCaption(bundle.getString("service.status.returned"));
+        } else {
+            this.setCaption(bundle.getString("service.status.returned.with.bill"));
+        }
         this.good = good;
     }
 

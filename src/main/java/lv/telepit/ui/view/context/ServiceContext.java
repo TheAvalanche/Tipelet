@@ -29,7 +29,9 @@ public class ServiceContext implements Action.Handler {
         visibleActions.add(new ServiceStatusRepairedAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusBrokenAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusReturnedWithBillAction(((ServiceGood) target), view));
-        visibleActions.add(new ServiceStatusReturnedWithoutBillAction(((ServiceGood) target), view));
+        if (!view.getUi().getCurrentUser().isAccessToBillOnly()) {
+            visibleActions.add(new ServiceStatusReturnedWithoutBillAction(((ServiceGood) target), view));
+        }
         visibleActions.add(new ServiceStatusOnDetailsAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceBillAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceHistoryAction(((ServiceGood) target), view));

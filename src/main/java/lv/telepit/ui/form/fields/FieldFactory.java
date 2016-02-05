@@ -115,6 +115,11 @@ public final class FieldFactory {
                 getRequired(key));
     }
 
+    public static ComboBox getBillComboBox(final String key) {
+        return new SimpleBillComboBox(getCaption(key),
+                getRequired(key));
+    }
+
     /**
      * Partners combobox with all partners prefilled.
      * @param key field's key

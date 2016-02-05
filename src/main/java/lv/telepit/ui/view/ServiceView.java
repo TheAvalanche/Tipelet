@@ -21,6 +21,8 @@ import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.ui.form.fields.SimpleBillComboBox;
+import lv.telepit.ui.form.fields.SimpleTypeComboBox;
 import lv.telepit.ui.view.context.ServiceContext;
 import lv.telepit.utils.ExcelUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -49,6 +51,7 @@ public class ServiceView extends AbstractView {
     private ComboBox categoryField;
     private DateField deliveredField;
     private DateField returnedField;
+    private ComboBox withBillField;
     private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
@@ -79,6 +82,9 @@ public class ServiceView extends AbstractView {
         categoryField = FieldFactory.getCategoryComboBox("search.category");
         deliveredField = FieldFactory.getDateField("search.service.deliveredDate");
         returnedField = FieldFactory.getDateField("search.service.returnedDate");
+        withBillField = FieldFactory.getBillComboBox("search.withBill");
+        withBillField.setNullSelectionAllowed(false);
+        withBillField.setValue(SimpleTypeComboBox.Type.ALL);
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
@@ -143,7 +149,7 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditServiceGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField, withBillField);
         searchLayout1.setSpacing(true);
         final HorizontalLayout searchLayout2 = new HorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
         searchLayout2.setSpacing(true);
@@ -202,6 +208,7 @@ public class ServiceView extends AbstractView {
             userField.setVisible(false);
             deleteGood.setVisible(false);
         }
+        withBillField.setVisible(false);
     }
 
     @Override
@@ -306,6 +313,8 @@ public class ServiceView extends AbstractView {
             categoryField.setValue(null);
             deliveredField.setValue(DateUtils.addMonths(new Date(), -1));
             returnedField.setValue(null);
+            withBillField.setValue(ui.getCurrentUser().isAccessToBillOnly()
+                    ? SimpleBillComboBox.Type.WITH_BILL : SimpleBillComboBox.Type.ALL);
         }
     }
 
@@ -348,6 +357,9 @@ public class ServiceView extends AbstractView {
         }
         if (returnedField.getValue() != null) {
             map.put(ServiceGoodCriteria.RETURNED_DATE_FROM, DateUtils.truncate(returnedField.getValue(), Calendar.DATE));
+        }
+        if (withBillField.getValue() != SimpleBillComboBox.Type.ALL) {
+            map.put(ServiceGoodCriteria.WITH_BILL, ((SimpleBillComboBox.Type) withBillField.getValue()).getBoolValue());
         }
 
         return map;

@@ -98,4 +98,8 @@ public class ReportData {
     public String getInfo() {
         return info;
     }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

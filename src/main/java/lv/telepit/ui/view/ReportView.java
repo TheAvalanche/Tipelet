@@ -18,6 +18,7 @@ import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.form.fields.FieldFactory;
+import lv.telepit.ui.form.fields.SimpleBillComboBox;
 import lv.telepit.ui.form.fields.SimpleTypeComboBox;
 import lv.telepit.utils.ExcelUtils;
 import lv.telepit.utils.PdfUtils;
@@ -38,6 +39,7 @@ public class ReportView extends AbstractView {
     private DateField fromDateField;
     private DateField toDateField;
     private ComboBox typeField;
+    private ComboBox withBillField;
     private Button expandButton;
     private Button searchButton;
     private Button refreshButton;
@@ -68,6 +70,9 @@ public class ReportView extends AbstractView {
         typeField = FieldFactory.getTypeComboBox("search.type");
         typeField.setNullSelectionAllowed(false);
         typeField.setValue(SimpleTypeComboBox.Type.ALL);
+        withBillField = FieldFactory.getBillComboBox("search.withBill");
+        withBillField.setNullSelectionAllowed(false);
+        withBillField.setValue(SimpleTypeComboBox.Type.ALL);
 
         searchButton = new Button(bundle.getString("default.button.search"));
         searchButton.addClickListener(new SearchListener());
@@ -85,7 +90,7 @@ public class ReportView extends AbstractView {
         container = new BeanItemContainer<>(ReportData.class);
         table = new CommonTable(container, "report.data", "store", "user", "date", "type", "id", "name", "code", "price", "info");
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, withBillField);
         searchLayout1.setSpacing(true);
         final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
         searchLayout2.setSpacing(true);
@@ -141,12 +146,8 @@ public class ReportView extends AbstractView {
     public void refreshView(List<ReportData> records) {
 
         if (records == null) {
-            records = new ArrayList<>();
-            records.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
-            records.addAll(ui.getStockService().findReports(buildSoldItemMap()));
+            records = getReportData();
         }
-
-        Collections.sort(records, Collections.reverseOrder(new ReportDataComparator()));
 
         container.removeAllItems();
         container.addAll(records);
@@ -162,6 +163,7 @@ public class ReportView extends AbstractView {
             storeField.setVisible(false);
             userField.setVisible(false);
         }
+        withBillField.setVisible(false);
     }
 
     @Override
@@ -228,6 +230,10 @@ public class ReportView extends AbstractView {
             reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
         }
 
+        if (ui.getCurrentUser().isAccessToBillOnly()) {
+            reports.stream().forEach(it -> it.setInfo(""));
+        }
+
         Collections.sort(reports, Collections.reverseOrder(new ReportDataComparator()));
         return reports;
     }
@@ -254,6 +260,8 @@ public class ReportView extends AbstractView {
             fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
             toDateField.setValue(null);
             typeField.setValue(SimpleTypeComboBox.Type.ALL);
+            withBillField.setValue(ui.getCurrentUser().isAccessToBillOnly()
+                    ? SimpleBillComboBox.Type.WITH_BILL : SimpleBillComboBox.Type.ALL);
         }
     }
 
@@ -271,6 +279,9 @@ public class ReportView extends AbstractView {
         if (toDateField.getValue() != null) {
             map.put(SoldItemCriteria.DATE_TO, DateUtils.ceiling(toDateField.getValue(), Calendar.DATE));
         }
+        if (withBillField.getValue() != SimpleBillComboBox.Type.ALL) {
+            map.put(SoldItemCriteria.WITH_BILL, ((SimpleBillComboBox.Type) withBillField.getValue()).getBoolValue());
+        }
         return map;
     }
 
@@ -287,6 +298,9 @@ public class ReportView extends AbstractView {
         }
         if (toDateField.getValue() != null) {
             map.put(ServiceGoodCriteria.RETURNED_DATE_TO, DateUtils.ceiling(toDateField.getValue(), Calendar.DATE));
+        }
+        if (withBillField.getValue() != SimpleBillComboBox.Type.ALL) {
+            map.put(ServiceGoodCriteria.WITH_BILL, ((SimpleBillComboBox.Type) withBillField.getValue()).getBoolValue());
         }
         return map;
     }
