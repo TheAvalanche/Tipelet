@@ -74,6 +74,9 @@ public class ServiceGoodForm extends FormLayout {
     @PropertyId("additionalDescription")
     private TextArea additionalDescriptionField = FieldFactory.getTextArea("service.additionalDescription");
 
+    @PropertyId("withBill")
+    private CheckBox withBill = FieldFactory.getCheckBox("service.withBill");
+
     public ServiceGoodForm(BeanItem<ServiceGood> serviceGoodItem, AbstractView view) {
         /*Initial settings.*/
         ServiceGood good = serviceGoodItem.getBean();
@@ -115,6 +118,9 @@ public class ServiceGoodForm extends FormLayout {
         addComponent(contactPhoneField);
         addComponent(contactMailField);
         addComponent(additionalDescriptionField);
+        if (!view.getUi().getCurrentUser().isAccessToBillOnly()) {
+            addComponent(withBill);
+        }
 
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
