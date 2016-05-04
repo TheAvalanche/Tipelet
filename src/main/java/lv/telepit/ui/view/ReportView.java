@@ -162,8 +162,8 @@ public class ReportView extends AbstractView {
         if (!ui.getCurrentUser().isAdmin()) {
             storeField.setVisible(false);
             userField.setVisible(false);
+            withBillField.setVisible(false);
         }
-        withBillField.setVisible(false);
     }
 
     @Override
