@@ -108,7 +108,7 @@ public class ServiceView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(ServiceGood.class);
-        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "warranty", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "price", "warranty", "called", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setAlwaysRecalculateColumnWidths(true);
         table.setCellStyleGenerator((Table.CellStyleGenerator) (source, itemId, propertyId) -> {
             ServiceGood sg = container.getItem(itemId).getBean();
@@ -127,7 +127,18 @@ public class ServiceView extends AbstractView {
             return "";
         });
 
+        table.setItemDescriptionGenerator((AbstractSelect.ItemDescriptionGenerator) (component, itemId, propertyId) -> {
+            if ("called".equals(propertyId)) {
+                ServiceGood sg = container.getItem(itemId).getBean();
+                if (sg.isCalled()) {
+                    return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(sg.getCalledDate());
+                }
+            }
+            return null;
+        });
+
         table.setConverter("warranty", new BooleanToTickConverter());
+        table.setConverter("called", new BooleanToTickConverter());
         table.addItemClickListener(new EditServiceGoodListener());
         table.addValueChangeListener(new EditServiceGoodListener());
         table.addActionHandler(new ServiceContext(this));
@@ -197,7 +208,7 @@ public class ServiceView extends AbstractView {
         container.removeAllItems();
         container.addAll(serviceGoods);
         container.sort(new Object[]{"id"}, new boolean[]{false});
-        table.setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
+        table.setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.1f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
         table.refreshRowCache();
     }
 

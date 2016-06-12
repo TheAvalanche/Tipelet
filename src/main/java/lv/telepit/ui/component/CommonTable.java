@@ -21,12 +21,7 @@ public class CommonTable extends Table {
         this.setWidth("1200px");
         this.setContainerDataSource(container);
         this.setVisibleColumns(headers);
-        this.setColumnHeaders(Collections2.transform(Arrays.asList(headers), new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-                return bundle.getString(bundleBase + "." + s);
-            }
-        }).toArray(new String[headers.length]));
+        this.setColumnHeaders(Collections2.transform(Arrays.asList(headers), s -> bundle.getString(bundleBase + "." + s)).toArray(new String[headers.length]));
 
         this.setSelectable(true);
         this.setImmediate(true);

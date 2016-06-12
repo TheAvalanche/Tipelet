@@ -39,6 +39,8 @@ public class ServiceGood {
     private boolean warranty = false;
     private boolean deleted = false;
     private boolean withBill = true;
+    private boolean called = false;
+    private Date calledDate;
 
     private ChangeRecord change = new ChangeRecord("service.good");
 
@@ -299,6 +301,29 @@ public class ServiceGood {
                 String.valueOf(this.withBill),
                 String.valueOf(withBill));
         this.withBill = withBill;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCalledDate() {
+        return calledDate;
+    }
+
+    public void setCalledDate(Date calledDate) {
+        change.addChange("calledDate",
+                this.calledDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(this.calledDate) : "-",
+                calledDate != null ? new SimpleDateFormat("dd-MM-YYYY HH:mm").format(calledDate) : "-");
+        this.calledDate = calledDate;
+    }
+
+    public boolean isCalled() {
+        return called;
+    }
+
+    public void setCalled(boolean called) {
+        change.addChange("called",
+                String.valueOf(this.called),
+                String.valueOf(called));
+        this.called = called;
     }
 
     @Transient
