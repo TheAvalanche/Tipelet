@@ -122,6 +122,10 @@ public class ServiceGoodForm extends FormLayout {
             addComponent(withBill);
         }
 
+        if (!view.getUi().getCurrentUser().isAdmin() && good.getId() != 0) {
+            price.setReadOnly(true);
+        }
+
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, serviceGoodItem.getBean(), view));
