@@ -86,7 +86,7 @@ public class LoginWindow extends Window {
                 user.setPhone("12345678");
                 user.setStore(new Store());
             }
-            if (user != null) {
+            if (user != null && !user.isDeleted()) {
                 application.removeWindow(LoginWindow.this);
                 application.setCurrentUser(user);
                 application.getNavigator().navigateTo("service");
