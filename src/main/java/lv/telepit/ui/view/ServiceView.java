@@ -162,14 +162,12 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditServiceGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField, withBillField);
+        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField, withBillField, contactNameField, contactPhoneField);
         searchLayout1.setSpacing(true);
         final HorizontalLayout searchLayout2 = new HorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
         searchLayout2.setSpacing(true);
-        final HorizontalLayout searchLayout3 = new HorizontalLayout(contactNameField, contactPhoneField);
-        searchLayout3.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchLayout3,
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
                 new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
