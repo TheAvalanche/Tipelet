@@ -29,8 +29,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.*;
@@ -45,6 +43,8 @@ public class ServiceView extends AbstractView {
     private TextField nameField;
     private TextField imeiField;
     private TextField accumNumField;
+    private TextField contactNameField;
+    private TextField contactPhoneField;
     private ComboBox userField;
     private ComboBox storeField;
     private ComboBox statusField;
@@ -75,6 +75,8 @@ public class ServiceView extends AbstractView {
         idField = FieldFactory.getTextField("search.service.id");
         nameField = FieldFactory.getTextField("search.service.name");
         imeiField = FieldFactory.getTextField("search.service.imei");
+        contactNameField = FieldFactory.getTextField("search.service.contactName");
+        contactPhoneField = FieldFactory.getTextField("search.service.contactPhone");
         accumNumField = FieldFactory.getTextField("search.service.accumNum");
         userField = FieldFactory.getUserComboBox("search.user");
         storeField = FieldFactory.getStoreComboBox("search.store");
@@ -164,8 +166,10 @@ public class ServiceView extends AbstractView {
         searchLayout1.setSpacing(true);
         final HorizontalLayout searchLayout2 = new HorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
         searchLayout2.setSpacing(true);
+        final HorizontalLayout searchLayout3 = new HorizontalLayout(contactNameField, contactPhoneField);
+        searchLayout3.setSpacing(true);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, searchLayout3,
                 new HorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
@@ -317,6 +321,8 @@ public class ServiceView extends AbstractView {
             idField.setValue(null);
             nameField.setValue(null);
             imeiField.setValue(null);
+            contactNameField.setValue(null);
+            contactPhoneField.setValue(null);
             accumNumField.setValue(null);
             userField.setValue(null);
             storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
@@ -350,6 +356,12 @@ public class ServiceView extends AbstractView {
         }
         if (!Strings.isNullOrEmpty(accumNumField.getValue())) {
             map.put(ServiceGoodCriteria.ACCUM_NUM, accumNumField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(contactNameField.getValue())) {
+            map.put(ServiceGoodCriteria.CONTACT_NAME, contactNameField.getValue().trim().toLowerCase());
+        }
+        if (!Strings.isNullOrEmpty(contactPhoneField.getValue())) {
+            map.put(ServiceGoodCriteria.CONTACT_PHONE, contactPhoneField.getValue().trim().toLowerCase());
         }
         if (userField.getValue() != null) {
             map.put(ServiceGoodCriteria.USER, userField.getValue());

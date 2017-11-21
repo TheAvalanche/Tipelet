@@ -3,7 +3,7 @@ package lv.telepit.backend.criteria;
 import javax.persistence.Query;
 
 public enum ServiceGoodCriteria implements Criteria {
-    ID, CUSTOM_ID, NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, RETURNED_DATE_TO, USER, STORE, WITH_BILL;
+    ID, CUSTOM_ID, NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, RETURNED_DATE_TO, USER, STORE, WITH_BILL, CONTACT_PHONE, CONTACT_NAME;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
@@ -46,6 +46,12 @@ public enum ServiceGoodCriteria implements Criteria {
                 break;
             case WITH_BILL:
                 query.append("sg.withBill = :withBill ");
+                break;
+            case CONTACT_NAME:
+                query.append("lower(sg.contactName) like :contactName ");
+                break;
+            case CONTACT_PHONE:
+                query.append("lower(sg.contactPhone) like :contactPhone ");
                 break;
 
         }
@@ -93,6 +99,12 @@ public enum ServiceGoodCriteria implements Criteria {
                 break;
             case WITH_BILL:
                 q.setParameter("withBill", value);
+                break;
+            case CONTACT_NAME:
+                q.setParameter("contactName", "%" + value + "%");
+                break;
+            case CONTACT_PHONE:
+                q.setParameter("contactPhone", "%" + value + "%");
                 break;
 
         }
