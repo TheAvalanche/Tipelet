@@ -10,6 +10,7 @@ import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Category;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.List;
@@ -112,8 +113,7 @@ public class CategoryView extends AbstractView {
         treePanel.setWidth("300px");
         treePanel.setHeight("100%");
 
-        HorizontalLayout treeAndButtons = new HorizontalLayout(treePanel, controlLayout);
-        treeAndButtons.setSpacing(true);
+        HorizontalLayout treeAndButtons = new SpacedHorizontalLayout(treePanel, controlLayout);
         treeAndButtons.setHeight("100%");
 
         content.addComponent(label);

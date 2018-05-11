@@ -14,6 +14,7 @@ import lv.telepit.model.Store;
 import lv.telepit.model.User;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.component.PropertyFilter;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.UserForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -96,21 +97,18 @@ public class UserView extends AbstractView {
         deleteUser.setEnabled(false);
         deleteUser.addClickListener(new EditUserListener());
 
-        final HorizontalLayout searchLayout = new HorizontalLayout(filterName, filterSurname, filterStore, filterDeleted, filterButton);
-        searchLayout.setSpacing(true);
+        final HorizontalLayout searchLayout = new SpacedHorizontalLayout(filterName, filterSurname, filterStore, filterDeleted, filterButton);
         searchLayout.setComponentAlignment(filterDeleted, Alignment.BOTTOM_CENTER);
         searchLayout.setComponentAlignment(filterButton, Alignment.BOTTOM_RIGHT);
 
-        final HorizontalLayout searchButtonLayout = new HorizontalLayout(filterButton, refreshButton);
-        searchButtonLayout.setSpacing(true);
+        final HorizontalLayout searchButtonLayout = new SpacedHorizontalLayout(filterButton, refreshButton);
         searchButtonLayout.setWidth("700px");
         searchButtonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
 
         final VerticalLayout buttonLayout = new VerticalLayout(addUser, updateUser, deleteUser);
         buttonLayout.setSpacing(true);
 
-        final HorizontalLayout tableButtonsLayout = new HorizontalLayout(table, buttonLayout);
-        tableButtonsLayout.setSpacing(true);
+        final HorizontalLayout tableButtonsLayout = new SpacedHorizontalLayout(table, buttonLayout);
 
         content.addComponent(label);
         content.addComponent(new Hr());

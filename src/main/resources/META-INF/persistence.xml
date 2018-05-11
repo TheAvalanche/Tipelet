@@ -11,6 +11,8 @@
         <class>lv.telepit.model.ChangeRecord</class>
         <class>lv.telepit.model.StockGood</class>
         <class>lv.telepit.model.SoldItem</class>
+        <class>lv.telepit.model.BusinessReceipt</class>
+        <class>lv.telepit.model.ReceiptItem</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

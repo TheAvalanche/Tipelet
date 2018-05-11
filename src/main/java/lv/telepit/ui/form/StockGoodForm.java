@@ -12,6 +12,7 @@ import com.vaadin.ui.TextField;
 import lv.telepit.backend.StockService;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.actions.SaveOnClick;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
@@ -75,7 +76,7 @@ public class StockGoodForm extends FormLayout {
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, stockGoodItem.getBean(), view));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+        HorizontalLayout buttonLayout = new SpacedHorizontalLayout();
         buttonLayout.setSpacing(true);
         buttonLayout.setMargin(true);
         buttonLayout.setWidth("100%");

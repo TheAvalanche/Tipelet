@@ -24,6 +24,13 @@ public class Store {
     private String city;
     private String address;
     private boolean deleted;
+
+    private String legalName;
+    private String legalRegNum;
+    private String legalBankName;
+    private String legalBankNum;
+    private String legalAddress;
+    
     private List<User> userList;
     private List<ServiceGood> serviceGoodList;
 
@@ -69,6 +76,46 @@ public class Store {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getLegalName() {
+        return legalName;
+    }
+
+    public void setLegalName(String legalName) {
+        this.legalName = legalName;
+    }
+
+    public String getLegalRegNum() {
+        return legalRegNum;
+    }
+
+    public void setLegalRegNum(String legalRegNum) {
+        this.legalRegNum = legalRegNum;
+    }
+
+    public String getLegalBankName() {
+        return legalBankName;
+    }
+
+    public void setLegalBankName(String legalBankName) {
+        this.legalBankName = legalBankName;
+    }
+
+    public String getLegalBankNum() {
+        return legalBankNum;
+    }
+
+    public void setLegalBankNum(String legalBankNum) {
+        this.legalBankNum = legalBankNum;
+    }
+
+    public String getLegalAddress() {
+        return legalAddress;
+    }
+
+    public void setLegalAddress(String legalAddress) {
+        this.legalAddress = legalAddress;
     }
 
     public boolean isDeleted() {

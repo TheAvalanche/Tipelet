@@ -1,10 +1,7 @@
 package lv.telepit.ui.view;
 
 import com.itextpdf.text.DocumentException;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
@@ -15,15 +12,13 @@ import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.ChangeRecordCriteria;
 import lv.telepit.model.ChangeRecord;
-import lv.telepit.model.ServiceGood;
 import lv.telepit.model.dto.RecordData;
-import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.utils.ChangesComparator;
 import lv.telepit.model.utils.RecordDataComparator;
-import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.actions.changes.ShowPropertiesListener;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.form.fields.SimpleTypeComboBox;
 import lv.telepit.utils.ExcelUtils;
@@ -31,7 +26,6 @@ import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Calendar;
@@ -91,13 +85,11 @@ public class ChangesView extends AbstractView {
         table = new CommonTable(container, "record.data", "store", "user", "date", "type", "name", "id", "propertyNames");
         table.addItemClickListener(new ShowPropertiesListener(this));
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField);
-        searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
-        searchLayout2.setSpacing(true);
+        final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(userField, storeField);
+        final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(fromDateField, toDateField, typeField);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
-                new HorizontalLayout(searchButton, resetButton), new Hr());
+                new SpacedHorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
 
@@ -122,8 +114,7 @@ public class ChangesView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(pdfButton, xlsButton, refreshButton);
-        buttonLayout.setSpacing(true);
+        final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(pdfButton, xlsButton, refreshButton);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);

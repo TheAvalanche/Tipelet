@@ -8,6 +8,7 @@ import lv.telepit.backend.CommonService;
 import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -71,7 +72,7 @@ public class UserForm extends FormLayout {
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveUser(binder, userItem.getBean(), view));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+        HorizontalLayout buttonLayout = new SpacedHorizontalLayout();
         buttonLayout.setSpacing(true);
         buttonLayout.setMargin(true);
         buttonLayout.setWidth("100%");

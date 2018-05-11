@@ -11,6 +11,7 @@ import com.vaadin.ui.*;
 import lv.telepit.TelepitUI;
 import lv.telepit.model.Store;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.StoreForm;
 import org.vaadin.dialogs.ConfirmDialog;
 
@@ -69,8 +70,7 @@ public class StoreView extends AbstractView {
         final VerticalLayout buttonLayout = new VerticalLayout(addStore, updateStore, deleteStore);
         buttonLayout.setSpacing(true);
 
-        final HorizontalLayout tableButtonsLayout = new HorizontalLayout(table, buttonLayout);
-        tableButtonsLayout.setSpacing(true);
+        final HorizontalLayout tableButtonsLayout = new SpacedHorizontalLayout(table, buttonLayout);
 
         content.addComponent(label);
         content.addComponent(new Hr());

@@ -4,11 +4,11 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import lv.telepit.model.StockGood;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.view.AbstractView;
 import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,8 +46,7 @@ public class StockWarrantyAction extends AbstractAction {
         layout.setMargin(true);
         layout.setSpacing(true);
         layout.addComponent(new Label("Izveidot kvītu?"));
-        HorizontalLayout buttons = new HorizontalLayout(pdfButton);
-        buttons.setSpacing(true);
+        HorizontalLayout buttons = new SpacedHorizontalLayout(pdfButton);
         buttons.setMargin(true);
         layout.addComponent(buttons);
 

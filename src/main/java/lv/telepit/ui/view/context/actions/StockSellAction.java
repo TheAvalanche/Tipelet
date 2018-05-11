@@ -3,13 +3,13 @@ package lv.telepit.ui.view.context.actions;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.event.Action;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.converters.StringToDoubleConverter;
 import lv.telepit.ui.view.AbstractView;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class StockSellAction extends AbstractAction {
 
@@ -80,7 +79,7 @@ public class StockSellAction extends AbstractAction {
             }
         });
 
-        HorizontalLayout buttonLayout = new HorizontalLayout(addButton, sellButton);
+        HorizontalLayout buttonLayout = new SpacedHorizontalLayout(addButton, sellButton);
         buttonLayout.setWidth("100%");
         buttonLayout.setComponentAlignment(sellButton, Alignment.BOTTOM_RIGHT);
 
@@ -146,9 +145,8 @@ public class StockSellAction extends AbstractAction {
             deleteButton.setEnabled(false);
         }
 
-        final HorizontalLayout subLayout = new HorizontalLayout(codeField, priceField, infoField, billField, deleteButton);
+        final HorizontalLayout subLayout = new SpacedHorizontalLayout(codeField, priceField, infoField, billField, deleteButton);
         subLayout.setWidth("100%");
-        subLayout.setSpacing(true);
         subLayout.setComponentAlignment(priceField, Alignment.BOTTOM_RIGHT);
         subLayout.setComponentAlignment(infoField, Alignment.BOTTOM_RIGHT);
         subLayout.setComponentAlignment(billField, Alignment.BOTTOM_LEFT);

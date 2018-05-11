@@ -3,25 +3,17 @@ package lv.telepit.ui.form;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import lv.telepit.backend.StockService;
 import lv.telepit.backend.criteria.StockGoodCriteria;
 import lv.telepit.model.SoldItem;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.actions.SaveOnClick;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class OrderStockGoodForm extends FormLayout {
 
@@ -76,8 +68,7 @@ public class OrderStockGoodForm extends FormLayout {
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, stockGoodItem.getBean(), view));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setSpacing(true);
+        HorizontalLayout buttonLayout = new SpacedHorizontalLayout();
         buttonLayout.setMargin(true);
         buttonLayout.setWidth("100%");
         buttonLayout.addComponent(saveButton);

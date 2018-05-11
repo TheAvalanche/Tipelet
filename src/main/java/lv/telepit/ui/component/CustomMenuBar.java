@@ -25,6 +25,7 @@ public class CustomMenuBar extends MenuBar {
         this.navigator = navigator;
         this.addItem(bundle.getString("menu.stock"), new NavigateCommand("stock"));
         this.addItem(bundle.getString("menu.service"), new NavigateCommand("service"));
+        this.addItem(bundle.getString("menu.businessReceipt"), new NavigateCommand("businessReceipt"));
         adminItem = this.addItem(bundle.getString("menu.admin"), null, null);
         reportItem = adminItem.addItem(bundle.getString("menu.financial"), new NavigateCommand("report"));
         changesItem = adminItem.addItem(bundle.getString("menu.changes"), new NavigateCommand("changes"));

@@ -10,16 +10,7 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.criteria.StockGoodCriteria;
@@ -28,6 +19,7 @@ import lv.telepit.model.StockGood;
 import lv.telepit.model.User;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.OrderStockGoodForm;
 import lv.telepit.ui.form.StockGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
@@ -36,7 +28,6 @@ import lv.telepit.utils.ExcelUtils;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -151,13 +142,11 @@ public class StockView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditStockGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(idField, userField, storeField, categoryField);
-        searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(nameField, modelField, priceField);
-        searchLayout2.setSpacing(true);
+        final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(idField, userField, storeField, categoryField);
+        final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(nameField, modelField, priceField);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
-                new HorizontalLayout(searchButton, resetButton), new Hr());
+                new SpacedHorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
 
@@ -165,13 +154,11 @@ public class StockView extends AbstractView {
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
         expandButton.addClickListener((Button.ClickListener) event -> searchLayout.setVisible(!searchLayout.isVisible()));
 
-        final HorizontalLayout headerLayout = new HorizontalLayout(label, expandButton);
-        headerLayout.setSpacing(true);
+        final HorizontalLayout headerLayout = new SpacedHorizontalLayout(label, expandButton);
         headerLayout.setWidth("1200px");
         headerLayout.setComponentAlignment(expandButton, Alignment.BOTTOM_RIGHT);
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, orderGood, xlsButton, refreshButton);
-        buttonLayout.setSpacing(true);
+        final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(addGood, updateGood, deleteGood, orderGood, xlsButton, refreshButton);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);

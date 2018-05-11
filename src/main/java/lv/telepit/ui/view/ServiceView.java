@@ -19,6 +19,7 @@ import lv.telepit.model.ServiceGood;
 import lv.telepit.ui.component.BooleanToTickConverter;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.ServiceGoodForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.form.fields.SimpleBillComboBox;
@@ -162,13 +163,11 @@ public class ServiceView extends AbstractView {
         deleteGood.setEnabled(false);
         deleteGood.addClickListener(new EditServiceGoodListener());
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, categoryField, statusField, withBillField, contactNameField, contactPhoneField);
-        searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
-        searchLayout2.setSpacing(true);
+        final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(userField, storeField, categoryField, statusField, withBillField, contactNameField, contactPhoneField);
+        final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
-                new HorizontalLayout(searchButton, resetButton), new Hr());
+                new SpacedHorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
 
@@ -176,13 +175,11 @@ public class ServiceView extends AbstractView {
         expandButton.setStyleName(Reindeer.BUTTON_LINK);
         expandButton.addClickListener((Button.ClickListener) event -> searchLayout.setVisible(!searchLayout.isVisible()));
 
-        final HorizontalLayout headerLayout = new HorizontalLayout(label, expandButton);
-        headerLayout.setSpacing(true);
+        final HorizontalLayout headerLayout = new SpacedHorizontalLayout(label, expandButton);
         headerLayout.setWidth("1200px");
         headerLayout.setComponentAlignment(expandButton, Alignment.BOTTOM_RIGHT);
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(addGood, updateGood, deleteGood, xlsButton, refreshButton);
-        buttonLayout.setSpacing(true);
+        final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(addGood, updateGood, deleteGood, xlsButton, refreshButton);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);

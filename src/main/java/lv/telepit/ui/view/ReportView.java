@@ -1,7 +1,6 @@
 package lv.telepit.ui.view;
 
 import com.itextpdf.text.DocumentException;
-import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FileDownloader;
@@ -17,6 +16,7 @@ import lv.telepit.model.dto.ReportData;
 import lv.telepit.model.utils.ReportDataComparator;
 import lv.telepit.ui.component.CommonTable;
 import lv.telepit.ui.component.Hr;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.form.fields.SimpleBillComboBox;
 import lv.telepit.ui.form.fields.SimpleTypeComboBox;
@@ -25,7 +25,6 @@ import lv.telepit.utils.PdfUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -90,12 +89,10 @@ public class ReportView extends AbstractView {
         container = new BeanItemContainer<>(ReportData.class);
         table = new CommonTable(container, "report.data", "store", "user", "date", "type", "id", "name", "code", "price", "info");
 
-        final HorizontalLayout searchLayout1 = new HorizontalLayout(userField, storeField, withBillField);
-        searchLayout1.setSpacing(true);
-        final HorizontalLayout searchLayout2 = new HorizontalLayout(fromDateField, toDateField, typeField);
-        searchLayout2.setSpacing(true);
+        final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(userField, storeField, withBillField);
+        final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(fromDateField, toDateField, typeField);
 
-        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, new HorizontalLayout(searchButton, resetButton), new Hr());
+        final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2, new SpacedHorizontalLayout(searchButton, resetButton), new Hr());
         searchLayout.setSpacing(true);
         searchLayout.setVisible(true);
 
@@ -122,8 +119,7 @@ public class ReportView extends AbstractView {
         sumLabel = new Label();
         sumLabel.setContentMode(ContentMode.HTML);
 
-        final HorizontalLayout buttonLayout = new HorizontalLayout(pdfButton, xlsButton, refreshButton);
-        buttonLayout.setSpacing(true);
+        final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(pdfButton, xlsButton, refreshButton);
         buttonLayout.setWidth("1200px");
         buttonLayout.setExpandRatio(refreshButton, 1.0f);
         buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);

@@ -6,16 +6,14 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
+import lv.telepit.backend.BusinessReceiptService;
 import lv.telepit.backend.CommonService;
 import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.backend.StockService;
-import lv.telepit.model.ServiceGood;
-import lv.telepit.model.ServiceStatus;
 import lv.telepit.model.User;
 import lv.telepit.ui.view.*;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.Date;
 import java.util.Locale;
 
 @Theme("mytheme")
@@ -26,6 +24,7 @@ public class TelepitUI extends UI {
     private CommonService commonService;
     private ServiceGoodService serviceGoodService;
     private StockService stockService;
+    private BusinessReceiptService businessReceiptService;
 
     private User currentUser;
 
@@ -44,6 +43,7 @@ public class TelepitUI extends UI {
         commonService = new CommonService();
         serviceGoodService = new ServiceGoodService();
         stockService = new StockService();
+        businessReceiptService = new BusinessReceiptService();
 
         Navigator navigator = new Navigator(this, this);
 
@@ -55,7 +55,8 @@ public class TelepitUI extends UI {
         CategoryView categoryView = new CategoryView(navigator, this, "category");
         ReportView reportView = new ReportView(navigator, this, "report");
         ChangesView changesView = new ChangesView(navigator, this, "changes");
-
+        BusinessReceiptView businessReceiptView = new BusinessReceiptView(navigator, this, "businessReceipt");
+        
         navigator.addView("", startView);
         navigator.addView("stock", stockView);
         navigator.addView("service", serviceView);
@@ -64,6 +65,7 @@ public class TelepitUI extends UI {
         navigator.addView("category", categoryView);
         navigator.addView("report", reportView);
         navigator.addView("changes", changesView);
+        navigator.addView("businessReceipt", businessReceiptView);
     }
 
     public CommonService getCommonService() {
@@ -74,6 +76,10 @@ public class TelepitUI extends UI {
         return serviceGoodService;
     }
 
+    public BusinessReceiptService getBusinessReceiptService() {
+        return businessReceiptService;
+    }
+    
     public StockService getStockService() {
         return stockService;
     }

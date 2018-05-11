@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import lv.telepit.backend.CommonService;
 import lv.telepit.model.Store;
 import lv.telepit.ui.actions.SaveOnClick;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
@@ -28,6 +29,22 @@ public class StoreForm extends FormLayout {
     @PropertyId("address")
     private TextField addressField = FieldFactory.getTextField("store.address");
 
+    @PropertyId("legalName")
+    private TextField legalNameField = FieldFactory.getTextField("store.legalName");
+
+    @PropertyId("legalRegNum")
+    private TextField legalRegNumField = FieldFactory.getTextField("store.legalRegNum");
+
+    @PropertyId("legalBankName")
+    private TextField legalBankNameField = FieldFactory.getTextField("store.legalBankName");
+
+    @PropertyId("legalBankNum")
+    private TextField legalBankNumField = FieldFactory.getTextField("store.legalBankNum");
+
+    @PropertyId("legalAddress")
+    private TextField legalAddressField = FieldFactory.getTextField("store.legalAddress");
+    
+
 
     public StoreForm(BeanItem<Store> storeItem, AbstractView view) {
 
@@ -36,12 +53,17 @@ public class StoreForm extends FormLayout {
         addComponent(nameField);
         addComponent(cityField);
         addComponent(addressField);
+        addComponent(legalNameField);
+        addComponent(legalRegNumField);
+        addComponent(legalAddressField);
+        addComponent(legalBankNameField);
+        addComponent(legalBankNumField);
 
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveStore(binder, storeItem.getBean(), view));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+        HorizontalLayout buttonLayout = new SpacedHorizontalLayout();
         buttonLayout.setSpacing(true);
         buttonLayout.setMargin(true);
         buttonLayout.setWidth("100%");

@@ -8,6 +8,7 @@ import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
 import lv.telepit.ui.actions.SaveOnClick;
+import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
 
@@ -130,7 +131,7 @@ public class ServiceGoodForm extends FormLayout {
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, serviceGoodItem.getBean(), view));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+        HorizontalLayout buttonLayout = new SpacedHorizontalLayout();
         buttonLayout.setSpacing(true);
         buttonLayout.setMargin(true);
         buttonLayout.setWidth("100%");

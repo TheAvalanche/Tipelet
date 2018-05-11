@@ -5,10 +5,13 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import lv.telepit.model.BusinessReceipt;
 import lv.telepit.model.ChangeRecord;
+import lv.telepit.model.ReceiptItem;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.dto.ReportData;
 import org.apache.commons.lang3.StringUtils;
+import pl.allegro.finance.tradukisto.MoneyConverters;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,6 +28,8 @@ public class PdfUtils {
     private Document document;
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
+    private Font headerFont;
+    private Font header2Font;
     private Font boldFont;
     private Font normalFont;
     private Font boldBlueFont;
@@ -35,6 +40,8 @@ public class PdfUtils {
     public PdfUtils() throws DocumentException {
         try {
             BaseFont arial = BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            headerFont = new Font(arial, 14, Font.BOLD);
+            header2Font = new Font(arial, 12, Font.BOLD);
             boldFont = new Font(arial, 10, Font.BOLD);
             normalFont = new Font(arial, 10, Font.NORMAL);
             boldBlueFont = new Font(arial, 12, Font.NORMAL, BaseColor.BLUE);
@@ -338,6 +345,153 @@ public class PdfUtils {
         document.add(new Paragraph(" "));
         document.add(footer);
         document.add(footerLines);
+    }
+
+    public void createInvoice(BusinessReceipt businessReceipt) throws DocumentException, IOException {
+        Paragraph headerOne = new Paragraph("Rēķins Nr. " + businessReceipt.getNumber(), headerFont);
+        headerOne.setAlignment(Element.ALIGN_CENTER);
+
+        PdfPTable dateTable = new PdfPTable(2);
+        dateTable.setWidthPercentage(100);
+        dateTable.setWidths(new int[]{2, 5});
+
+        dateTable.addCell(noBCell("Izrakstīšanas datums", normalFont));
+        dateTable.addCell(noBCell(new SimpleDateFormat("dd/MM/yyyy").format(businessReceipt.getDate()), boldFont));
+        
+        PdfPTable providerTable = new PdfPTable(2);
+        providerTable.setWidthPercentage(100);
+        providerTable.setWidths(new int[]{2, 5});
+
+        providerTable.addCell(noBCell("Piegādātājs", normalFont));
+        providerTable.addCell(noBCell(businessReceipt.getProviderName(), header2Font));
+        providerTable.addCell(noBCell("Reg.Nr.", normalFont));
+        providerTable.addCell(noBCell(businessReceipt.getProviderRegNum(), boldFont));
+        providerTable.addCell(noBCell("Jurid. adrese", normalFont));
+        providerTable.addCell(noBCell(businessReceipt.getProviderLegalAddress(), boldFont));
+        providerTable.addCell(noBCell("Norēķinu rekvizīti", normalFont));
+        providerTable.addCell(noBCell(businessReceipt.getProviderBankName(), boldFont));
+        providerTable.addCell(noBCell("Konts", normalFont));
+        providerTable.addCell(noBCell(businessReceipt.getProviderBankNum(), boldFont));
+        providerTable.addCell(noBCell("Izsniegšanas vieta", normalFont));
+        providerTable.addCell(noBCell(businessReceipt.getProviderAddress(), boldFont));
+                
+        providerTable.addCell(empty2());
+        providerTable.addCell(hr());
+        providerTable.addCell(empty2());
+
+        PdfPTable receiverTable = new PdfPTable(2);
+        receiverTable.setWidthPercentage(100);
+        receiverTable.setWidths(new int[]{2, 5});
+
+        receiverTable.addCell(noBCell("Maksātājs", normalFont));
+        receiverTable.addCell(noBCell(businessReceipt.getReceiverName(), header2Font));
+        receiverTable.addCell(noBCell("Reg.Nr.", normalFont));
+        receiverTable.addCell(noBCell(businessReceipt.getReceiverRegNum(), boldFont));
+        receiverTable.addCell(noBCell("Jurid. adrese", normalFont));
+        receiverTable.addCell(noBCell(businessReceipt.getReceiverLegalAddress(), boldFont));
+        receiverTable.addCell(noBCell("Norēķinu rekvizīti", normalFont));
+        receiverTable.addCell(noBCell(businessReceipt.getReceiverBankName(), boldFont));
+        receiverTable.addCell(noBCell("Konts", normalFont));
+        receiverTable.addCell(noBCell(businessReceipt.getReceiverBankNum(), boldFont));
+
+        receiverTable.addCell(empty2());
+        receiverTable.addCell(hr());
+        receiverTable.addCell(empty2());
+
+        PdfPTable itemsTable = new PdfPTable(6);
+        itemsTable.setWidthPercentage(100);
+        itemsTable.setWidths(new int[]{1, 5, 2, 2, 2, 2});
+        
+        itemsTable.addCell(new PdfPCell(new Phrase("№", boldFont)));
+        itemsTable.addCell(new PdfPCell(new Phrase("Preču nosaukums", boldFont)));
+        itemsTable.addCell(new PdfPCell(new Phrase("Mērv.", boldFont)));
+        itemsTable.addCell(new PdfPCell(new Phrase("Daudz.", boldFont)));
+        itemsTable.addCell(new PdfPCell(new Phrase("Cena", boldFont)));
+        itemsTable.addCell(new PdfPCell(new Phrase("Summa", boldFont)));
+        
+
+        int i = 0;
+        for (ReceiptItem receiptItem : businessReceipt.getReceiptItems()) {
+            itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(++i), normalFont)));
+            itemsTable.addCell(new PdfPCell(new Phrase(receiptItem.getName(), boldFont)));
+            itemsTable.addCell(new PdfPCell(new Phrase("gb", normalFont)));
+            itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getCount()), normalFont)));
+            itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getPrice()), normalFont)));
+            itemsTable.addCell(new PdfPCell(new Phrase(receiptItem.getTotalPrice().toString(), normalFont)));
+        }
+        
+        itemsTable.addCell(empty());
+        itemsTable.addCell(noBCell("Kopā", normalFont));
+        itemsTable.addCell(empty());
+        itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(businessReceipt.totalAmount()), normalFont)));
+        itemsTable.addCell(empty());
+        itemsTable.addCell(new PdfPCell(new Phrase("EUR " + String.valueOf(businessReceipt.getTotalPrice()), normalFont)));
+        
+        itemsTable.addCell(empty());
+        itemsTable.addCell(noBCell("Pievienotās vērtības nodoklis", normalFont));
+        itemsTable.addCell(empty());
+        itemsTable.addCell(empty());
+        itemsTable.addCell(noBCell("0%", normalFont));
+        itemsTable.addCell(new PdfPCell(new Phrase(" ", normalFont)));
+
+        itemsTable.addCell(empty());
+        itemsTable.addCell(noBCell("Pavisam apmaksai", normalFont));
+        itemsTable.addCell(empty());
+        itemsTable.addCell(empty());
+        itemsTable.addCell(empty());
+        itemsTable.addCell(new PdfPCell(new Phrase("EUR " + String.valueOf(businessReceipt.getTotalPrice()), boldFont)));
+
+        MoneyConverters converter = MoneyConverters.LATVIAN_BANKING_MONEY_VALUE;
+        String moneyAsWords = converter.asWords(businessReceipt.getTotalPrice());
+        moneyAsWords = moneyAsWords.replace("EUR", "eiro").replace("/100", " centi");
+        
+        PdfPTable sumTable = new PdfPTable(2);
+        sumTable.setWidthPercentage(100);
+        sumTable.setWidths(new int[]{1, 5});
+
+        sumTable.addCell(noBCell("Vārdiem:", normalFont));
+        sumTable.addCell(noBCell(moneyAsWords, boldFont));
+        
+        document.add(headerOne);
+        document.add(new Paragraph(" "));
+        document.add(dateTable);
+        document.add(new Paragraph(" "));
+        document.add(providerTable);
+        document.add(receiverTable);
+        document.add(new Paragraph(" "));
+        document.add(itemsTable);
+        document.add(new Paragraph(" "));
+        document.add(sumTable);
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("Rēķins ir sagatavots elektroniski un ir derīgs bez paraksta.", boldFont));
+        
+        
+    }
+
+    private PdfPCell hr() {
+        PdfPCell cell = new PdfPCell(new Phrase(" ", normalFont));
+        cell.setBorder(Rectangle.BOTTOM);
+        cell.setColspan(2);
+        return cell;
+    }
+
+    private PdfPCell empty() {
+        PdfPCell empty = new PdfPCell(new Phrase(" ", normalFont));
+        empty.setBorder(Rectangle.NO_BORDER);
+        return empty;
+    }
+    
+    private PdfPCell empty2() {
+        PdfPCell empty = new PdfPCell(new Phrase(" ", normalFont));
+        empty.setBorder(Rectangle.NO_BORDER);
+        empty.setColspan(2);
+        return empty;
+    }
+
+    private PdfPCell noBCell(String phrase, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(phrase, font));
+        cell.setBorder(Rectangle.NO_BORDER);
+        return cell;
     }
 
     public ByteArrayOutputStream getOutputStream() {
