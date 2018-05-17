@@ -8,6 +8,11 @@ import lv.telepit.model.BusinessReceipt;
 import lv.telepit.model.ReceiptItem;
 
 import javax.persistence.OptimisticLockException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -47,6 +52,18 @@ public class BusinessReceiptService {
 
 	public List<BusinessReceipt> findBusinessReceipt(Map<BusinessReceiptCriteria, Object> criteriaMap) {
 		return businessReceiptDao.findBusinessReceipts(criteriaMap);
+	}
+	
+	public String generateName() {
+		return DateTimeFormatter.ofPattern("ddMMyyyy").format(LocalDate.now()) + "-" + (countReceiptsForToday() + 1);
+	}
+	
+	public int countReceiptsForToday() {
+		Map<BusinessReceiptCriteria, Object> criteriaMap = new HashMap<>();
+		criteriaMap.put(BusinessReceiptCriteria.DATE_FROM, Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+		criteriaMap.put(BusinessReceiptCriteria.DATE_TO, Date.from(LocalDate.now().plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+		
+		return businessReceiptDao.findBusinessReceipts(criteriaMap).size();
 	}
 
 	private void catchOptimisticLockException() {

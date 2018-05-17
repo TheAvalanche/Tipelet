@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 public class BusinessReceiptForm extends FormLayout {
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
-
+		
 	@PropertyId("store")
 	private ComboBox storeField = FieldFactory.getStoreComboBox("businessReceipt.store");
 
@@ -80,15 +80,41 @@ public class BusinessReceiptForm extends FormLayout {
 			good.setProviderBankName(store.getLegalBankName());
 			good.setProviderBankNum(store.getLegalBankNum());
 		}
-
+		
 		if (view.getUi().getCurrentUser().isAdmin()) {
 			storeField.setRequired(true);
 			addComponent(storeField);
+			storeField.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+				Store store = (Store) valueChangeEvent.getProperty().getValue();
+				if (store == null) {
+					providerNameField.setValue("");
+					providerRegNumField.setValue("");
+					providerLegalAddressField.setValue("");
+					providerAddressField.setValue("");
+					providerBankNameField.setValue("");
+					providerBankNumField.setValue("");
+				} else {
+					providerNameField.setValue(store.getLegalName());
+					providerRegNumField.setValue(store.getLegalRegNum());
+					providerLegalAddressField.setValue(store.getLegalAddress());
+					providerAddressField.setValue(store.getAddress());
+					providerBankNameField.setValue(store.getLegalBankName());
+					providerBankNumField.setValue(store.getLegalBankNum());
+				}
+
+			});
 		}
 
 		FieldGroup binder = new FieldGroup(businessReceiptItem);
 		binder.bindMemberFields(this);
 
+		providerNameField.setEnabled(false);
+		providerRegNumField.setEnabled(false);
+		providerLegalAddressField.setEnabled(false);
+		providerAddressField.setEnabled(false);
+		providerBankNameField.setEnabled(false);
+		providerBankNumField.setEnabled(false);
+		
 		addComponent(new SpacedHorizontalLayout(providerNameField, providerRegNumField));
 		addComponent(new SpacedHorizontalLayout(providerLegalAddressField, providerAddressField));
 		addComponent(new SpacedHorizontalLayout(providerBankNameField, providerBankNumField));
@@ -162,6 +188,7 @@ public class BusinessReceiptForm extends FormLayout {
 
 		TextField nameField = new TextField("Nosaukums", beanItem.getItemProperty("name"));
 		nameField.setImmediate(true);
+		nameField.setRequired(true);
 		nameField.setWidth(100f, Sizeable.Unit.PIXELS);
 		nameField.setNullRepresentation("");
 
@@ -231,6 +258,7 @@ public class BusinessReceiptForm extends FormLayout {
 		public void businessMethod() {
 			BusinessReceiptService service = view.getUi().getBusinessReceiptService();
 			if (entity.getId() == 0) {
+				entity.setNumber(view.getUi().getBusinessReceiptService().generateName());
 				service.createBusinessReceipt(entity);
 			} else {
 				service.updateBusinessReceipt(entity);

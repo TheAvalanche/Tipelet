@@ -32,6 +32,7 @@ public class BusinessReceiptView extends AbstractView {
 	private Button updateBusinessReceipt;
 
 	private TextField idField;
+	private TextField numberField;
 	private TextField receiverNameField;
 	private ComboBox userField;
 	private ComboBox storeField;
@@ -64,6 +65,7 @@ public class BusinessReceiptView extends AbstractView {
 		storeField = FieldFactory.getStoreComboBox("search.store");
 		fromDateField = FieldFactory.getDateField("search.businessReceipt.fromDate");
 		toDateField = FieldFactory.getDateField("search.businessReceipt.toDate");
+		numberField = FieldFactory.getTextField("search.businessReceipt.number");
 
 		searchButton = new Button(bundle.getString("default.button.search"));
 		searchButton.addClickListener(new SearchListener());
@@ -79,9 +81,12 @@ public class BusinessReceiptView extends AbstractView {
 		refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
 		container = new BeanItemContainer<>(BusinessReceipt.class);
-		table = new CommonTable(container, "businessReceipt", "id", "store", "date", "receiverName");
+		table = new CommonTable(container, "businessReceipt", "number", "store", "date", "receiverName");
 		table.setCellStyleGenerator((Table.CellStyleGenerator) (source, itemId, propertyId) -> {
 			BusinessReceipt br = container.getItem(itemId).getBean();
+			if (br.isPaid()) {
+				return "finished";
+			}
 			return "";
 		});
 		table.addItemClickListener(new EditBusinessReceiptListener());
@@ -100,7 +105,7 @@ public class BusinessReceiptView extends AbstractView {
 		updateBusinessReceipt.setEnabled(false);
 		updateBusinessReceipt.addClickListener(new EditBusinessReceiptListener());
 
-		final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(idField, userField, storeField);
+		final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(numberField, userField, storeField);
 		final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(receiverNameField, fromDateField, toDateField);
 
 		final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
@@ -211,6 +216,7 @@ public class BusinessReceiptView extends AbstractView {
 		@Override
 		public void buttonClick(Button.ClickEvent clickEvent) {
 			idField.setValue(null);
+			numberField.setValue(null);
 			receiverNameField.setValue(null);
 			userField.setValue(null);
 			storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
@@ -231,6 +237,9 @@ public class BusinessReceiptView extends AbstractView {
 		Map<BusinessReceiptCriteria, Object> map = new HashMap<>();
 		if (!Strings.isNullOrEmpty(idField.getValue())) {
 			map.put(BusinessReceiptCriteria.ID, idField.getValue().trim().toLowerCase());
+		}
+		if (!Strings.isNullOrEmpty(numberField.getValue())) {
+			map.put(BusinessReceiptCriteria.NUMBER, numberField.getValue().trim().toLowerCase());
 		}
 		if (!Strings.isNullOrEmpty(receiverNameField.getValue())) {
 			map.put(BusinessReceiptCriteria.RECEIVER_NAME, receiverNameField.getValue().trim().toLowerCase());

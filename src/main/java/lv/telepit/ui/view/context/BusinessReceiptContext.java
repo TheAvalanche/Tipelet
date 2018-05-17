@@ -1,10 +1,12 @@
 package lv.telepit.ui.view.context;
 
 import com.vaadin.event.Action;
+import lv.telepit.model.BusinessReceipt;
 import lv.telepit.ui.view.BusinessReceiptView;
 import lv.telepit.ui.view.context.actions.AbstractAction;
+import lv.telepit.ui.view.context.actions.BusinessReceiptBillAction;
+import lv.telepit.ui.view.context.actions.BusinessReceiptPaidAction;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,14 +25,10 @@ public class BusinessReceiptContext implements Action.Handler {
         }
 
         List<AbstractAction> visibleActions = new LinkedList<>();
+        visibleActions.add(new BusinessReceiptBillAction(((BusinessReceipt) target), view));
+        visibleActions.add(new BusinessReceiptPaidAction(((BusinessReceipt) target), view));
 
-        Iterator<AbstractAction> iter = visibleActions.iterator();
-        while (iter.hasNext()) {
-            AbstractAction action = iter.next();
-            if (!action.show()) {
-                iter.remove();
-            }
-        }
+        visibleActions.removeIf(action -> !action.show());
         return visibleActions.toArray(new Action[visibleActions.size()]);
     }
 

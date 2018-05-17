@@ -32,13 +32,7 @@ public class StockContext implements Action.Handler {
         visibleActions.add(new StockWarrantyAction(((StockGood) target), view));
         visibleActions.add(new StockHistoryAction(((StockGood) target), view));
 
-        Iterator<AbstractAction> iter = visibleActions.iterator();
-        while (iter.hasNext()) {
-            AbstractAction action = iter.next();
-            if (!action.show()) {
-                iter.remove();
-            }
-        }
+        visibleActions.removeIf(action -> !action.show());
         return visibleActions.toArray(new Action[visibleActions.size()]);
     }
 

@@ -5,7 +5,6 @@ import lv.telepit.model.ServiceGood;
 import lv.telepit.ui.view.ServiceView;
 import lv.telepit.ui.view.context.actions.*;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,13 +36,7 @@ public class ServiceContext implements Action.Handler {
         visibleActions.add(new ServiceBillAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceHistoryAction(((ServiceGood) target), view));
 
-        Iterator<AbstractAction> iter = visibleActions.iterator();
-        while (iter.hasNext()) {
-            AbstractAction action = iter.next();
-            if (!action.show()) {
-                iter.remove();
-            }
-        }
+        visibleActions.removeIf(action -> !action.show());
         return visibleActions.toArray(new Action[visibleActions.size()]);
     }
 

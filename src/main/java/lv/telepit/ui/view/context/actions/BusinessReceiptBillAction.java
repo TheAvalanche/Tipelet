@@ -34,8 +34,8 @@ public class BusinessReceiptBillAction extends AbstractAction {
     public void execute() {
         Window subWindow = new Window();
         subWindow.setModal(true);
-        subWindow.setHeight("180px");
-        subWindow.setWidth("280px");
+        subWindow.setHeight("150px");
+        subWindow.setWidth("185px");
         subWindow.setClosable(true);
         view.getUi().addWindow(subWindow);
 
@@ -75,7 +75,7 @@ public class BusinessReceiptBillAction extends AbstractAction {
         StringBuilder builder = new StringBuilder();
         builder.append("invoice");
         builder.append(new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()));
-        builder.append("." + extension);
+        builder.append(".").append(extension);
         return builder.toString();
     }
 }
