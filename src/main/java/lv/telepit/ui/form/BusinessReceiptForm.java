@@ -81,29 +81,28 @@ public class BusinessReceiptForm extends FormLayout {
 			good.setProviderBankNum(store.getLegalBankNum());
 		}
 		
-		if (view.getUi().getCurrentUser().isAdmin()) {
-			storeField.setRequired(true);
-			addComponent(storeField);
-			storeField.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
-				Store store = (Store) valueChangeEvent.getProperty().getValue();
-				if (store == null) {
-					providerNameField.setValue("");
-					providerRegNumField.setValue("");
-					providerLegalAddressField.setValue("");
-					providerAddressField.setValue("");
-					providerBankNameField.setValue("");
-					providerBankNumField.setValue("");
-				} else {
-					providerNameField.setValue(store.getLegalName());
-					providerRegNumField.setValue(store.getLegalRegNum());
-					providerLegalAddressField.setValue(store.getLegalAddress());
-					providerAddressField.setValue(store.getAddress());
-					providerBankNameField.setValue(store.getLegalBankName());
-					providerBankNumField.setValue(store.getLegalBankNum());
-				}
 
-			});
-		}
+		storeField.setRequired(true);
+		addComponent(storeField);
+		storeField.addValueChangeListener((Property.ValueChangeListener) valueChangeEvent -> {
+			Store store = (Store) valueChangeEvent.getProperty().getValue();
+			if (store == null) {
+				providerNameField.setValue("");
+				providerRegNumField.setValue("");
+				providerLegalAddressField.setValue("");
+				providerAddressField.setValue("");
+				providerBankNameField.setValue("");
+				providerBankNumField.setValue("");
+			} else {
+				providerNameField.setValue(store.getLegalName());
+				providerRegNumField.setValue(store.getLegalRegNum());
+				providerLegalAddressField.setValue(store.getLegalAddress());
+				providerAddressField.setValue(store.getAddress());
+				providerBankNameField.setValue(store.getLegalBankName());
+				providerBankNumField.setValue(store.getLegalBankNum());
+			}
+
+		});
 
 		FieldGroup binder = new FieldGroup(businessReceiptItem);
 		binder.bindMemberFields(this);

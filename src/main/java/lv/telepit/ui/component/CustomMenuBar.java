@@ -16,6 +16,7 @@ public class CustomMenuBar extends MenuBar {
     private final MenuItem storeItem;
     private final MenuItem userItem;
     private final MenuItem categoryItem;
+    private final MenuItem businessReceiptItem;
     private Navigator navigator;
     private final MenuItem adminItem;
     private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
@@ -25,7 +26,7 @@ public class CustomMenuBar extends MenuBar {
         this.navigator = navigator;
         this.addItem(bundle.getString("menu.stock"), new NavigateCommand("stock"));
         this.addItem(bundle.getString("menu.service"), new NavigateCommand("service"));
-        this.addItem(bundle.getString("menu.businessReceipt"), new NavigateCommand("businessReceipt"));
+        businessReceiptItem = this.addItem(bundle.getString("menu.businessReceipt"), new NavigateCommand("businessReceipt"));
         adminItem = this.addItem(bundle.getString("menu.admin"), null, null);
         reportItem = adminItem.addItem(bundle.getString("menu.financial"), new NavigateCommand("report"));
         changesItem = adminItem.addItem(bundle.getString("menu.changes"), new NavigateCommand("changes"));
@@ -44,7 +45,12 @@ public class CustomMenuBar extends MenuBar {
             storeItem.setVisible(false);
             userItem.setVisible(false);
             categoryItem.setVisible(false);
+
+            if (!user.isCanSeeReceipts()) {
+                businessReceiptItem.setVisible(false);
+            }
         }
+
         nameLabel.setText("Sveiki, " + user.getName() + " (" + user.getStore().getName() + ")");
     }
 

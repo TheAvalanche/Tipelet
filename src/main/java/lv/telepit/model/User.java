@@ -26,6 +26,7 @@ public class User {
     private boolean admin = false;
     private boolean accessToAddInStock = false;
     private boolean accessToBillOnly = false;
+    private boolean canSeeReceipts = false;
     private List<ServiceGood> serviceGoodList;
 
     @Id
@@ -136,6 +137,14 @@ public class User {
 
     public void setServiceGoodList(List<ServiceGood> serviceGoodList) {
         this.serviceGoodList = serviceGoodList;
+    }
+
+    public boolean isCanSeeReceipts() {
+        return canSeeReceipts;
+    }
+
+    public void setCanSeeReceipts(boolean canSeeReceipts) {
+        this.canSeeReceipts = canSeeReceipts;
     }
 
     @Override

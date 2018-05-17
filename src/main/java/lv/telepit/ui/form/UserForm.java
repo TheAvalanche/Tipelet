@@ -49,7 +49,9 @@ public class UserForm extends FormLayout {
     @PropertyId("accessToBillOnly")
     private CheckBox accessToBillOnly = FieldFactory.getCheckBox("user.accessToBillOnly");
 
-
+    @PropertyId("canSeeReceipts")
+    private CheckBox canSeeReceipts = FieldFactory.getCheckBox("user.canSeeReceipts");
+    
     public UserForm(BeanItem<User> userItem, AbstractView view) {
 
         FieldGroup binder = new FieldGroup(userItem);
@@ -66,6 +68,7 @@ public class UserForm extends FormLayout {
         addComponent(new Label(bundle.getString("user.form.access.label")));
         addComponent(accessToAddInStock);
         addComponent(accessToBillOnly);
+        addComponent(canSeeReceipts);
         addComponent(new Hr());
 
 
