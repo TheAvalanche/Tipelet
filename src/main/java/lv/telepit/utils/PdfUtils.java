@@ -427,12 +427,12 @@ public class PdfUtils {
         itemsTable.addCell(empty());
         itemsTable.addCell(new PdfPCell(new Phrase("EUR " + String.valueOf(businessReceipt.getTotalPrice()), normalFont)));
         
-        itemsTable.addCell(empty());
+/*        itemsTable.addCell(empty());
         itemsTable.addCell(noBCell("Pievienotās vērtības nodoklis", normalFont));
         itemsTable.addCell(empty());
         itemsTable.addCell(empty());
         itemsTable.addCell(noBCell("0%", normalFont));
-        itemsTable.addCell(new PdfPCell(new Phrase(" ", normalFont)));
+        itemsTable.addCell(new PdfPCell(new Phrase(" ", normalFont)));*/
 
         itemsTable.addCell(empty());
         itemsTable.addCell(noBCell("Pavisam apmaksai", normalFont));

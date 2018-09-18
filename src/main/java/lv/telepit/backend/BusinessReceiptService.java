@@ -50,6 +50,15 @@ public class BusinessReceiptService {
 		}
 	}
 
+	public void deleteBusinessReceipt(BusinessReceipt receipt) {
+		receipt.setDeleted(true);
+		try {
+			businessReceiptDao.updateBusinessReceipt(receipt);
+		} catch (OptimisticLockException e) {
+			catchOptimisticLockException();
+		}
+	}
+
 	public List<BusinessReceipt> findBusinessReceipt(Map<BusinessReceiptCriteria, Object> criteriaMap) {
 		return businessReceiptDao.findBusinessReceipts(criteriaMap);
 	}

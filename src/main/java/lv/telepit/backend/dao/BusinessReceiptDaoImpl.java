@@ -52,7 +52,7 @@ public class BusinessReceiptDaoImpl implements BusinessReceiptDao {
 				entry.getKey().setQuery(queryBuilder);
 			}
 		}
-		queryBuilder.append(" order by br.id desc");
+		queryBuilder.append(" and br.deleted <> true order by br.id desc");
 		final Query q = em.createQuery(queryBuilder.toString());
 		if (criteriaMap != null) {
 			for (Map.Entry<BusinessReceiptCriteria, Object> entry : criteriaMap.entrySet()) {

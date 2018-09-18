@@ -26,6 +26,7 @@ public class BusinessReceipt {
 	private String receiverBankName;
 	private String receiverBankNum;
 	private boolean paid = false;
+	private boolean deleted = false;
 	private List<ReceiptItem> receiptItems = new ArrayList<>();
 
 	@Id
@@ -168,6 +169,14 @@ public class BusinessReceipt {
 
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})

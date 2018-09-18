@@ -20,6 +20,7 @@ import lv.telepit.ui.form.BusinessReceiptForm;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.context.BusinessReceiptContext;
 import org.apache.commons.lang3.time.DateUtils;
+import org.vaadin.dialogs.ConfirmDialog;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class BusinessReceiptView extends AbstractView {
 
 	private Button addBusinessReceipt;
 	private Button updateBusinessReceipt;
+	private Button deleteBusinessReceipt;
 
 	private TextField idField;
 	private TextField numberField;
@@ -105,6 +107,12 @@ public class BusinessReceiptView extends AbstractView {
 		updateBusinessReceipt.setEnabled(false);
 		updateBusinessReceipt.addClickListener(new EditBusinessReceiptListener());
 
+		deleteBusinessReceipt = new Button(bundle.getString("default.button.delete"));
+		deleteBusinessReceipt.setIcon(new ThemeResource("img/delete.png"));
+		deleteBusinessReceipt.setWidth("150");
+		deleteBusinessReceipt.setEnabled(false);
+		deleteBusinessReceipt.addClickListener(new EditBusinessReceiptListener());
+
 		final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(numberField, userField, storeField);
 		final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(receiverNameField, fromDateField, toDateField);
 
@@ -121,7 +129,7 @@ public class BusinessReceiptView extends AbstractView {
 		headerLayout.setWidth("1200px");
 		headerLayout.setComponentAlignment(expandButton, Alignment.BOTTOM_RIGHT);
 		
-		final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(addBusinessReceipt, updateBusinessReceipt, refreshButton);
+		final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(addBusinessReceipt, updateBusinessReceipt, deleteBusinessReceipt, refreshButton);
 		buttonLayout.setWidth("1200px");
 		buttonLayout.setExpandRatio(refreshButton, 1.0f);
 		buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
@@ -142,6 +150,7 @@ public class BusinessReceiptView extends AbstractView {
 
 		ui.removeWindow(subWindow);
 		updateBusinessReceipt.setEnabled(false);
+		deleteBusinessReceipt.setEnabled(false);
 
 		if (businessReceipts == null) {
 			businessReceipts = ui.getBusinessReceiptService().findBusinessReceipt(buildMap());
@@ -159,7 +168,9 @@ public class BusinessReceiptView extends AbstractView {
 
 	@Override
 	public void checkAuthority() {
-
+		if (!ui.getCurrentUser().isAdmin()) {
+			deleteBusinessReceipt.setVisible(false);
+		}
 	}
 
 	private class EditBusinessReceiptListener implements Button.ClickListener, ItemClickEvent.ItemClickListener, Property.ValueChangeListener {
@@ -169,6 +180,17 @@ public class BusinessReceiptView extends AbstractView {
 				openBusinessReceiptForm(new BeanItem<>(new BusinessReceipt()));
 			} else if (clickEvent.getButton() == updateBusinessReceipt && table.getValue() != null){
 				openBusinessReceiptForm(container.getItem(table.getValue()));
+			} else if (clickEvent.getButton() == deleteBusinessReceipt && table.getValue() != null) {
+				final BusinessReceipt goodToDelete = container.getItem(table.getValue()).getBean();
+				ConfirmDialog.show(ui,
+						bundle.getString("service.view.delete.header"),
+						bundle.getString("service.view.delete.message"),
+						bundle.getString("default.button.ok"), bundle.getString("default.button.cancel"), (ConfirmDialog.Listener) dialog -> {
+							if (dialog.isConfirmed()) {
+								ui.getBusinessReceiptService().deleteBusinessReceipt(goodToDelete);
+								refreshView();
+							}
+						});
 			}
 		}
 
@@ -183,6 +205,7 @@ public class BusinessReceiptView extends AbstractView {
 		@Override
 		public void valueChange(Property.ValueChangeEvent event) {
 			updateBusinessReceipt.setEnabled(table.getValue() != null);
+			deleteBusinessReceipt.setEnabled(table.getValue() != null);
 		}
 
 		private void openBusinessReceiptForm(BeanItem<BusinessReceipt> businessReceipt) {
