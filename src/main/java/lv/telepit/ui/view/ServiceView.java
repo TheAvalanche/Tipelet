@@ -283,24 +283,24 @@ public class ServiceView extends AbstractView {
             updateGood.setEnabled(table.getValue() != null);
             deleteGood.setEnabled(table.getValue() != null);
         }
+    }
 
-        private void openServiceGoodForm(BeanItem<ServiceGood> serviceGood) {
+    public void openServiceGoodForm(BeanItem<ServiceGood> serviceGood) {
 
-            subWindow = new Window();
-            subWindow.setModal(true);
-            subWindow.setHeight("800px");
-            subWindow.setWidth("450px");
-            subWindow.setClosable(true);
-            ui.addWindow(subWindow);
+        subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("800px");
+        subWindow.setWidth("450px");
+        subWindow.setClosable(true);
+        ui.addWindow(subWindow);
 
-            final VerticalLayout layout = new VerticalLayout();
-            layout.setMargin(true);
-            layout.setSpacing(true);
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.setSpacing(true);
 
-            layout.addComponent(new ServiceGoodForm(serviceGood, ServiceView.this));
+        layout.addComponent(new ServiceGoodForm(serviceGood, ServiceView.this));
 
-            subWindow.setContent(layout);
-        }
+        subWindow.setContent(layout);
     }
 
     private class RefreshListener implements Button.ClickListener {

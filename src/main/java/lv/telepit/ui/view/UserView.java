@@ -188,24 +188,24 @@ public class UserView extends AbstractView {
             updateUser.setEnabled(table.getValue() != null);
             deleteUser.setEnabled(table.getValue() != null);
         }
+    }
 
-        private void openUserForm(BeanItem<User> user) {
+    private void openUserForm(BeanItem<User> user) {
 
-            subWindow = new Window();
-            subWindow.setModal(true);
-            subWindow.setHeight("500px");
-            subWindow.setWidth("450px");
-            subWindow.setClosable(true);
-            ui.addWindow(subWindow);
+        subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("500px");
+        subWindow.setWidth("450px");
+        subWindow.setClosable(true);
+        ui.addWindow(subWindow);
 
-            final VerticalLayout layout = new VerticalLayout();
-            layout.setMargin(true);
-            layout.setSpacing(true);
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.setSpacing(true);
 
-            layout.addComponent(new UserForm(user, UserView.this));
+        layout.addComponent(new UserForm(user, UserView.this));
 
-            subWindow.setContent(layout);
-        }
+        subWindow.setContent(layout);
     }
 
     private class FilterUser implements Button.ClickListener {

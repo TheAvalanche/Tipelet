@@ -1,12 +1,12 @@
 package lv.telepit.ui.view.context.actions;
 
 import lv.telepit.model.StockGood;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.StockView;
 
-public class StockBestsellerAction extends AbstractAction {
+public class StockBestsellerAction extends AbstractAction<StockView> {
     private final StockGood good;
 
-    public StockBestsellerAction(StockGood good, AbstractView view) {
+    public StockBestsellerAction(StockGood good, StockView view) {
         super(view);
 
         if (good.isBestseller()) {

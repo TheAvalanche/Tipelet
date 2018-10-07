@@ -11,18 +11,18 @@ import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.Hr;
 import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.converters.StringToDoubleConverter;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.StockView;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StockSellAction extends AbstractAction {
+public class StockSellAction extends AbstractAction<StockView> {
 
     private final StockGood good;
 
-    public StockSellAction(StockGood good, AbstractView view) {
+    public StockSellAction(StockGood good, StockView view) {
         super(view);
         this.setCaption(bundle.getString("sell.item"));
         this.good = good;

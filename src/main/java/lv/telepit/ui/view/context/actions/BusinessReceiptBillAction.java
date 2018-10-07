@@ -8,18 +8,18 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import lv.telepit.model.BusinessReceipt;
 import lv.telepit.ui.component.SpacedHorizontalLayout;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.BusinessReceiptView;
 import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BusinessReceiptBillAction extends AbstractAction {
+public class BusinessReceiptBillAction extends AbstractAction<BusinessReceiptView> {
 
     private final BusinessReceipt good;
 
-    public BusinessReceiptBillAction(BusinessReceipt good, AbstractView view) {
+    public BusinessReceiptBillAction(BusinessReceipt good, BusinessReceiptView view) {
         super(view);
         this.setCaption(bundle.getString("service.generate.bill"));
         this.good = good;

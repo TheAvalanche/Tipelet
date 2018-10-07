@@ -2,14 +2,14 @@ package lv.telepit.ui.view.context.actions;
 
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.ServiceView;
 import org.vaadin.dialogs.ConfirmDialog;
 
-public class ServiceStatusInRepairAction extends AbstractAction {
+public class ServiceStatusInRepairAction extends AbstractAction<ServiceView> {
 
     private final ServiceGood good;
 
-    public ServiceStatusInRepairAction(ServiceGood good, AbstractView view) {
+    public ServiceStatusInRepairAction(ServiceGood good, ServiceView view) {
         super(view);
         this.setCaption(bundle.getString("service.status.in.repair"));
         this.good = good;

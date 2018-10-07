@@ -5,6 +5,7 @@ import lv.telepit.model.BusinessReceipt;
 import lv.telepit.ui.view.BusinessReceiptView;
 import lv.telepit.ui.view.context.actions.AbstractAction;
 import lv.telepit.ui.view.context.actions.BusinessReceiptBillAction;
+import lv.telepit.ui.view.context.actions.BusinessReceiptFromTemplateAction;
 import lv.telepit.ui.view.context.actions.BusinessReceiptPaidAction;
 
 import java.util.LinkedList;
@@ -27,6 +28,7 @@ public class BusinessReceiptContext implements Action.Handler {
         List<AbstractAction> visibleActions = new LinkedList<>();
         visibleActions.add(new BusinessReceiptBillAction(((BusinessReceipt) target), view));
         visibleActions.add(new BusinessReceiptPaidAction(((BusinessReceipt) target), view));
+        visibleActions.add(new BusinessReceiptFromTemplateAction(((BusinessReceipt) target), view));
 
         visibleActions.removeIf(action -> !action.show());
         return visibleActions.toArray(new Action[visibleActions.size()]);
@@ -35,7 +37,9 @@ public class BusinessReceiptContext implements Action.Handler {
     @Override
     public void handleAction(Action action, Object sender, Object target) {
         ((AbstractAction) action).execute();
-        view.refreshView();
+        if (((AbstractAction) action).refreshViewAfter()) {
+            view.refreshView();
+        }
     }
 
 

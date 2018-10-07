@@ -207,24 +207,24 @@ public class BusinessReceiptView extends AbstractView {
 			updateBusinessReceipt.setEnabled(table.getValue() != null);
 			deleteBusinessReceipt.setEnabled(table.getValue() != null);
 		}
+	}
 
-		private void openBusinessReceiptForm(BeanItem<BusinessReceipt> businessReceipt) {
+	public void openBusinessReceiptForm(BeanItem<BusinessReceipt> businessReceipt) {
 
-			subWindow = new Window();
-			subWindow.setModal(true);
-			subWindow.setHeight("800px");
-			subWindow.setWidth("800px");
-			subWindow.setClosable(true);
-			ui.addWindow(subWindow);
+		subWindow = new Window();
+		subWindow.setModal(true);
+		subWindow.setHeight("800px");
+		subWindow.setWidth("800px");
+		subWindow.setClosable(true);
+		ui.addWindow(subWindow);
 
-			final VerticalLayout layout = new VerticalLayout();
-			layout.setMargin(true);
-			layout.setSpacing(true);
+		final VerticalLayout layout = new VerticalLayout();
+		layout.setMargin(true);
+		layout.setSpacing(true);
 
-			layout.addComponent(new BusinessReceiptForm(businessReceipt, BusinessReceiptView.this));
+		layout.addComponent(new BusinessReceiptForm(businessReceipt, this));
 
-			subWindow.setContent(layout);
-		}
+		subWindow.setContent(layout);
 	}
 
 

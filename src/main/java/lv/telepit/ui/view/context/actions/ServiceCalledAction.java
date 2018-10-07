@@ -2,16 +2,15 @@ package lv.telepit.ui.view.context.actions;
 
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
-import lv.telepit.ui.view.AbstractView;
-import org.vaadin.dialogs.ConfirmDialog;
+import lv.telepit.ui.view.ServiceView;
 
 import java.util.Date;
 
-public class ServiceCalledAction extends AbstractAction {
+public class ServiceCalledAction extends AbstractAction<ServiceView> {
 
     private final ServiceGood good;
 
-    public ServiceCalledAction(ServiceGood good, AbstractView view) {
+    public ServiceCalledAction(ServiceGood good, ServiceView view) {
         super(view);
         if (!good.isCalled()) {
             this.setCaption(bundle.getString("service.status.called"));

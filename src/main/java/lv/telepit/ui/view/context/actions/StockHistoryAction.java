@@ -9,19 +9,18 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.StockGood;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.StockView;
 import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class StockHistoryAction extends AbstractAction {
+public class StockHistoryAction extends AbstractAction<StockView> {
     private final StockGood good;
 
-    public StockHistoryAction(StockGood good, AbstractView view) {
+    public StockHistoryAction(StockGood good, StockView view) {
         super(view);
         this.setCaption(bundle.getString("show.history"));
         this.good = good;

@@ -6,27 +6,21 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.ServiceView;
 import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class ServiceHistoryAction extends AbstractAction {
+public class ServiceHistoryAction extends AbstractAction<ServiceView> {
     private final ServiceGood good;
 
-    public ServiceHistoryAction(ServiceGood good, AbstractView view) {
+    public ServiceHistoryAction(ServiceGood good, ServiceView view) {
         super(view);
         this.setCaption(bundle.getString("show.history"));
         this.good = good;

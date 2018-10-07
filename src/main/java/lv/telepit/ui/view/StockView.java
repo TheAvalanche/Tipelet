@@ -276,29 +276,31 @@ public class StockView extends AbstractView {
         }
 
         private void openStockGoodForm(BeanItem<StockGood> serviceGood) {
-            openForm(new StockGoodForm(serviceGood, StockView.this));
+            StockView.this.openStockGoodForm(new StockGoodForm(serviceGood, StockView.this));
         }
 
         private void openOrderStockGoodForm(BeanItem<StockGood> serviceGood) {
-            openForm(new OrderStockGoodForm(serviceGood, StockView.this));
+            StockView.this.openStockGoodForm(new OrderStockGoodForm(serviceGood, StockView.this));
         }
 
-        private void openForm(Component form) {
-            subWindow = new Window();
-            subWindow.setModal(true);
-            subWindow.setHeight("650px");
-            subWindow.setWidth("450px");
-            subWindow.setClosable(true);
-            ui.addWindow(subWindow);
 
-            final VerticalLayout layout = new VerticalLayout();
-            layout.setMargin(true);
-            layout.setSpacing(true);
+    }
 
-            layout.addComponent(form);
+    public void openStockGoodForm(Component form) {
+        subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("650px");
+        subWindow.setWidth("450px");
+        subWindow.setClosable(true);
+        ui.addWindow(subWindow);
 
-            subWindow.setContent(layout);
-        }
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.setSpacing(true);
+
+        layout.addComponent(form);
+
+        subWindow.setContent(layout);
     }
 
     private class ResetListener implements Button.ClickListener {

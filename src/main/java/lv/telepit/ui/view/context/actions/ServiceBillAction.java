@@ -5,18 +5,18 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.ui.component.SpacedHorizontalLayout;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.ServiceView;
 import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ServiceBillAction extends AbstractAction {
+public class ServiceBillAction extends AbstractAction<ServiceView> {
 
     private final ServiceGood good;
 
-    public ServiceBillAction(ServiceGood good, AbstractView view) {
+    public ServiceBillAction(ServiceGood good, ServiceView view) {
         super(view);
         this.setCaption(bundle.getString("service.generate.bill"));
         this.good = good;

@@ -13,7 +13,7 @@ public enum BusinessReceiptCriteria implements Criteria {
 				query.append("lower(cast(br.id as text)) like :id ");
 				break;
 			case STORE:
-				query.append("br.user.store = :store ");
+				query.append("br.store = :store ");
 				break;
 			case USER:
 				query.append("br.user = :user ");

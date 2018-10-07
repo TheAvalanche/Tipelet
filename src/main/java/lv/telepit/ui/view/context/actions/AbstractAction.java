@@ -1,18 +1,17 @@
 package lv.telepit.ui.view.context.actions;
 
 import com.vaadin.event.Action;
-import lv.telepit.model.StockGood;
 import lv.telepit.ui.view.AbstractView;
 
 import java.util.ResourceBundle;
 
-public abstract class AbstractAction extends Action {
+public abstract class AbstractAction<T extends AbstractView> extends Action {
 
     protected ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
-    protected AbstractView view;
+    protected T view;
 
-    protected AbstractAction(AbstractView view) {
+    protected AbstractAction(T view) {
         super("caption");
         this.view = view;
     }
@@ -20,4 +19,8 @@ public abstract class AbstractAction extends Action {
     public abstract boolean show();
 
     public abstract void execute();
+    
+    public boolean refreshViewAfter() {
+        return true;
+    }
 }

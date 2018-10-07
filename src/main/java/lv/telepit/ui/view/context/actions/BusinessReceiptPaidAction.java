@@ -1,13 +1,13 @@
 package lv.telepit.ui.view.context.actions;
 
 import lv.telepit.model.BusinessReceipt;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.BusinessReceiptView;
 
-public class BusinessReceiptPaidAction extends AbstractAction {
+public class BusinessReceiptPaidAction extends AbstractAction<BusinessReceiptView> {
 
     private final BusinessReceipt good;
 
-    public BusinessReceiptPaidAction(BusinessReceipt good, AbstractView view) {
+    public BusinessReceiptPaidAction(BusinessReceipt good, BusinessReceiptView view) {
         super(view);
         if (!good.isPaid()) {
             this.setCaption(bundle.getString("businessReceipt.paid"));

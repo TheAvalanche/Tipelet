@@ -4,13 +4,13 @@ import com.vaadin.ui.*;
 import lv.telepit.model.StockGood;
 import lv.telepit.model.Store;
 import lv.telepit.ui.form.fields.FieldFactory;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.StockView;
 
-public class StockMoveAction extends AbstractAction {
+public class StockMoveAction extends AbstractAction<StockView> {
 
     private final StockGood good;
 
-    public StockMoveAction(StockGood good, AbstractView view) {
+    public StockMoveAction(StockGood good, StockView view) {
         super(view);
         this.setCaption(bundle.getString("move.item"));
         this.good = good;

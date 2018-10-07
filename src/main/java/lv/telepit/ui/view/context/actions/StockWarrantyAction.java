@@ -5,18 +5,18 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.ui.*;
 import lv.telepit.model.StockGood;
 import lv.telepit.ui.component.SpacedHorizontalLayout;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.StockView;
 import lv.telepit.utils.PdfUtils;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StockWarrantyAction extends AbstractAction {
+public class StockWarrantyAction extends AbstractAction<StockView> {
 
     private final StockGood good;
 
-    public StockWarrantyAction(StockGood good, AbstractView view) {
+    public StockWarrantyAction(StockGood good, StockView view) {
         super(view);
         this.setCaption(bundle.getString("create.warranty"));
         this.good = good;

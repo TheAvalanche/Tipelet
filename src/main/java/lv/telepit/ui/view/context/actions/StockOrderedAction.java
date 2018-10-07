@@ -1,13 +1,13 @@
 package lv.telepit.ui.view.context.actions;
 
 import lv.telepit.model.StockGood;
-import lv.telepit.ui.view.AbstractView;
+import lv.telepit.ui.view.StockView;
 
-public class StockOrderedAction extends AbstractAction {
+public class StockOrderedAction extends AbstractAction<StockView> {
 
     private final StockGood good;
 
-    public StockOrderedAction(StockGood good, AbstractView view) {
+    public StockOrderedAction(StockGood good, StockView view) {
         super(view);
         this.setCaption(bundle.getString("ordered.item"));
         this.good = good;

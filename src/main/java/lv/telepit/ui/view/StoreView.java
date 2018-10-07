@@ -139,23 +139,23 @@ public class StoreView extends AbstractView {
             updateStore.setEnabled(table.getValue() != null);
             deleteStore.setEnabled(table.getValue() != null);
         }
+    }
 
-        private void openStoreForm(BeanItem<Store> store) {
+    public void openStoreForm(BeanItem<Store> store) {
 
-            subWindow = new Window();
-            subWindow.setModal(true);
-            subWindow.setHeight("400px");
-            subWindow.setWidth("450px");
-            subWindow.setClosable(true);
-            ui.addWindow(subWindow);
+        subWindow = new Window();
+        subWindow.setModal(true);
+        subWindow.setHeight("400px");
+        subWindow.setWidth("450px");
+        subWindow.setClosable(true);
+        ui.addWindow(subWindow);
 
-            final VerticalLayout layout = new VerticalLayout();
-            layout.setMargin(true);
-            layout.setSpacing(true);
+        final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.setSpacing(true);
 
-            layout.addComponent(new StoreForm(store, StoreView.this));
+        layout.addComponent(new StoreForm(store, StoreView.this));
 
-            subWindow.setContent(layout);
-        }
+        subWindow.setContent(layout);
     }
 }

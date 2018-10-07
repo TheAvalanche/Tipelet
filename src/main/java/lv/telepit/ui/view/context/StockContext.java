@@ -39,7 +39,9 @@ public class StockContext implements Action.Handler {
     @Override
     public void handleAction(Action action, Object sender, Object target) {
         ((AbstractAction) action).execute();
-        view.refreshView();
+        if (((AbstractAction) action).refreshViewAfter()) {
+            view.refreshView();
+        }
     }
 
 
