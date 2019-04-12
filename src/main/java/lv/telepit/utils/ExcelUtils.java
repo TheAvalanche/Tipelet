@@ -216,20 +216,23 @@ public class ExcelUtils {
         Label h12 = new Label(11, y, bundle.getString("service.good.returnedDate"), boldCellWithBorder);
         sheet.addCell(h12);
 
-        Label h13 = new Label(12, y, bundle.getString("service.good.price"), boldCellWithBorder);
+        Label h13 = new Label(12, y, bundle.getString("service.good.diagnostics"), boldCellWithBorder);
         sheet.addCell(h13);
-
-        Label h14 = new Label(13, y, bundle.getString("service.good.contactName"), boldCellWithBorder);
+        
+        Label h14 = new Label(13, y, bundle.getString("service.good.price"), boldCellWithBorder);
         sheet.addCell(h14);
 
-        Label h15 = new Label(14, y, bundle.getString("service.good.contactPhone"), boldCellWithBorder);
+        Label h15 = new Label(14, y, bundle.getString("service.good.contactName"), boldCellWithBorder);
         sheet.addCell(h15);
 
-        Label h16 = new Label(15, y, bundle.getString("service.good.contactMail"), boldCellWithBorder);
+        Label h16 = new Label(15, y, bundle.getString("service.good.contactPhone"), boldCellWithBorder);
         sheet.addCell(h16);
 
-        Label h17 = new Label(16, y, bundle.getString("service.good.additionalDescription"), boldCellWithBorder);
+        Label h17 = new Label(16, y, bundle.getString("service.good.contactMail"), boldCellWithBorder);
         sheet.addCell(h17);
+
+        Label h18 = new Label(17, y, bundle.getString("service.good.additionalDescription"), boldCellWithBorder);
+        sheet.addCell(h18);
 
         y++;
 
@@ -246,11 +249,12 @@ public class ExcelUtils {
             sheet.addCell(new Label(9, y, getValue(sg.getStartDate()), normalCellWithBorder));
             sheet.addCell(new Label(10, y, getValue(sg.getFinishDate()), normalCellWithBorder));
             sheet.addCell(new Label(11, y, getValue(sg.getReturnedDate()), normalCellWithBorder));
-            sheet.addCell(new Label(12, y, getValue(sg.getPrice()), normalCellWithBorder));
-            sheet.addCell(new Label(13, y, getValue(sg.getContactName()), normalCellWithBorder));
-            sheet.addCell(new Label(14, y, getValue(sg.getContactPhone()), normalCellWithBorder));
-            sheet.addCell(new Label(15, y, getValue(sg.getContactMail()), normalCellWithBorder));
-            sheet.addCell(new Label(16, y, getValue(sg.getAdditionalDescription()), normalCellWithBorder));
+            sheet.addCell(new Label(12, y, getValue(sg.getDiagnostics()), normalCellWithBorder));
+            sheet.addCell(new Label(13, y, getValue(sg.getPrice()), normalCellWithBorder));
+            sheet.addCell(new Label(14, y, getValue(sg.getContactName()), normalCellWithBorder));
+            sheet.addCell(new Label(15, y, getValue(sg.getContactPhone()), normalCellWithBorder));
+            sheet.addCell(new Label(16, y, getValue(sg.getContactMail()), normalCellWithBorder));
+            sheet.addCell(new Label(17, y, getValue(sg.getAdditionalDescription()), normalCellWithBorder));
             y++;
         }
     }

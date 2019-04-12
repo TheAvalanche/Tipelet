@@ -45,6 +45,9 @@ public class ServiceGoodForm extends FormLayout {
     @PropertyId("problem")
     private TextArea problemField = FieldFactory.getTextArea("service.problem");
 
+    @PropertyId("diagnostics")
+    private TextField diagnostics = FieldFactory.getNumberField("service.diagnostics");
+    
     @PropertyId("price")
     private TextField price = FieldFactory.getNumberField("service.price");
 
@@ -87,6 +90,7 @@ public class ServiceGoodForm extends FormLayout {
             good.setDeliveredDate(new Date());
             good.setStatus(ServiceStatus.WAITING);
             good.setPrice(0.00);
+            good.setDiagnostics(0.00);
         }
 
         if (view.getUi().getCurrentUser().isAdmin()) {
@@ -113,6 +117,7 @@ public class ServiceGoodForm extends FormLayout {
             addComponent(finishDateField);
             addComponent(returnedDateField);
         }
+        addComponent(diagnostics);
         addComponent(price);
         addComponent(warranty);
         addComponent(contactNameField);
@@ -124,6 +129,7 @@ public class ServiceGoodForm extends FormLayout {
         }
 
         if (!view.getUi().getCurrentUser().isAdmin() && good.getId() != 0) {
+            diagnostics.setReadOnly(true);
             price.setReadOnly(true);
         }
 
