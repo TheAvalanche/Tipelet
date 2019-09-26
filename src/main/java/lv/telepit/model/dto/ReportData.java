@@ -63,6 +63,24 @@ public class ReportData {
         return list;
     }
 
+    public static List<ReportData> constructFromDiagnostics(List<ServiceGood> serviceGoods) {
+        List<ReportData> list = new ArrayList<>(serviceGoods.size());
+        for (ServiceGood sg : serviceGoods) {
+            ReportData r = new ReportData();
+            r.user = sg.getUser().getName() + " " + sg.getUser().getSurname();
+            r.store = sg.getStore().getName();
+            r.date = sg.getDeliveredDate();
+            r.type = bundle.getString("service.type");
+            r.id = String.valueOf(sg.getCustomId());
+            r.name = "(D) " + sg.getName();
+            r.code = sg.getImei();
+            r.price = sg.getDiagnostics();
+            r.info = sg.isWithBill() ? " (Ar čeku)" : " (Bez čeka)";
+            list.add(r);
+        }
+        return list;
+    }
+
     public String getUser() {
         return user;
     }

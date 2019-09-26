@@ -3,7 +3,7 @@ package lv.telepit.backend.criteria;
 import javax.persistence.Query;
 
 public enum ServiceGoodCriteria implements Criteria {
-    ID, CUSTOM_ID, NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, RETURNED_DATE_FROM, RETURNED_DATE_TO, USER, STORE, WITH_BILL, CONTACT_PHONE, CONTACT_NAME;
+    ID, CUSTOM_ID, NAME, STATUS, CATEGORY, IMEI, ACCUM_NUM, DELIVERED_DATE_FROM, DELIVERED_DATE_TO, RETURNED_DATE_FROM, RETURNED_DATE_TO, USER, STORE, WITH_BILL, CONTACT_PHONE, CONTACT_NAME, DIAGNOSTICS;
 
     public void setQuery(StringBuilder query) {
         switch (this) {
@@ -32,6 +32,9 @@ public enum ServiceGoodCriteria implements Criteria {
             case DELIVERED_DATE_FROM:
                 query.append("sg.deliveredDate >= :deliveredDateFrom ");
                 break;
+            case DELIVERED_DATE_TO:
+                query.append("sg.deliveredDate <= :deliveredDateTo ");
+                break;
             case RETURNED_DATE_TO:
                 query.append("sg.returnedDate <= :returnedDateTo ");
                 break;
@@ -52,6 +55,9 @@ public enum ServiceGoodCriteria implements Criteria {
                 break;
             case CONTACT_PHONE:
                 query.append("lower(sg.contactPhone) like :contactPhone ");
+                break;
+            case DIAGNOSTICS:
+                query.append("sg.diagnostics > :diagnostics ");
                 break;
 
         }
@@ -85,6 +91,9 @@ public enum ServiceGoodCriteria implements Criteria {
             case DELIVERED_DATE_FROM:
                 q.setParameter("deliveredDateFrom", value);
                 break;
+            case DELIVERED_DATE_TO:
+                q.setParameter("deliveredDateTo", value);
+                break;
             case RETURNED_DATE_TO:
                 q.setParameter("returnedDateTo", value);
                 break;
@@ -105,6 +114,9 @@ public enum ServiceGoodCriteria implements Criteria {
                 break;
             case CONTACT_PHONE:
                 q.setParameter("contactPhone", "%" + value + "%");
+                break;
+            case DIAGNOSTICS:
+                q.setParameter("diagnostics", value);
                 break;
 
         }

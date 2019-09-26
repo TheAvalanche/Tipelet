@@ -95,6 +95,22 @@ public class ServiceGoodService {
         return list;
     }
 
+    public List<ReportData> findDiagnosticReports(Map<ServiceGoodCriteria, Object> map) {
+        if (map.containsKey(ServiceGoodCriteria.RETURNED_DATE_FROM)) {
+            map.put(ServiceGoodCriteria.DELIVERED_DATE_FROM, map.get(ServiceGoodCriteria.RETURNED_DATE_FROM));
+            map.remove(ServiceGoodCriteria.RETURNED_DATE_FROM);
+        }
+        if (map.containsKey(ServiceGoodCriteria.RETURNED_DATE_TO)) {
+            map.put(ServiceGoodCriteria.DELIVERED_DATE_TO, map.get(ServiceGoodCriteria.RETURNED_DATE_TO));
+            map.remove(ServiceGoodCriteria.RETURNED_DATE_TO);
+        }
+        map.put(ServiceGoodCriteria.DIAGNOSTICS, 0);
+        List<ServiceGood> serviceGoods = serviceDao.findGoods(map);
+        List<ReportData> list = new ArrayList<>(serviceGoods.size());
+        list.addAll(ReportData.constructFromDiagnostics(serviceGoods));
+        return list;
+    }
+
     private void catchOptimisticLockException() {
         Notification.show(bundle.getString("exception.lock.header"), bundle.getString("exception.lock.message"), Notification.Type.ERROR_MESSAGE);
     }

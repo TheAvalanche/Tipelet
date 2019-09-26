@@ -219,10 +219,12 @@ public class ReportView extends AbstractView {
 
         if (typeField.getValue() == SimpleTypeComboBox.Type.SERVICE) {
             reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+            reports.addAll(ui.getServiceGoodService().findDiagnosticReports(buildServiceGoodMap()));
         } else if (typeField.getValue() == SimpleTypeComboBox.Type.STOCK) {
             reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
         } else {
             reports.addAll(ui.getServiceGoodService().findReports(buildServiceGoodMap()));
+            reports.addAll(ui.getServiceGoodService().findDiagnosticReports(buildServiceGoodMap()));
             reports.addAll(ui.getStockService().findReports(buildSoldItemMap()));
         }
 
