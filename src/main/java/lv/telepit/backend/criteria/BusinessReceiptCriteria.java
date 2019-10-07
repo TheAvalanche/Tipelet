@@ -4,7 +4,7 @@ import javax.persistence.Query;
 
 public enum BusinessReceiptCriteria implements Criteria {
 
-	ID, NUMBER, STORE, USER, RECEIVER_NAME, DATE_FROM, DATE_TO;
+	ID, NUMBER, STORE, USER, RECEIVER_NAME, RECEIVER_PHONE, RECEIVER_MAIL, DATE_FROM, DATE_TO;
 
 	public void setQuery(StringBuilder query) {
 		switch (this) {
@@ -20,6 +20,12 @@ public enum BusinessReceiptCriteria implements Criteria {
 				break;
 			case RECEIVER_NAME:
 				query.append("lower(br.receiverName) like :receiverName ");
+				break;
+			case RECEIVER_PHONE:
+				query.append("lower(br.receiverPhone) like :receiverPhone ");
+				break;
+			case RECEIVER_MAIL:
+				query.append("lower(br.receiverMail) like :receiverMail ");
 				break;
 			case DATE_FROM:
 				query.append("br.date >= :dateFrom ");
@@ -48,6 +54,12 @@ public enum BusinessReceiptCriteria implements Criteria {
 				break;
 			case RECEIVER_NAME:
 				q.setParameter("receiverName", "%" + value + "%");
+				break;
+			case RECEIVER_PHONE:
+				q.setParameter("receiverPhone", "%" + value + "%");
+				break;
+			case RECEIVER_MAIL:
+				q.setParameter("receiverMail", "%" + value + "%");
 				break;
 			case DATE_FROM:
 				q.setParameter("dateFrom", value);

@@ -25,6 +25,8 @@ public class BusinessReceipt {
 	private String receiverLegalAddress;
 	private String receiverBankName;
 	private String receiverBankNum;
+	private String receiverPhone;
+	private String receiverMail;
 	private boolean paid = false;
 	private boolean deleted = false;
 	private List<ReceiptItem> receiptItems = new ArrayList<>();
@@ -82,7 +84,7 @@ public class BusinessReceipt {
 	public void setProviderName(String providerName) {
 		this.providerName = providerName;
 	}
-	
+
 	public String getProviderRegNum() {
 		return providerRegNum;
 	}
@@ -171,6 +173,22 @@ public class BusinessReceipt {
 		this.paid = paid;
 	}
 
+	public String getReceiverPhone() {
+		return receiverPhone;
+	}
+
+	public void setReceiverPhone(String receiverPhone) {
+		this.receiverPhone = receiverPhone;
+	}
+
+	public String getReceiverMail() {
+		return receiverMail;
+	}
+
+	public void setReceiverMail(String receiverMail) {
+		this.receiverMail = receiverMail;
+	}
+
 	public boolean isDeleted() {
 		return deleted;
 	}
@@ -197,7 +215,7 @@ public class BusinessReceipt {
 		}
 		return acc.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
-	
+
 	@Transient
 	public int totalAmount() {
 		int sum = 0;

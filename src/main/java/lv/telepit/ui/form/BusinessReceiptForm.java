@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 public class BusinessReceiptForm extends FormLayout {
 
 	private static ResourceBundle bundle = ResourceBundle.getBundle("bundle");
-		
+
 	@PropertyId("store")
 	private ComboBox storeField = FieldFactory.getStoreComboBox("businessReceipt.store");
 
@@ -65,6 +65,12 @@ public class BusinessReceiptForm extends FormLayout {
 	@PropertyId("receiverBankNum")
 	private TextField receiverBankNumField = FieldFactory.getTextField("businessReceipt.receiverBankNum");
 
+	@PropertyId("receiverPhone")
+	private TextField receiverPhoneField = FieldFactory.getTextField("businessReceipt.receiverPhone");
+
+	@PropertyId("receiverMail")
+	private TextField receiverMailField = FieldFactory.getTextField("businessReceipt.receiverMail");
+
 	public BusinessReceiptForm(BeanItem<BusinessReceipt> businessReceiptItem, AbstractView view) {
 
 		BusinessReceipt good = businessReceiptItem.getBean();
@@ -80,7 +86,7 @@ public class BusinessReceiptForm extends FormLayout {
 			good.setProviderBankName(store.getLegalBankName());
 			good.setProviderBankNum(store.getLegalBankNum());
 		}
-		
+
 
 		storeField.setRequired(true);
 		addComponent(storeField);
@@ -113,7 +119,7 @@ public class BusinessReceiptForm extends FormLayout {
 		providerAddressField.setEnabled(false);
 		providerBankNameField.setEnabled(false);
 		providerBankNumField.setEnabled(false);
-		
+
 		addComponent(new SpacedHorizontalLayout(providerNameField, providerRegNumField));
 		addComponent(new SpacedHorizontalLayout(providerLegalAddressField, providerAddressField));
 		addComponent(new SpacedHorizontalLayout(providerBankNameField, providerBankNumField));
@@ -121,6 +127,7 @@ public class BusinessReceiptForm extends FormLayout {
 		addComponent(new SpacedHorizontalLayout(receiverNameField, receiverRegNumField));
 		addComponent(new SpacedHorizontalLayout(receiverBankNameField, receiverBankNumField));
 		addComponent(new SpacedHorizontalLayout(receiverLegalAddressField));
+		addComponent(new SpacedHorizontalLayout(receiverPhoneField, receiverMailField));
 		addComponent(new Hr());
 
 		final VerticalLayout subLayout = new VerticalLayout();
@@ -298,5 +305,5 @@ public class BusinessReceiptForm extends FormLayout {
 			field.setReadOnly(true);
 		}
 	}
-	
+
 }

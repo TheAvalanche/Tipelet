@@ -36,6 +36,8 @@ public class BusinessReceiptView extends AbstractView {
 	private TextField idField;
 	private TextField numberField;
 	private TextField receiverNameField;
+	private TextField receiverPhoneField;
+	private TextField receiverMailField;
 	private ComboBox userField;
 	private ComboBox storeField;
 	private DateField fromDateField;
@@ -63,6 +65,8 @@ public class BusinessReceiptView extends AbstractView {
 
 		idField = FieldFactory.getTextField("search.businessReceipt.id");
 		receiverNameField = FieldFactory.getTextField("search.businessReceipt.receiverName");
+		receiverPhoneField = FieldFactory.getTextField("search.businessReceipt.receiverPhone");
+		receiverMailField = FieldFactory.getTextField("search.businessReceipt.receiverMail");
 		userField = FieldFactory.getUserComboBox("search.user");
 		storeField = FieldFactory.getStoreComboBox("search.store");
 		fromDateField = FieldFactory.getDateField("search.businessReceipt.fromDate");
@@ -83,7 +87,7 @@ public class BusinessReceiptView extends AbstractView {
 		refreshButton.setIcon(new ThemeResource("img/refresh.png"));
 
 		container = new BeanItemContainer<>(BusinessReceipt.class);
-		table = new CommonTable(container, "businessReceipt", "number", "store", "date", "receiverName");
+		table = new CommonTable(container, "businessReceipt", "number", "store", "date", "receiverName", "receiverPhone", "receiverMail");
 		table.setCellStyleGenerator((Table.CellStyleGenerator) (source, itemId, propertyId) -> {
 			BusinessReceipt br = container.getItem(itemId).getBean();
 			if (br.isPaid()) {
@@ -113,8 +117,8 @@ public class BusinessReceiptView extends AbstractView {
 		deleteBusinessReceipt.setEnabled(false);
 		deleteBusinessReceipt.addClickListener(new EditBusinessReceiptListener());
 
-		final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(numberField, userField, storeField);
-		final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(receiverNameField, fromDateField, toDateField);
+		final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(numberField, userField, storeField, receiverMailField);
+		final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(receiverNameField, receiverPhoneField, fromDateField, toDateField);
 
 		final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
 				new SpacedHorizontalLayout(searchButton, resetButton), new Hr());
@@ -128,12 +132,12 @@ public class BusinessReceiptView extends AbstractView {
 		final HorizontalLayout headerLayout = new SpacedHorizontalLayout(label, expandButton);
 		headerLayout.setWidth("1200px");
 		headerLayout.setComponentAlignment(expandButton, Alignment.BOTTOM_RIGHT);
-		
+
 		final HorizontalLayout buttonLayout = new SpacedHorizontalLayout(addBusinessReceipt, updateBusinessReceipt, deleteBusinessReceipt, refreshButton);
 		buttonLayout.setWidth("1200px");
 		buttonLayout.setExpandRatio(refreshButton, 1.0f);
 		buttonLayout.setComponentAlignment(refreshButton, Alignment.BOTTOM_RIGHT);
-		
+
 		content.addComponent(headerLayout);
 		content.addComponent(searchLayout);
 		content.addComponent(buttonLayout);
@@ -241,6 +245,8 @@ public class BusinessReceiptView extends AbstractView {
 			idField.setValue(null);
 			numberField.setValue(null);
 			receiverNameField.setValue(null);
+			receiverMailField.setValue(null);
+			receiverPhoneField.setValue(null);
 			userField.setValue(null);
 			storeField.setValue(ui.getCurrentUser().isAdmin() ? null : ui.getCurrentUser().getStore());
 			fromDateField.setValue(DateUtils.addMonths(new Date(), -1));
@@ -266,6 +272,12 @@ public class BusinessReceiptView extends AbstractView {
 		}
 		if (!Strings.isNullOrEmpty(receiverNameField.getValue())) {
 			map.put(BusinessReceiptCriteria.RECEIVER_NAME, receiverNameField.getValue().trim().toLowerCase());
+		}
+		if (!Strings.isNullOrEmpty(receiverPhoneField.getValue())) {
+			map.put(BusinessReceiptCriteria.RECEIVER_PHONE, receiverPhoneField.getValue().trim().toLowerCase());
+		}
+		if (!Strings.isNullOrEmpty(receiverMailField.getValue())) {
+			map.put(BusinessReceiptCriteria.RECEIVER_MAIL, receiverMailField.getValue().trim().toLowerCase());
 		}
 		if (userField.getValue() != null) {
 			map.put(BusinessReceiptCriteria.USER, userField.getValue());

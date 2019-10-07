@@ -1,7 +1,6 @@
 package lv.telepit.model;
 
 import com.google.common.base.Objects;
-import com.sun.corba.se.spi.ior.ObjectAdapterId;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,6 +23,7 @@ public class User {
     private Store store;
     private boolean deleted = false;
     private boolean admin = false;
+    private boolean serviceWorker = false;
     private boolean accessToAddInStock = false;
     private boolean accessToBillOnly = false;
     private boolean canSeeReceipts = false;
@@ -128,6 +128,14 @@ public class User {
 
     public void setAccessToBillOnly(boolean accessToBillOnly) {
         this.accessToBillOnly = accessToBillOnly;
+    }
+
+    public boolean isServiceWorker() {
+        return serviceWorker;
+    }
+
+    public void setServiceWorker(boolean serviceWorker) {
+        this.serviceWorker = serviceWorker;
     }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
