@@ -23,18 +23,20 @@ public class ServiceContext implements Action.Handler {
         }
 
         List<AbstractAction> visibleActions = new LinkedList<>();
-        visibleActions.add(new ServiceCalledAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusInWaitingAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusInRepairAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusRepairedAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusBrokenAction(((ServiceGood) target), view));
-        visibleActions.add(new ServiceStatusReturnedWithBillAction(((ServiceGood) target), view));
-        if (!view.getUi().getCurrentUser().isAccessToBillOnly()) {
+        visibleActions.add(new ServiceStatusOnDetailsAction(((ServiceGood) target), view));
+        if (!view.getUi().getCurrentUser().isAccessToBillOnly() && !view.getUi().getCurrentUser().isServiceWorker()) {
             visibleActions.add(new ServiceStatusReturnedWithoutBillAction(((ServiceGood) target), view));
         }
-        visibleActions.add(new ServiceStatusOnDetailsAction(((ServiceGood) target), view));
-        visibleActions.add(new ServiceBillAction(((ServiceGood) target), view));
-        visibleActions.add(new ServiceHistoryAction(((ServiceGood) target), view));
+        if (!view.getUi().getCurrentUser().isServiceWorker()) {
+            visibleActions.add(new ServiceCalledAction(((ServiceGood) target), view));
+            visibleActions.add(new ServiceStatusReturnedWithBillAction(((ServiceGood) target), view));
+            visibleActions.add(new ServiceBillAction(((ServiceGood) target), view));
+            visibleActions.add(new ServiceHistoryAction(((ServiceGood) target), view));
+        }
 
         visibleActions.removeIf(action -> !action.show());
         return visibleActions.toArray(new Action[visibleActions.size()]);

@@ -7,6 +7,7 @@ import com.vaadin.ui.*;
 import lv.telepit.backend.ServiceGoodService;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
+import lv.telepit.model.User;
 import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
@@ -14,6 +15,7 @@ import lv.telepit.ui.view.AbstractView;
 
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * Created by Alex on 04/03/14.
@@ -47,7 +49,7 @@ public class ServiceGoodForm extends FormLayout {
 
     @PropertyId("diagnostics")
     private TextField diagnostics = FieldFactory.getNumberField("service.diagnostics");
-    
+
     @PropertyId("price")
     private TextField price = FieldFactory.getNumberField("service.price");
 
@@ -102,37 +104,27 @@ public class ServiceGoodForm extends FormLayout {
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
 
-        addComponent(customIdField);
-        addComponent(categoryField);
-        addComponent(nameField);
-        if (view.getUi().getCurrentUser().isAdmin()) {
-            addComponent(statusField);
-        }
-        addComponent(imeiField);
-        addComponent(accumNumField);
-        addComponent(problemField);
-        if (view.getUi().getCurrentUser().isAdmin()) {
-            addComponent(deliveredDateField);
-            addComponent(startDateField);
-            addComponent(finishDateField);
-            addComponent(returnedDateField);
-        }
-        addComponent(diagnostics);
-        addComponent(price);
-        addComponent(warranty);
-        addComponent(contactNameField);
-        addComponent(contactPhoneField);
-        addComponent(contactMailField);
-        addComponent(additionalDescriptionField);
+        addComponent(view, customIdField, u -> true, User::isServiceWorker);
+        addComponent(view, categoryField, u -> true, User::isServiceWorker);
+        addComponent(view, nameField, u -> true, User::isServiceWorker);
+        addComponent(view, statusField, User::isAdmin);
+        addComponent(view, imeiField, u -> true, User::isServiceWorker);
+        addComponent(view, accumNumField, u -> true, User::isServiceWorker);
+        addComponent(view, problemField, u -> true, User::isServiceWorker);
+        addComponent(view, deliveredDateField, User::isAdmin);
+        addComponent(view, startDateField, User::isAdmin);
+        addComponent(view, finishDateField, User::isAdmin);
+        addComponent(view, returnedDateField, User::isAdmin);
+        addComponent(view, diagnostics, u -> !u.isServiceWorker(), u -> !u.isAdmin() && !good.isNew());
+        addComponent(view, price, u -> !u.isServiceWorker(), u -> !u.isAdmin() && !good.isNew());
+        addComponent(view, warranty, u -> !u.isServiceWorker());
+        addComponent(view, contactNameField, u -> !u.isServiceWorker());
+        addComponent(view, contactPhoneField, u -> !u.isServiceWorker());
+        addComponent(view, contactMailField, u -> !u.isServiceWorker());
+        addComponent(view, additionalDescriptionField);
         if (!view.getUi().getCurrentUser().isAccessToBillOnly()) {
-            addComponent(withBill);
+            addComponent(view, withBill, u -> !u.isServiceWorker());
         }
-
-        if (!view.getUi().getCurrentUser().isAdmin() && good.getId() != 0) {
-            diagnostics.setReadOnly(true);
-            price.setReadOnly(true);
-        }
-
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, serviceGoodItem.getBean(), view));
@@ -145,6 +137,24 @@ public class ServiceGoodForm extends FormLayout {
         buttonLayout.setComponentAlignment(saveButton, Alignment.BOTTOM_RIGHT);
 
         addComponent(buttonLayout);
+    }
+
+    private void addComponent(AbstractView view, Component c) {
+        addComponent(view, c, u -> true);
+    }
+
+    private void addComponent(AbstractView view, Component c, Predicate<User> visible) {
+        addComponent(view, c, visible, u -> false);
+    }
+
+    private void addComponent(AbstractView view, Component c, Predicate<User> visible, Predicate<User> readOnly) {
+        if (visible.test(view.getUi().getCurrentUser())) {
+            addComponent(c);
+
+            if (readOnly.test(view.getUi().getCurrentUser())) {
+                c.setReadOnly(true);
+            }
+        }
     }
 
     private class SaveGood extends SaveOnClick<ServiceGood> {

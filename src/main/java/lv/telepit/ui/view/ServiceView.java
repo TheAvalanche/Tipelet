@@ -218,6 +218,13 @@ public class ServiceView extends AbstractView {
             userField.setVisible(false);
             deleteGood.setVisible(false);
         }
+        if (ui.getCurrentUser().isServiceWorker()) {
+            table.setVisibleColumns("customId", "store", "category", "name", "status", "accumNum", "problem", "deliveredDate");
+            returnedField.setVisible(false);
+            contactNameField.setVisible(false);
+            contactPhoneField.setVisible(false);
+            addGood.setVisible(false);
+        }
         withBillField.setVisible(false);
     }
 

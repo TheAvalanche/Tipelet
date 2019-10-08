@@ -343,6 +343,11 @@ public class ServiceGood {
         return change;
     }
 
+    @Transient
+    public boolean isNew() {
+        return this.getId() == 0;
+    }
+
     @PostLoad
     public void postLoad() {
         change = new ChangeRecord("service.good");

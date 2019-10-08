@@ -11,6 +11,8 @@ public class AuthUtil {
             return false;
         } else if (user.isAdmin()) {
             return true;
+        } else if (user.isServiceWorker()) {
+            return "service".equals(key);
         } else {
             return PropertyUtil.get(key, false);
         }

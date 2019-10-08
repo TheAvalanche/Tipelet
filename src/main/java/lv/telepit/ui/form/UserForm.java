@@ -51,7 +51,10 @@ public class UserForm extends FormLayout {
 
     @PropertyId("canSeeReceipts")
     private CheckBox canSeeReceipts = FieldFactory.getCheckBox("user.canSeeReceipts");
-    
+
+    @PropertyId("serviceWorker")
+    private CheckBox serviceWorker = FieldFactory.getCheckBox("user.serviceWorker");
+
     public UserForm(BeanItem<User> userItem, AbstractView view) {
 
         FieldGroup binder = new FieldGroup(userItem);
@@ -69,6 +72,7 @@ public class UserForm extends FormLayout {
         addComponent(accessToAddInStock);
         addComponent(accessToBillOnly);
         addComponent(canSeeReceipts);
+        addComponent(serviceWorker);
         addComponent(new Hr());
 
 
