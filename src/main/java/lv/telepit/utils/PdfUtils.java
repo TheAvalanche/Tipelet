@@ -467,6 +467,18 @@ public class PdfUtils {
 		document.add(new Paragraph(" "));
 		document.add(sumTable);
 		document.add(new Paragraph(" "));
+		if (businessReceipt.getAgreementNum() != null) {
+			final StringBuilder agreementLine = new StringBuilder().append("Līgums Nr ").append(businessReceipt.getAgreementNum());
+			if (businessReceipt.getAgreementDate() != null) {
+				agreementLine.append(" no ").append(new SimpleDateFormat("dd/MM/yyyy").format(businessReceipt.getAgreementDate()));
+			}
+			document.add(new Paragraph(agreementLine.toString(), normalFont));
+		}
+		if (businessReceipt.getPaymentDeadLine() != null) {
+			document.add(new Paragraph("Apmaksāt " + businessReceipt.getPaymentDeadLine() + " dienu laikā", normalFont));
+			document.add(new Paragraph(" "));
+		}
+
 		document.add(new Paragraph("Rēķins ir sagatavots elektroniski un ir derīgs bez paraksta.", boldFont));
 
 

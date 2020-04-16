@@ -71,6 +71,15 @@ public class BusinessReceiptForm extends FormLayout {
 	@PropertyId("receiverMail")
 	private TextField receiverMailField = FieldFactory.getTextField("businessReceipt.receiverMail");
 
+	@PropertyId("agreementNum")
+	private TextField agreementNum = FieldFactory.getTextField("businessReceipt.agreementNum");
+
+	@PropertyId("agreementDate")
+	private DateField agreementDate = FieldFactory.getDateField("businessReceipt.agreementDate");
+
+	@PropertyId("paymentDeadLine")
+	private TextField paymentDeadLine = FieldFactory.getNumberField("businessReceipt.paymentDeadLine");
+
 	public BusinessReceiptForm(BeanItem<BusinessReceipt> businessReceiptItem, AbstractView view) {
 
 		BusinessReceipt good = businessReceiptItem.getBean();
@@ -128,6 +137,12 @@ public class BusinessReceiptForm extends FormLayout {
 		addComponent(new SpacedHorizontalLayout(receiverBankNameField, receiverBankNumField));
 		addComponent(new SpacedHorizontalLayout(receiverLegalAddressField));
 		addComponent(new SpacedHorizontalLayout(receiverPhoneField, receiverMailField));
+		addComponent(new Hr());
+		addComponent(new SpacedHorizontalLayout(agreementNum, agreementDate));
+		final Label dateText = new Label(" dienu laikā");
+		final SpacedHorizontalLayout paymentDeadLine = new SpacedHorizontalLayout(this.paymentDeadLine, dateText);
+		paymentDeadLine.setComponentAlignment(dateText, Alignment.BOTTOM_LEFT);
+		addComponent(paymentDeadLine);
 		addComponent(new Hr());
 
 		final VerticalLayout subLayout = new VerticalLayout();

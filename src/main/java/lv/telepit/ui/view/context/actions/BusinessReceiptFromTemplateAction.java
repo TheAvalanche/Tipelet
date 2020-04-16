@@ -27,6 +27,8 @@ public class BusinessReceiptFromTemplateAction extends AbstractAction<BusinessRe
         businessReceipt.setReceiverLegalAddress(good.getReceiverLegalAddress());
         businessReceipt.setReceiverName(good.getReceiverName());
         businessReceipt.setReceiverRegNum(good.getReceiverRegNum());
+        businessReceipt.setReceiverMail(good.getReceiverMail());
+        businessReceipt.setReceiverPhone(good.getReceiverPhone());
         view.openBusinessReceiptForm(new BeanItem<>(businessReceipt));
     }
 

@@ -27,6 +27,9 @@ public class BusinessReceipt {
 	private String receiverBankNum;
 	private String receiverPhone;
 	private String receiverMail;
+	private String agreementNum;
+	private Date agreementDate;
+	private Long paymentDeadLine;
 	private boolean paid = false;
 	private boolean deleted = false;
 	private List<ReceiptItem> receiptItems = new ArrayList<>();
@@ -195,6 +198,31 @@ public class BusinessReceipt {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public String getAgreementNum() {
+		return agreementNum;
+	}
+
+	public void setAgreementNum(String agreementNum) {
+		this.agreementNum = agreementNum;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getAgreementDate() {
+		return agreementDate;
+	}
+
+	public void setAgreementDate(Date agreementDate) {
+		this.agreementDate = agreementDate;
+	}
+
+	public Long getPaymentDeadLine() {
+		return paymentDeadLine;
+	}
+
+	public void setPaymentDeadLine(Long paymentDeadLine) {
+		this.paymentDeadLine = paymentDeadLine;
 	}
 
 	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
