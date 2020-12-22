@@ -348,7 +348,14 @@ public class PdfUtils {
 	}
 
 	public void createInvoice(BusinessReceipt businessReceipt) throws DocumentException, IOException {
-		Paragraph headerOne = new Paragraph("Rēķins Nr. " + businessReceipt.getNumber(), headerFont);
+
+		String headerTitle;
+		if (businessReceipt.isAdvancePayment()) {
+			headerTitle = "Priekšapmaksas Rēķins Nr. " + businessReceipt.getNumber();
+		} else {
+			headerTitle = "Rēķins Nr. " + businessReceipt.getNumber();
+		}
+		Paragraph headerOne = new Paragraph(headerTitle, headerFont);
 		headerOne.setAlignment(Element.ALIGN_CENTER);
 
 		PdfPTable dateTable = new PdfPTable(2);
@@ -375,7 +382,6 @@ public class PdfUtils {
 		providerTable.addCell(noBCell("Izsniegšanas vieta", normalFont));
 		providerTable.addCell(noBCell(businessReceipt.getProviderAddress(), boldFont));
 
-		providerTable.addCell(empty2());
 		providerTable.addCell(hr());
 		providerTable.addCell(empty2());
 
@@ -387,8 +393,12 @@ public class PdfUtils {
 		receiverTable.addCell(noBCell(businessReceipt.getReceiverName(), header2Font));
 		receiverTable.addCell(noBCell("Reg.Nr.", normalFont));
 		receiverTable.addCell(noBCell(businessReceipt.getReceiverRegNum(), boldFont));
+		receiverTable.addCell(noBCell("PVN Reg.Nr.", normalFont));
+		receiverTable.addCell(noBCell(businessReceipt.getReceiverPVNRegNum(), boldFont));
 		receiverTable.addCell(noBCell("Jurid. adrese", normalFont));
 		receiverTable.addCell(noBCell(businessReceipt.getReceiverLegalAddress(), boldFont));
+		receiverTable.addCell(noBCell("Objekta adrese", normalFont));
+		receiverTable.addCell(noBCell(businessReceipt.getReceiverRealAddress(), boldFont));
 		receiverTable.addCell(noBCell("Norēķinu rekvizīti", normalFont));
 		receiverTable.addCell(noBCell(businessReceipt.getReceiverBankName(), boldFont));
 		receiverTable.addCell(noBCell("Konts", normalFont));
@@ -398,9 +408,7 @@ public class PdfUtils {
 		receiverTable.addCell(noBCell("Tālrunis", normalFont));
 		receiverTable.addCell(noBCell(businessReceipt.getReceiverPhone(), boldFont));
 
-		receiverTable.addCell(empty2());
 		receiverTable.addCell(hr());
-		receiverTable.addCell(empty2());
 
 		PdfPTable itemsTable = new PdfPTable(6);
 		itemsTable.setWidthPercentage(100);
@@ -457,13 +465,36 @@ public class PdfUtils {
 		sumTable.addCell(noBCell(moneyAsWords, boldFont));
 
 		document.add(headerOne);
+		Image image = Image.getInstance(getClass().getResource("/logo.png"));
+		float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+				- document.rightMargin()) / image.getWidth()) * 100;
+		image.scalePercent(15f);
+		image.setSpacingAfter(0);
+		image.setAlignment(Element.ALIGN_LEFT);
+
+		PdfPTable table = new PdfPTable(2);
+		table.setWidthPercentage(100);
+		table.setSpacingBefore(0f);
+		table.setSpacingAfter(0f);
+
+		PdfPTable dataTable = new PdfPTable(1);
+		dataTable.setWidthPercentage(100);
+		dataTable.setSpacingBefore(0f);
+		dataTable.setSpacingAfter(0f);
+		dataTable.addCell(noBCell(dateTable));
+		dataTable.addCell(noBCell(providerTable));
+		dataTable.addCell(noBCell(receiverTable));
+
+		table.addCell(noBCell(image));
+		table.addCell(noBCell(dataTable));
+		table.setWidths(new int[]{1, 2});
+
+
 		document.add(new Paragraph(" "));
-		document.add(dateTable);
-		document.add(new Paragraph(" "));
-		document.add(providerTable);
-		document.add(receiverTable);
+		document.add(table);
 		document.add(new Paragraph(" "));
 		document.add(itemsTable);
+		document.add(new Paragraph(" "));
 		document.add(new Paragraph(" "));
 		document.add(sumTable);
 		document.add(new Paragraph(" "));
@@ -479,9 +510,45 @@ public class PdfUtils {
 			document.add(new Paragraph(" "));
 		}
 
-		document.add(new Paragraph("Rēķins ir sagatavots elektroniski un ir derīgs bez paraksta.", boldFont));
+		document.add(new Paragraph("Rēķins sagatavots elektroniski un derīgs bez paraksta un zīmoga saskaņā ar likuma \"Par grāmatvedību\" 7.1 panta trešo daļu.", normalFont));
 
+		writer.setPageEvent(new MyFooter());
 
+	}
+
+	static class MyFooter extends PdfPageEventHelper {
+
+		public void onEndPage(PdfWriter writer, Document document) {
+			try {
+
+/*
+				Phrase footer = new Phrase("Rēķins sagatavots elektroniski un derīgs bez paraksta un zīmoga saskaņā ar likuma \"Par grāmatvedību\" 7.1 panta trešo daļu.", new Font(BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 10, Font.NORMAL));
+
+				ColumnText.showTextAligned(cb, Element.ALIGN_LEFT,
+						footer,
+						document.left(),
+						document.bottom() + 85, 0);*/
+
+				PdfContentByte cb = writer.getDirectContent();
+				Phrase footer2 = new Phrase("VISA VEIDA ELEKTRONIKAS SERVISS", new Font(BaseFont.createFont("arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 10, Font.BOLD));
+
+				ColumnText.showTextAligned(cb, Element.ALIGN_CENTER,
+						footer2,
+						(document.right() - document.left()) / 2 + document.leftMargin(),
+						document.bottom() + 55, 0);
+
+				Image image = Image.getInstance(getClass().getResource("/footer.png"));
+
+				image.scalePercent(70);
+				image.setSpacingAfter(0);
+				image.setAlignment(Element.ALIGN_CENTER);
+				float x = (PageSize.A4.getWidth() - image.getScaledWidth()) / 2;
+				image.setAbsolutePosition(x, 20.0f);
+				document.add(image);
+			} catch (IOException | DocumentException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private PdfPCell hr() {
@@ -506,6 +573,18 @@ public class PdfUtils {
 
 	private PdfPCell noBCell(String phrase, Font font) {
 		PdfPCell cell = new PdfPCell(new Phrase(phrase, font));
+		cell.setBorder(Rectangle.NO_BORDER);
+		return cell;
+	}
+
+	private PdfPCell noBCell(PdfPTable table) {
+		PdfPCell cell = new PdfPCell(table);
+		cell.setBorder(Rectangle.NO_BORDER);
+		return cell;
+	}
+
+	private PdfPCell noBCell(Image image) {
+		PdfPCell cell = new PdfPCell(image);
 		cell.setBorder(Rectangle.NO_BORDER);
 		return cell;
 	}

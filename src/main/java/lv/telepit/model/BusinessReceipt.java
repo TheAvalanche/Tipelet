@@ -22,7 +22,9 @@ public class BusinessReceipt {
 	private String providerAddress;
 	private String receiverName;
 	private String receiverRegNum;
+	private String receiverPVNRegNum;
 	private String receiverLegalAddress;
+	private String receiverRealAddress;
 	private String receiverBankName;
 	private String receiverBankNum;
 	private String receiverPhone;
@@ -31,6 +33,7 @@ public class BusinessReceipt {
 	private Date agreementDate;
 	private Long paymentDeadLine;
 	private boolean paid = false;
+	private boolean advancePayment = false;
 	private boolean deleted = false;
 	private List<ReceiptItem> receiptItems = new ArrayList<>();
 
@@ -144,6 +147,22 @@ public class BusinessReceipt {
 		this.receiverRegNum = receiverRegNum;
 	}
 
+	public String getReceiverPVNRegNum() {
+		return receiverPVNRegNum;
+	}
+
+	public void setReceiverPVNRegNum(String receiverPVNRegNum) {
+		this.receiverPVNRegNum = receiverPVNRegNum;
+	}
+
+	public String getReceiverRealAddress() {
+		return receiverRealAddress;
+	}
+
+	public void setReceiverRealAddress(String receiverRealAddress) {
+		this.receiverRealAddress = receiverRealAddress;
+	}
+
 	public String getReceiverLegalAddress() {
 		return receiverLegalAddress;
 	}
@@ -174,6 +193,14 @@ public class BusinessReceipt {
 
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+
+	public boolean isAdvancePayment() {
+		return advancePayment;
+	}
+
+	public void setAdvancePayment(boolean advancePayment) {
+		this.advancePayment = advancePayment;
 	}
 
 	public String getReceiverPhone() {

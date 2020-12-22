@@ -63,15 +63,16 @@ public class BusinessReceiptService {
 		return businessReceiptDao.findBusinessReceipts(criteriaMap);
 	}
 	
-	public String generateName() {
-		return DateTimeFormatter.ofPattern("ddMMyyyy").format(LocalDate.now()) + "-" + (countReceiptsForToday() + 1);
+	public String generateName(String providerRegNum) {
+		return DateTimeFormatter.ofPattern("ddMMyyyy").format(LocalDate.now()) + "-" + (countReceiptsForToday(providerRegNum) + 1);
 	}
 	
-	public int countReceiptsForToday() {
+	public int countReceiptsForToday(String providerRegNum) {
 		Map<BusinessReceiptCriteria, Object> criteriaMap = new HashMap<>();
 		criteriaMap.put(BusinessReceiptCriteria.DATE_FROM, Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 		criteriaMap.put(BusinessReceiptCriteria.DATE_TO, Date.from(LocalDate.now().plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-		
+		criteriaMap.put(BusinessReceiptCriteria.PROVIDER_REG_NUM, providerRegNum);
+
 		return businessReceiptDao.findBusinessReceipts(criteriaMap).size();
 	}
 

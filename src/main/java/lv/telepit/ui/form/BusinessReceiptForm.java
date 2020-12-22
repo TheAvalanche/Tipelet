@@ -56,8 +56,14 @@ public class BusinessReceiptForm extends FormLayout {
 	@PropertyId("receiverRegNum")
 	private TextField receiverRegNumField = FieldFactory.getTextField("businessReceipt.receiverRegNum");
 
+	@PropertyId("receiverPVNRegNum")
+	private TextField receiverPVNRegNumField = FieldFactory.getTextField("businessReceipt.receiverPVNRegNum");
+
 	@PropertyId("receiverLegalAddress")
 	private TextField receiverLegalAddressField = FieldFactory.getTextField("businessReceipt.receiverLegalAddress");
+
+	@PropertyId("receiverRealAddress")
+	private TextField receiverRealAddressField = FieldFactory.getTextField("businessReceipt.receiverRealAddress");
 
 	@PropertyId("receiverBankName")
 	private TextField receiverBankNameField = FieldFactory.getTextField("businessReceipt.receiverBankName");
@@ -80,20 +86,23 @@ public class BusinessReceiptForm extends FormLayout {
 	@PropertyId("paymentDeadLine")
 	private TextField paymentDeadLine = FieldFactory.getNumberField("businessReceipt.paymentDeadLine");
 
+	@PropertyId("advancePayment")
+	private CheckBox advancePayment = FieldFactory.getCheckBox("businessReceipt.advancePayment");
+
 	public BusinessReceiptForm(BeanItem<BusinessReceipt> businessReceiptItem, AbstractView view) {
 
 		BusinessReceipt good = businessReceiptItem.getBean();
 		if (good.getId() == 0) {
 			Store store = view.getUi().getCurrentUser().getStore();
 			good.setUser(view.getUi().getCurrentUser());
-			good.setStore(view.getUi().getCurrentUser().getStore());
+			//good.setStore(view.getUi().getCurrentUser().getStore());
 			good.setDate(new Date());
-			good.setProviderName(store.getLegalName());
-			good.setProviderLegalAddress(store.getLegalAddress());
-			good.setProviderAddress(store.getAddress());
-			good.setProviderRegNum(store.getLegalRegNum());
-			good.setProviderBankName(store.getLegalBankName());
-			good.setProviderBankNum(store.getLegalBankNum());
+			//good.setProviderName(store.getLegalName());
+			//good.setProviderLegalAddress(store.getLegalAddress());
+			//good.setProviderAddress(store.getAddress());
+			//good.setProviderRegNum(store.getLegalRegNum());
+			//good.setProviderBankName(store.getLegalBankName());
+			//good.setProviderBankNum(store.getLegalBankNum());
 		}
 
 
@@ -133,9 +142,11 @@ public class BusinessReceiptForm extends FormLayout {
 		addComponent(new SpacedHorizontalLayout(providerLegalAddressField, providerAddressField));
 		addComponent(new SpacedHorizontalLayout(providerBankNameField, providerBankNumField));
 		addComponent(new Hr());
-		addComponent(new SpacedHorizontalLayout(receiverNameField, receiverRegNumField));
+		addComponent(new SpacedHorizontalLayout(advancePayment));
+		addComponent(new SpacedHorizontalLayout(receiverNameField));
+		addComponent(new SpacedHorizontalLayout(receiverRegNumField, receiverPVNRegNumField));
 		addComponent(new SpacedHorizontalLayout(receiverBankNameField, receiverBankNumField));
-		addComponent(new SpacedHorizontalLayout(receiverLegalAddressField));
+		addComponent(new SpacedHorizontalLayout(receiverLegalAddressField, receiverRealAddressField));
 		addComponent(new SpacedHorizontalLayout(receiverPhoneField, receiverMailField));
 		addComponent(new Hr());
 		addComponent(new SpacedHorizontalLayout(agreementNum, agreementDate));
@@ -279,7 +290,7 @@ public class BusinessReceiptForm extends FormLayout {
 		public void businessMethod() {
 			BusinessReceiptService service = view.getUi().getBusinessReceiptService();
 			if (entity.getId() == 0) {
-				entity.setNumber(view.getUi().getBusinessReceiptService().generateName());
+				entity.setNumber(view.getUi().getBusinessReceiptService().generateName(entity.getProviderRegNum()));
 				service.createBusinessReceipt(entity);
 			} else {
 				service.updateBusinessReceipt(entity);
