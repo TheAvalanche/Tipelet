@@ -10,8 +10,11 @@ import lv.telepit.model.ReceiptItem;
 import javax.persistence.OptimisticLockException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +66,15 @@ public class BusinessReceiptService {
 		return businessReceiptDao.findBusinessReceipts(criteriaMap);
 	}
 	
-	public String generateName(String providerRegNum) {
+	public String generateName(String providerRegNum, Long numberIdx, String postfix) {
+		if (LocalDate.now().isAfter(LocalDate.of(2020, Month.DECEMBER, 31))) {
+			return numberIdx + "-" + DateTimeFormatter.ofPattern("yy").format(LocalDate.now()) + postfix;
+		}
 		return DateTimeFormatter.ofPattern("ddMMyyyy").format(LocalDate.now()) + "-" + (countReceiptsForToday(providerRegNum) + 1);
+	}
+
+	public Long lastReceiptNumberDuringYear(String providerRegNum) {
+		return businessReceiptDao.lastReceiptNumber(providerRegNum, Date.from(LocalDate.now().with(TemporalAdjusters.firstDayOfYear()).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 	}
 	
 	public int countReceiptsForToday(String providerRegNum) {

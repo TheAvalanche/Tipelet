@@ -11,6 +11,7 @@ public class ReceiptItem {
 	private String name;
 	private int count;
 	private Double price;
+	private int discount = 0;
 	private BusinessReceipt parent;
 
 	@Id
@@ -48,6 +49,14 @@ public class ReceiptItem {
 		this.price = price;
 	}
 
+	public int getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
+
 	@ManyToOne(targetEntity = BusinessReceipt.class)
 	public BusinessReceipt getParent() {
 		return parent;
@@ -59,6 +68,8 @@ public class ReceiptItem {
 
 	@Transient
 	public BigDecimal getTotalPrice() {
-		return new BigDecimal(price, MathContext.DECIMAL64).multiply(new BigDecimal(count)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		return new BigDecimal(price, MathContext.DECIMAL64)
+				.subtract(new BigDecimal(price, MathContext.DECIMAL64).multiply(new BigDecimal(discount)).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP))
+				.multiply(new BigDecimal(count)).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 }

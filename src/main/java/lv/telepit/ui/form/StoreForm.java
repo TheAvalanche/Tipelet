@@ -43,6 +43,9 @@ public class StoreForm extends FormLayout {
 
     @PropertyId("legalAddress")
     private TextField legalAddressField = FieldFactory.getTextField("store.legalAddress");
+
+    @PropertyId("invoicePostfix")
+    private TextField invoicePostfixField = FieldFactory.getTextField("store.invoicePostfix");
     
 
 
@@ -58,6 +61,7 @@ public class StoreForm extends FormLayout {
         addComponent(legalAddressField);
         addComponent(legalBankNameField);
         addComponent(legalBankNumField);
+        addComponent(invoicePostfixField);
 
 
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));

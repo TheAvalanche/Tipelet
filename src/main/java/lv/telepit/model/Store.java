@@ -30,6 +30,8 @@ public class Store {
     private String legalBankName;
     private String legalBankNum;
     private String legalAddress;
+
+    private String invoicePostfix;
     
     private List<User> userList;
     private List<ServiceGood> serviceGoodList;
@@ -124,6 +126,14 @@ public class Store {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getInvoicePostfix() {
+        return invoicePostfix;
+    }
+
+    public void setInvoicePostfix(String invoicePostfix) {
+        this.invoicePostfix = invoicePostfix;
     }
 
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)

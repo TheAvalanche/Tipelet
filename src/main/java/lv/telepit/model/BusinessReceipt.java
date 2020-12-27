@@ -10,6 +10,8 @@ import java.util.List;
 public class BusinessReceipt {
 
 	private long id;
+	private Long numberIdx;
+	private String postfix;
 	private String number;
 	private User user;
 	private Store store;
@@ -46,6 +48,22 @@ public class BusinessReceipt {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public Long getNumberIdx() {
+		return numberIdx;
+	}
+
+	public void setNumberIdx(Long numberIdx) {
+		this.numberIdx = numberIdx;
+	}
+
+	public String getPostfix() {
+		return postfix;
+	}
+
+	public void setPostfix(String postfix) {
+		this.postfix = postfix;
 	}
 
 	public String getNumber() {

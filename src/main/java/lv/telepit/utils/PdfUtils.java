@@ -410,15 +410,16 @@ public class PdfUtils {
 
 		receiverTable.addCell(hr());
 
-		PdfPTable itemsTable = new PdfPTable(6);
+		PdfPTable itemsTable = new PdfPTable(7);
 		itemsTable.setWidthPercentage(100);
-		itemsTable.setWidths(new int[]{1, 5, 2, 2, 2, 2});
+		itemsTable.setWidths(new int[]{1, 5, 2, 2, 2, 2, 2});
 
 		itemsTable.addCell(new PdfPCell(new Phrase("№", boldFont)));
 		itemsTable.addCell(new PdfPCell(new Phrase("Preču nosaukums", boldFont)));
 		itemsTable.addCell(new PdfPCell(new Phrase("Mērv.", boldFont)));
 		itemsTable.addCell(new PdfPCell(new Phrase("Daudz.", boldFont)));
 		itemsTable.addCell(new PdfPCell(new Phrase("Cena", boldFont)));
+		itemsTable.addCell(new PdfPCell(new Phrase("Atlaide, %", boldFont)));
 		itemsTable.addCell(new PdfPCell(new Phrase("Summa", boldFont)));
 
 
@@ -429,6 +430,7 @@ public class PdfUtils {
 			itemsTable.addCell(new PdfPCell(new Phrase("gb", normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getCount()), normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getPrice()), normalFont)));
+			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getDiscount()), normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(receiptItem.getTotalPrice().toString(), normalFont)));
 		}
 
@@ -436,6 +438,7 @@ public class PdfUtils {
 		itemsTable.addCell(noBCell("Kopā", normalFont));
 		itemsTable.addCell(empty());
 		itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(businessReceipt.totalAmount()), normalFont)));
+		itemsTable.addCell(empty());
 		itemsTable.addCell(empty());
 		itemsTable.addCell(new PdfPCell(new Phrase("EUR " + String.valueOf(businessReceipt.getTotalPrice()), normalFont)));
 

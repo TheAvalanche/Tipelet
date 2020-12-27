@@ -168,6 +168,7 @@ public class BusinessReceiptForm extends FormLayout {
 		if (good.getReceiptItems().isEmpty()) {
 			ReceiptItem item = new ReceiptItem();
 			item.setPrice(0.0);
+			item.setDiscount(0);
 			item.setCount(1);
 			receiptItems.add(item);
 			addReceiptItem(receiptItems, item, subLayout, priceListener);
@@ -181,6 +182,7 @@ public class BusinessReceiptForm extends FormLayout {
 		addButton.addClickListener((Button.ClickListener) event -> {
 			ReceiptItem item = new ReceiptItem();
 			item.setPrice(0.0);
+			item.setDiscount(0);
 			item.setCount(1);
 			receiptItems.add(item);
 			addReceiptItem(receiptItems, item, subLayout, priceListener);
@@ -258,16 +260,34 @@ public class BusinessReceiptForm extends FormLayout {
 			localPriceListener.update();
 		});
 
+		final TextField discountField = new TextField("Atlaide, %", beanItem.getItemProperty("discount"));
+		discountField.setImmediate(true);
+		discountField.setRequired(true);
+		discountField.setWidth(100f, Sizeable.Unit.PIXELS);
+		discountField.setConverter(new StringToIntConverter());
+		discountField.addValueChangeListener((Property.ValueChangeListener) event -> {
+			try {
+				discountField.validate();
+			} catch (Validator.InvalidValueException e) {
+				Notification.show("Nepareiza atlaide!", Notification.Type.ERROR_MESSAGE);
+				item.setDiscount(0);
+				discountField.setValue(String.valueOf(0));
+			}
+			priceListener.update();
+			localPriceListener.update();
+		});
+
 		Button deleteButton = new Button(bundle.getString("default.button.delete"));
 		deleteButton.setStyleName("small");
 		if (receiptItems.size() == 1) {
 			deleteButton.setEnabled(false);
 		}
 
-		final HorizontalLayout subLayout = new SpacedHorizontalLayout(nameField, priceField, countField, totalPriceField, deleteButton);
+		final HorizontalLayout subLayout = new SpacedHorizontalLayout(nameField, priceField, countField, discountField, totalPriceField, deleteButton);
 		subLayout.setWidth("100%");
 		subLayout.setComponentAlignment(priceField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(countField, Alignment.BOTTOM_RIGHT);
+		subLayout.setComponentAlignment(discountField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(deleteButton, Alignment.BOTTOM_RIGHT);
 
 		deleteButton.addClickListener((Button.ClickListener) event -> {
@@ -290,7 +310,12 @@ public class BusinessReceiptForm extends FormLayout {
 		public void businessMethod() {
 			BusinessReceiptService service = view.getUi().getBusinessReceiptService();
 			if (entity.getId() == 0) {
-				entity.setNumber(view.getUi().getBusinessReceiptService().generateName(entity.getProviderRegNum()));
+				entity.setNumberIdx(view.getUi().getBusinessReceiptService().lastReceiptNumberDuringYear(entity.getProviderRegNum()) + 1);
+				entity.setPostfix(view.getUi().getCommonService().getAllStores().stream()
+						.filter(it -> it.getLegalRegNum().equalsIgnoreCase(entity.getProviderRegNum()))
+						.findFirst().map(Store::getInvoicePostfix)
+						.orElse(""));
+				entity.setNumber(view.getUi().getBusinessReceiptService().generateName(entity.getProviderRegNum(), entity.getNumberIdx(), entity.getPostfix()));
 				service.createBusinessReceipt(entity);
 			} else {
 				service.updateBusinessReceipt(entity);
