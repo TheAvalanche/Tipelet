@@ -223,13 +223,13 @@ public class BusinessReceiptForm extends FormLayout {
 		TextField nameField = new TextField("Nosaukums", beanItem.getItemProperty("name"));
 		nameField.setImmediate(true);
 		nameField.setRequired(true);
-		nameField.setWidth(100f, Sizeable.Unit.PIXELS);
+		nameField.setWidth(200f, Sizeable.Unit.PIXELS);
 		nameField.setNullRepresentation("");
 
 		final TextField priceField = new TextField("Cena", beanItem.getItemProperty("price"));
 		priceField.setImmediate(true);
 		priceField.setRequired(true);
-		priceField.setWidth(100f, Sizeable.Unit.PIXELS);
+		priceField.setWidth(80f, Sizeable.Unit.PIXELS);
 		priceField.setConverter(new StringToDoubleConverter());
 		priceField.addValueChangeListener((Property.ValueChangeListener) event -> {
 			try {
@@ -246,7 +246,7 @@ public class BusinessReceiptForm extends FormLayout {
 		final TextField countField = new TextField("Daudzums", beanItem.getItemProperty("count"));
 		countField.setImmediate(true);
 		countField.setRequired(true);
-		countField.setWidth(100f, Sizeable.Unit.PIXELS);
+		countField.setWidth(80f, Sizeable.Unit.PIXELS);
 		countField.setConverter(new StringToIntConverter());
 		countField.addValueChangeListener((Property.ValueChangeListener) event -> {
 			try {
@@ -263,7 +263,7 @@ public class BusinessReceiptForm extends FormLayout {
 		final TextField discountField = new TextField("Atlaide, %", beanItem.getItemProperty("discount"));
 		discountField.setImmediate(true);
 		discountField.setRequired(true);
-		discountField.setWidth(100f, Sizeable.Unit.PIXELS);
+		discountField.setWidth(80f, Sizeable.Unit.PIXELS);
 		discountField.setConverter(new StringToIntConverter());
 		discountField.addValueChangeListener((Property.ValueChangeListener) event -> {
 			try {
@@ -289,6 +289,10 @@ public class BusinessReceiptForm extends FormLayout {
 		subLayout.setComponentAlignment(countField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(discountField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(deleteButton, Alignment.BOTTOM_RIGHT);
+		subLayout.setExpandRatio(nameField, 1.0f);
+		subLayout.setExpandRatio(countField, 0.4f);
+		subLayout.setExpandRatio(discountField, 0.4f);
+		subLayout.setExpandRatio(deleteButton, 0.4f);
 
 		deleteButton.addClickListener((Button.ClickListener) event -> {
 			receiptItems.remove(item);

@@ -208,7 +208,7 @@ public class ServiceView extends AbstractView {
         container.addAll(serviceGoods);
         container.sort(new Object[]{"id"}, new boolean[]{false});
         // "customId", "store", "category", "name", "status", "problem", "diagnostics", "details", "price", "warranty", "called", "deliveredDate", "returnedDate", "contactName", "contactPhone"
-        table.setColumnWidths(0.5f, 0.5f, 0.5f, 2.0f, 0.5f, 2.0f, 0.5f, 0.5f, 0.5f, 0.1f, 0.1f, 0.5f, 0.5f, 1.0f, 1.0f);
+        table.setColumnWidths(0.5f, 0.5f, 0.5f, 1.5f, 0.5f, 1.5f, 0.5f, 0.5f, 0.5f, 0.1f, 0.1f, 0.5f, 0.5f, 1.0f, 1.0f);
         table.refreshRowCache();
     }
 
