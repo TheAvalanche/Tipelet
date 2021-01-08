@@ -217,7 +217,7 @@ public class PdfUtils {
 		PdfPCell phrase = new PdfPCell(new Phrase("Iekārtas Nosaukums: " + StringUtils.defaultIfEmpty(serviceGood.getName(), ""), smallBoldFont));
 		phrase.setFixedHeight(15f);
 		headerInnerRight.addCell(phrase);
-		PdfPCell phrase1 = new PdfPCell(new Phrase("IMEI vai S/N: " + StringUtils.defaultIfEmpty(serviceGood.getImei(), ""), smallFont));
+		PdfPCell phrase1 = new PdfPCell(new Phrase("S/N: " + StringUtils.defaultIfEmpty(serviceGood.getImei(), ""), smallFont));
 		phrase1.setFixedHeight(15f);
 		headerInnerRight.addCell(phrase1);
 		PdfPCell phrase2 = new PdfPCell(new Phrase("Komplektācija:" +

@@ -50,6 +50,9 @@ public class ServiceGoodForm extends FormLayout {
     @PropertyId("diagnostics")
     private TextField diagnostics = FieldFactory.getNumberField("service.diagnostics");
 
+    @PropertyId("details")
+    private TextField details = FieldFactory.getNumberField("service.details");
+
     @PropertyId("price")
     private TextField price = FieldFactory.getNumberField("service.price");
 
@@ -92,6 +95,7 @@ public class ServiceGoodForm extends FormLayout {
             good.setDeliveredDate(new Date());
             good.setStatus(ServiceStatus.WAITING);
             good.setPrice(0.00);
+            good.setDetails(0.00);
             good.setDiagnostics(0.00);
         }
 
@@ -109,13 +113,13 @@ public class ServiceGoodForm extends FormLayout {
         addComponent(view, nameField, u -> true, User::isServiceWorker);
         addComponent(view, statusField, User::isAdmin);
         addComponent(view, imeiField, u -> true, User::isServiceWorker);
-        addComponent(view, accumNumField, u -> true, User::isServiceWorker);
         addComponent(view, problemField, u -> true, User::isServiceWorker);
         addComponent(view, deliveredDateField, User::isAdmin);
         addComponent(view, startDateField, User::isAdmin);
         addComponent(view, finishDateField, User::isAdmin);
         addComponent(view, returnedDateField, User::isAdmin);
         addComponent(view, diagnostics, u -> !u.isServiceWorker(), u -> !u.isAdmin() && !good.isNew());
+        addComponent(view, details, u -> !u.isServiceWorker(), u -> !u.isAdmin() && !good.isNew());
         addComponent(view, price, u -> !u.isServiceWorker(), u -> !u.isAdmin() && !good.isNew());
         addComponent(view, warranty, u -> !u.isServiceWorker());
         addComponent(view, contactNameField, u -> !u.isServiceWorker());

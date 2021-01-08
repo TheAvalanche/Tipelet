@@ -111,7 +111,7 @@ public class ServiceView extends AbstractView {
         excelDownloader.extend(xlsButton);
 
         container = new BeanItemContainer<>(ServiceGood.class);
-        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "accumNum", "problem", "diagnostics", "price", "warranty", "called", "deliveredDate", "returnedDate", "contactName", "contactPhone");
+        table = new CommonTable(container, "service.good", "customId", "store", "category", "name", "status", "problem", "diagnostics", "details", "price", "warranty", "called", "deliveredDate", "returnedDate", "contactName", "contactPhone");
         table.setAlwaysRecalculateColumnWidths(true);
         table.setCellStyleGenerator((Table.CellStyleGenerator) (source, itemId, propertyId) -> {
             ServiceGood sg = container.getItem(itemId).getBean();
@@ -164,7 +164,7 @@ public class ServiceView extends AbstractView {
         deleteGood.addClickListener(new EditServiceGoodListener());
 
         final HorizontalLayout searchLayout1 = new SpacedHorizontalLayout(userField, storeField, categoryField, statusField, withBillField, contactNameField, contactPhoneField);
-        final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(idField, nameField, imeiField, accumNumField, deliveredField, returnedField);
+        final HorizontalLayout searchLayout2 = new SpacedHorizontalLayout(idField, nameField, imeiField, deliveredField, returnedField);
 
         final VerticalLayout searchLayout = new VerticalLayout(new Hr(), searchLayout1, searchLayout2,
                 new SpacedHorizontalLayout(searchButton, resetButton), new Hr());
@@ -207,7 +207,7 @@ public class ServiceView extends AbstractView {
         container.removeAllItems();
         container.addAll(serviceGoods);
         container.sort(new Object[]{"id"}, new boolean[]{false});
-        table.setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.1f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
+        table.setColumnWidths(0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.1f, 0.1f, 0.8f, 0.8f, 1.0f, 1.0f);
         table.refreshRowCache();
     }
 
@@ -219,7 +219,7 @@ public class ServiceView extends AbstractView {
             deleteGood.setVisible(false);
         }
         if (ui.getCurrentUser().isServiceWorker()) {
-            table.setVisibleColumns("customId", "store", "category", "name", "status", "accumNum", "problem", "deliveredDate");
+            table.setVisibleColumns("customId", "store", "category", "name", "status", "problem", "deliveredDate");
             returnedField.setVisible(false);
             contactNameField.setVisible(false);
             contactPhoneField.setVisible(false);

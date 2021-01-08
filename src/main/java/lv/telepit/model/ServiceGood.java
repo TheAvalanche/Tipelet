@@ -28,6 +28,7 @@ public class ServiceGood {
     private String accumNum;
     private String problem;
     private Double diagnostics;
+    private Double details;
     private Double price;
     private Date deliveredDate;
     private Date startDate;
@@ -177,6 +178,17 @@ public class ServiceGood {
                 this.diagnostics != null ? this.diagnostics.toString() : "-",
                 diagnostics != null ? diagnostics.toString() : "-");
         this.diagnostics = diagnostics;
+    }
+
+    public Double getDetails() {
+        return details;
+    }
+
+    public void setDetails(Double details) {
+        change.addChange("details",
+                this.details != null ? this.details.toString() : "-",
+                details != null ? details.toString() : "-");
+        this.details = details;
     }
 
     public Double getPrice() {
