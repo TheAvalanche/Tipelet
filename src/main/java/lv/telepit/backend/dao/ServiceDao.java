@@ -3,6 +3,7 @@ package lv.telepit.backend.dao;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.model.Store;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
  */
 public interface ServiceDao {
     void createGood(ServiceGood good);
+
+    Long lastCustomId(Store providerRegNum);
 
     void updateGood(ServiceGood good);
 

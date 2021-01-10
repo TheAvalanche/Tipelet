@@ -108,7 +108,7 @@ public class ServiceGoodForm extends FormLayout {
         FieldGroup binder = new FieldGroup(serviceGoodItem);
         binder.bindMemberFields(this);
 
-        addComponent(view, customIdField, u -> true, User::isServiceWorker);
+        addComponent(view, customIdField, u -> true, u -> u.isServiceWorker() || good.isNew());
         addComponent(view, categoryField, u -> true, User::isServiceWorker);
         addComponent(view, nameField, u -> true, User::isServiceWorker);
         addComponent(view, statusField, User::isAdmin);
@@ -171,6 +171,7 @@ public class ServiceGoodForm extends FormLayout {
         public void businessMethod() {
             ServiceGoodService service = view.getUi().getServiceGoodService();
             if (entity.getId() == 0) {
+                entity.setCustomId(String.valueOf(service.lastCustomId(entity.getStore()) + 1));
                 service.saveGood(entity);
             } else {
                 service.updateGood(entity);

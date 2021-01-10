@@ -7,9 +7,13 @@ import lv.telepit.backend.dao.ServiceDaoImpl;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
 import lv.telepit.model.ServiceStatus;
+import lv.telepit.model.Store;
 import lv.telepit.model.dto.ReportData;
 
 import javax.persistence.OptimisticLockException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 /**
@@ -31,6 +35,10 @@ public class ServiceGoodService {
         } catch (OptimisticLockException e) {
             catchOptimisticLockException();
         }
+    }
+
+    public Long lastCustomId(Store store) {
+        return serviceDao.lastCustomId(store);
     }
 
     public void updateGood(ServiceGood good) {

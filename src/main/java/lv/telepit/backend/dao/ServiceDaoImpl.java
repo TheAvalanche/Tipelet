@@ -4,8 +4,11 @@ import com.vaadin.ui.UI;
 import lv.telepit.TelepitUI;
 import lv.telepit.backend.PersistenceProvider;
 import lv.telepit.backend.criteria.ServiceGoodCriteria;
+import lv.telepit.model.BusinessReceipt;
 import lv.telepit.model.ChangeRecord;
 import lv.telepit.model.ServiceGood;
+import lv.telepit.model.Store;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,6 +46,21 @@ public class ServiceDaoImpl implements ServiceDao {
 
         em.getTransaction().commit();
         em.close();
+    }
+
+    @Override
+    public Long lastCustomId(Store providerRegNum) {
+        EntityManager em = emf.createEntityManager();
+
+        final Query q = em.createQuery("select br from ServiceGood br where br.store = :store and br.deleted <> true order by br.id desc");
+        q.setParameter("store", providerRegNum);
+        q.setMaxResults(1);
+        List<ServiceGood> list = q.getResultList();
+        em.close();
+        if (list.size() > 0 && list.get(0).getCustomId() != null) {
+            return NumberUtils.toLong(list.get(0).getCustomId(), 0L);
+        }
+        return 0L;
     }
 
     @Override
