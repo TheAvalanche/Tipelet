@@ -42,6 +42,7 @@ public class ServiceGood {
     private boolean deleted = false;
     private boolean withBill = true;
     private boolean called = false;
+    private boolean blacklisted = false;
     private Date calledDate;
 
     private ChangeRecord change = new ChangeRecord("service.good");
@@ -348,6 +349,17 @@ public class ServiceGood {
                 String.valueOf(this.called),
                 String.valueOf(called));
         this.called = called;
+    }
+
+    public boolean isBlacklisted() {
+        return blacklisted;
+    }
+
+    public void setBlacklisted(boolean blacklisted) {
+        change.addChange("blacklisted",
+                String.valueOf(this.blacklisted),
+                String.valueOf(blacklisted));
+        this.blacklisted = blacklisted;
     }
 
     @Transient

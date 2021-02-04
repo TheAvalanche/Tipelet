@@ -12,6 +12,7 @@ import lv.telepit.ui.actions.SaveOnClick;
 import lv.telepit.ui.component.SpacedHorizontalLayout;
 import lv.telepit.ui.form.fields.FieldFactory;
 import lv.telepit.ui.view.AbstractView;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -86,6 +87,11 @@ public class ServiceGoodForm extends FormLayout {
     @PropertyId("withBill")
     private CheckBox withBill = FieldFactory.getCheckBox("service.withBill");
 
+    private Label blacklistedTop = new Label("!!! MELNAJĀ SARAKSTĀ !!!");
+    private Label blacklistedBottom = new Label("!!! MELNAJĀ SARAKSTĀ !!!");
+    private Label frequentUserTop = new Label("!!! PASTĀVĪGAIS KLIENTS !!!");
+    private Label frequentUserBottom = new Label("!!! PASTĀVĪGAIS KLIENTS !!!");
+
     public ServiceGoodForm(BeanItem<ServiceGood> serviceGoodItem, AbstractView view) {
         /*Initial settings.*/
         ServiceGood good = serviceGoodItem.getBean();
@@ -98,6 +104,17 @@ public class ServiceGoodForm extends FormLayout {
             good.setDetails(0.00);
             good.setDiagnostics(0.00);
         }
+
+        blacklistedTop.setVisible(false);
+        blacklistedTop.setStyleName("blacklisted");
+        blacklistedBottom.setVisible(false);
+        blacklistedBottom.setStyleName("blacklisted");
+        frequentUserTop.setVisible(false);
+        frequentUserTop.setStyleName("frequent-user");
+        frequentUserBottom.setVisible(false);
+        frequentUserBottom.setStyleName("frequent-user");
+        addComponent(view, blacklistedTop);
+        addComponent(view, frequentUserTop);
 
         if (view.getUi().getCurrentUser().isAdmin()) {
             storeField.setRequired(true);
@@ -130,8 +147,40 @@ public class ServiceGoodForm extends FormLayout {
             addComponent(view, withBill, u -> !u.isServiceWorker());
         }
 
+        addComponent(view, blacklistedBottom);
+        addComponent(view, frequentUserBottom);
+
         Button saveButton = new Button(bundle.getString("default.button.save.changes"));
         saveButton.addClickListener(new SaveGood(binder, serviceGoodItem.getBean(), view));
+
+        contactPhoneField.addValueChangeListener(val -> {
+            if (view.getUi().getServiceGoodService().isBlacklisted((String) val.getProperty().getValue())) {
+                blacklistedTop.setVisible(true);
+                blacklistedBottom.setVisible(true);
+                frequentUserTop.setVisible(false);
+                frequentUserBottom.setVisible(false);
+            } else if (view.getUi().getServiceGoodService().isFrequentUser((String) val.getProperty().getValue())) {
+                frequentUserTop.setVisible(true);
+                frequentUserBottom.setVisible(true);
+                blacklistedTop.setVisible(false);
+                blacklistedBottom.setVisible(false);
+            } else {
+                blacklistedTop.setVisible(false);
+                blacklistedBottom.setVisible(false);
+                frequentUserTop.setVisible(false);
+                frequentUserBottom.setVisible(false);
+            }
+        });
+
+        if (good.getId() != 0 && StringUtils.isNotBlank(good.getContactPhone())) {
+            if (view.getUi().getServiceGoodService().isBlacklisted(good.getContactPhone())) {
+                blacklistedTop.setVisible(true);
+                blacklistedBottom.setVisible(true);
+            } else if (view.getUi().getServiceGoodService().isFrequentUser(good.getContactPhone())) {
+                frequentUserTop.setVisible(true);
+                frequentUserBottom.setVisible(true);
+            }
+        }
 
         HorizontalLayout buttonLayout = new SpacedHorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -170,6 +219,14 @@ public class ServiceGoodForm extends FormLayout {
         @Override
         public void businessMethod() {
             ServiceGoodService service = view.getUi().getServiceGoodService();
+
+            if (service.isBlacklisted(entity.getContactPhone())) {
+                entity.setBlacklisted(true);
+                Notification.show("MELNAJĀ SARAKSTĀ", Notification.Type.ERROR_MESSAGE);
+            } else if (service.isFrequentUser(entity.getContactPhone())) {
+                Notification.show("PASTĀVĪGAIS KLIENTS", Notification.Type.WARNING_MESSAGE);
+            }
+
             if (entity.getId() == 0) {
                 entity.setCustomId(String.valueOf(service.lastCustomId(entity.getStore()) + 1));
                 service.saveGood(entity);

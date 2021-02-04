@@ -29,6 +29,22 @@ public class ServiceGoodService {
         this.serviceDao = new ServiceDaoImpl();
     }
 
+    public boolean isBlacklisted(String phoneNumber) {
+        return serviceDao.isBlackListed(phoneNumber);
+    }
+
+    public boolean isFrequentUser(String phoneNumber) {
+        return serviceDao.isFrequentUser(phoneNumber);
+    }
+
+    public void blacklist(String phoneNumber) {
+        serviceDao.blacklist(phoneNumber);
+    }
+
+    public void unBlacklist(String phoneNumber) {
+        serviceDao.unblacklist(phoneNumber);
+    }
+
     public void saveGood(ServiceGood good) {
         try {
             serviceDao.createGood(good);

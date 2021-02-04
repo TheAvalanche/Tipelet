@@ -18,6 +18,14 @@ public interface ServiceDao {
 
     void updateGood(ServiceGood good);
 
+    boolean isBlackListed(String phoneNumber);
+
+    boolean isFrequentUser(String phoneNumber);
+
+    void unblacklist(String phoneNumber);
+
+    void blacklist(String phoneNumber);
+
     List<ServiceGood> findGoods(Map<ServiceGoodCriteria, Object> criteriaMap);
 
     List<ChangeRecord> findChanges(ServiceGood serviceGood);

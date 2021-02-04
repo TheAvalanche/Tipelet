@@ -7068,3 +7068,13 @@ body .mytheme.v-app .v-app-loading {
 	margin-bottom: 0;
 	margin-top: 0;
 }
+
+.mytheme .blacklisted {
+	color: red;
+	font-weight: bold;
+}
+
+.mytheme .frequent-user {
+	color: green;
+	font-weight: bold;
+}

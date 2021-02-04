@@ -63,6 +63,53 @@ public class ServiceDaoImpl implements ServiceDao {
         return 0L;
     }
 
+    public boolean isBlackListed(String phoneNumber) {
+        EntityManager em = emf.createEntityManager();
+
+        final Query q = em.createQuery("select br.id from ServiceGood br where br.contactPhone = :phoneNumber and br.deleted <> true and br.blacklisted = true order by br.id desc");
+        q.setParameter("phoneNumber", phoneNumber);
+        q.setMaxResults(1);
+        List<Long> list = q.getResultList();
+        em.close();
+        return list.size() > 0;
+
+    }
+
+    public boolean isFrequentUser(String phoneNumber) {
+        EntityManager em = emf.createEntityManager();
+
+        final Query q = em.createQuery("select br.id from ServiceGood br where br.contactPhone = :phoneNumber and br.deleted <> true order by br.id desc");
+        q.setParameter("phoneNumber", phoneNumber);
+        List<Long> list = q.getResultList();
+        em.close();
+        return list.size() >= 2;
+
+    }
+
+    public void blacklist(String phoneNumber) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final Query q = em.createQuery("update ServiceGood br set br.blacklisted = true where br.contactPhone = :phoneNumber and br.deleted <> true");
+        q.setParameter("phoneNumber", phoneNumber);
+        q.executeUpdate();
+
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public void unblacklist(String phoneNumber) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        final Query q = em.createQuery("update ServiceGood br set br.blacklisted = false where br.contactPhone = :phoneNumber and br.deleted <> true");
+        q.setParameter("phoneNumber", phoneNumber);
+        q.executeUpdate();
+
+        em.getTransaction().commit();
+        em.close();
+    }
+
     @Override
     public void updateGood(ServiceGood good) {
         EntityManager em = emf.createEntityManager();

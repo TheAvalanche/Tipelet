@@ -23,6 +23,7 @@ public class ServiceContext implements Action.Handler {
         }
 
         List<AbstractAction> visibleActions = new LinkedList<>();
+        visibleActions.add(new ServiceBlacklistedAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusInWaitingAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusInRepairAction(((ServiceGood) target), view));
         visibleActions.add(new ServiceStatusRepairedAction(((ServiceGood) target), view));
