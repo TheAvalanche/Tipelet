@@ -10,6 +10,7 @@ public class ReceiptItem {
 	private long id;
 	private String name;
 	private int count;
+	private String measure;
 	private Double price;
 	private int discount = 0;
 	private BusinessReceipt parent;
@@ -23,6 +24,14 @@ public class ReceiptItem {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getMeasure() {
+		return measure;
+	}
+
+	public void setMeasure(String measure) {
+		this.measure = measure;
 	}
 
 	public String getName() {

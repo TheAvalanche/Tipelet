@@ -427,7 +427,7 @@ public class PdfUtils {
 		for (ReceiptItem receiptItem : businessReceipt.getReceiptItems()) {
 			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(++i), normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(receiptItem.getName(), boldFont)));
-			itemsTable.addCell(new PdfPCell(new Phrase("gb", normalFont)));
+			itemsTable.addCell(new PdfPCell(new Phrase(receiptItem.getMeasure(), normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getCount()), normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getPrice()), normalFont)));
 			itemsTable.addCell(new PdfPCell(new Phrase(String.valueOf(receiptItem.getDiscount()), normalFont)));

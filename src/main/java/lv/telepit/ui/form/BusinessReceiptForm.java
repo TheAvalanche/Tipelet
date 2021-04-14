@@ -1,5 +1,6 @@
 package lv.telepit.ui.form;
 
+import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -169,6 +170,7 @@ public class BusinessReceiptForm extends FormLayout {
 			ReceiptItem item = new ReceiptItem();
 			item.setPrice(0.0);
 			item.setDiscount(0);
+			item.setMeasure("Gb.");
 			item.setCount(1);
 			receiptItems.add(item);
 			addReceiptItem(receiptItems, item, subLayout, priceListener);
@@ -184,6 +186,7 @@ public class BusinessReceiptForm extends FormLayout {
 			item.setPrice(0.0);
 			item.setDiscount(0);
 			item.setCount(1);
+			item.setMeasure("Gb.");
 			receiptItems.add(item);
 			addReceiptItem(receiptItems, item, subLayout, priceListener);
 		});
@@ -260,6 +263,16 @@ public class BusinessReceiptForm extends FormLayout {
 			localPriceListener.update();
 		});
 
+		final ComboBox measureField = new ComboBox("Mērv.", Lists.newArrayList("Gb.", "St."));
+		measureField.setImmediate(true);
+		measureField.setRequired(true);
+		measureField.setWidth(50f, Sizeable.Unit.PIXELS);
+		measureField.setNullSelectionAllowed(false);
+		measureField.setValue(item.getMeasure());
+		measureField.addValueChangeListener((Property.ValueChangeListener) event -> {
+			item.setMeasure((String) event.getProperty().getValue());
+		});
+
 		final TextField discountField = new TextField("Atlaide, %", beanItem.getItemProperty("discount"));
 		discountField.setImmediate(true);
 		discountField.setRequired(true);
@@ -283,14 +296,16 @@ public class BusinessReceiptForm extends FormLayout {
 			deleteButton.setEnabled(false);
 		}
 
-		final HorizontalLayout subLayout = new SpacedHorizontalLayout(nameField, priceField, countField, discountField, totalPriceField, deleteButton);
+		final HorizontalLayout subLayout = new SpacedHorizontalLayout(nameField, priceField, countField, measureField, discountField, totalPriceField, deleteButton);
 		subLayout.setWidth("100%");
 		subLayout.setComponentAlignment(priceField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(countField, Alignment.BOTTOM_RIGHT);
+		subLayout.setComponentAlignment(measureField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(discountField, Alignment.BOTTOM_RIGHT);
 		subLayout.setComponentAlignment(deleteButton, Alignment.BOTTOM_RIGHT);
 		subLayout.setExpandRatio(nameField, 1.0f);
 		subLayout.setExpandRatio(countField, 0.4f);
+		subLayout.setExpandRatio(measureField, 0.25f);
 		subLayout.setExpandRatio(discountField, 0.4f);
 		subLayout.setExpandRatio(deleteButton, 0.4f);
 
